@@ -1,6 +1,6 @@
 .grid {
     display: grid;
-    grid-template-columns: repeat(6, 1fr);
+    grid-template-columns: 1fr 1fr 2fr 1fr 1fr;
     gap: 10px;
     grid-auto-rows: minmax(100px, auto);
 }
@@ -8,6 +8,13 @@
 .dept {
     grid-column: 1;
 }
+
+.callSign {
+    grid-column: 3;
+    text-align: center;
+}
+
 .dest {
-    grid-column: 6;
+    grid-column: 5;
+    text-align: end;
 }

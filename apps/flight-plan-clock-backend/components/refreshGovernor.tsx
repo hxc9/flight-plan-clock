@@ -2,9 +2,11 @@
 
 import {MouseEvent, useCallback, useEffect, useTransition} from "react";
 import {useRouter} from "next/navigation";
+import io, {Socket} from "socket.io-client"
 
 import styles from './refreshGovernor.module.css'
 
+let socket : Socket
 
 export const RefreshGovernor = () : JSX.Element => {
     const router = useRouter();
@@ -14,20 +16,22 @@ export const RefreshGovernor = () : JSX.Element => {
         startTransition(() => { router.refresh() })
     }, [router])
 
-    useEffect(() => {
-        let timeout : any|null = null
+    async function socketInitializer() {
+        await fetch('/api/socket')
+        socket = io()
 
-        const poll = async () => {
-            const res = await fetch('/api/poll', {method: "POST"})
-            const hasNewMessages = await res.json()
-            if (hasNewMessages) {
+        socket.on('connect', () => {
+            console.debug("connected")
+            socket.on('new-messages', () => {
+                console.debug("Got new messages!")
                 refreshData()
-            }
-            timeout = setTimeout(poll, 5000)
-        }
-        timeout = setTimeout(poll, 0)
+            })
+        })
+    }
 
-        return () => timeout && clearTimeout(timeout)
+    useEffect( () => {
+        socketInitializer().catch(console.error)
+        return () => { socket && socket.disconnect() }
     }, [refreshData])
 
     useEffect(() => {

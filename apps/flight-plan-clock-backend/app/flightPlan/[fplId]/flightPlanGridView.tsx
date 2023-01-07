@@ -10,6 +10,7 @@ export async function FlightPlanGridView({fplId} : {fplId: number}) {
 
     return <div className={styles.grid}>
         <div className={styles.dept}>{fpl.departure}</div>
+        <div className={styles.callSign}>{fpl.callsign}</div>
         <div className={styles.dest}>{fpl.destination}</div>
     </div>
 }
