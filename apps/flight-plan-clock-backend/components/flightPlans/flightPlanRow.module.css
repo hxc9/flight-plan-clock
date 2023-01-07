@@ -1,0 +1,36 @@
+.statusLamp.preDeparture {
+    color: green;
+}
+
+.statusLamp.inFlight {
+    color: green;
+    animation: blink 2s linear infinite;
+}
+
+.statusLamp.suspended {
+    color: orange;
+}
+
+.statusLamp.closed {
+    color: red;
+}
+
+.italic {
+    font-style: italic;
+}
+
+.mark {
+    border-bottom: 1pt solid;
+}
+
+@keyframes blink {
+    0% {
+        opacity: 0;
+    }
+    50% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+    }
+}
