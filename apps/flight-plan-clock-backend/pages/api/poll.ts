@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import {ackMessages, fetchMessages} from "../../lib/apiClient";
-import { FplSlotMessage} from "../../lib/message";
+import { FplSlotMessage} from "autorouter-dto";
 import {deleteFplCtot, setFplCtot} from "../../lib/ctotService";
 import {redis} from "../../lib/dbClient";
 import {storeMessage} from "../../lib/messageService";

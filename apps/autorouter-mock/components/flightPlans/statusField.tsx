@@ -3,13 +3,14 @@
 import {Status} from "autorouter-dto"
 import {ChangeEvent, useEffect, useState, useTransition} from "react";
 import {useRouter} from "next/navigation";
+import {allTransitionsFrom} from "autorouter-dto";
 
 export const StatusField = ({
-                                 fplId,
-                                 currentStatus: statusName
-                             }: { fplId: number, currentStatus: string }): JSX.Element => {
-    const currentStatus = Status.fromString(statusName)
-    const allowedTransitions = currentStatus.canTransitionTo()
+                                fplId,
+                                currentStatus: statusName
+                            }: { fplId: number, currentStatus: string }): JSX.Element => {
+    const currentStatus = statusName as Status
+    const allowedTransitions = allTransitionsFrom(currentStatus)
     const allOptions = [currentStatus, ...allowedTransitions]
 
     const router = useRouter();
@@ -32,7 +33,7 @@ export const StatusField = ({
 
     const handleChange = async (event: ChangeEvent<HTMLSelectElement>) => {
         event.preventDefault()
-        const newStatus = Status.fromString(event.target.value);
+        const newStatus = event.target.value as Status;
         setTransition(newStatus)
         setIsFetching(true)
         await fetch(`/api/mock/flightPlan/${fplId}`,
@@ -42,7 +43,7 @@ export const StatusField = ({
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    newStatus: newStatus.name
+                    newStatus: newStatus
                 })
             })
         setIsFetching(false)
@@ -52,9 +53,9 @@ export const StatusField = ({
     }
 
     return <form>
-        <select value={selectedTransition?.name} onChange={handleChange}>
-            {allOptions.map((status) => <option key={status.name}
-                                                        value={status.name}>{status.name}</option>)}
+        <select value={selectedTransition} onChange={handleChange}>
+            {allOptions.map((status) => <option key={status}
+                                                value={status}>{status}</option>)}
         </select>
     </form>
 }

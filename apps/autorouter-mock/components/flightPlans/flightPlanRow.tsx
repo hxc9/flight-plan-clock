@@ -10,8 +10,8 @@ import styles from "../../app/page.module.css";
 export const FlightPlanRow = async ({flightplanid: fplId, ...fpl}: any) : Promise<JSX.Element> => {
     const ctot = await readFlightPlanCtot(fplId)
 
-    const status = Status.fromString(fpl.status)
-    const isBeforeDeparture = [Status.Created, Status.ManualCorrection, Status.Filed, Status.Suspended].includes(Status.fromString(fpl.status))
+    const status = fpl.status
+    const isBeforeDeparture = [Status.Created, Status.ManualCorrection, Status.Filed, Status.Suspended].includes(fpl.status)
 
     return <tr className={status === Status.Closed ? styles.italic : undefined }>
         <td>{fplId}</td>

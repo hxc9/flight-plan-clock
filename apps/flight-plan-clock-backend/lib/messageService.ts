@@ -1,5 +1,5 @@
 import {ChainableCommander} from "ioredis";
-import {FplMessage, FplMessages} from "./message";
+import {FplMessage, FplMessages} from "autorouter-dto";
 import {defaultExpiry, fplKey, redis, schemaPrefix} from "./dbClient";
 
 export function storeMessage(pipeline: ChainableCommander, msg: FplMessage) {

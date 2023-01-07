@@ -3,13 +3,14 @@ import styles from "../../app/page.module.css";
 import {readAllMessages} from "../../lib/server/messageService";
 import {readMessages} from "../../lib/server/messageStreamService";
 import {PendingMessage} from "./pendingMessage";
+import {FplMessage} from "autorouter-dto/dist";
 
 export const revalidate = 0
 
 export const MessagesTable = async (): Promise<JSX.Element> => {
     const messages = await readAllMessages()
     const queuedMessages = (await readMessages(messages.length, 0))
-        .map(({id}) => id)
+        .map(({id} : {id:number}) => id)
 
     return <div>
         <h2>Pending messages ({messages.length})</h2>
@@ -24,7 +25,7 @@ export const MessagesTable = async (): Promise<JSX.Element> => {
             </tr>
             </thead>
             <tbody>
-            {messages.map((msg) => <tr key={msg.id}>
+            {messages.map((msg : FplMessage) => <tr key={msg.id}>
                 <td>{msg.id}</td>
                 <td>{msg.message.fplid}</td>
                 <td>{msg.type}</td>

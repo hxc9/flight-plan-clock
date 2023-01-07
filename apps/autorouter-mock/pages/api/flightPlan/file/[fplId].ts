@@ -1,9 +1,10 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import {getFlightPlan} from "../../../../lib/server/flightPlanService";
+import {FlightPlan} from "autorouter-dto/dist";
 
 export default async function handler(
     req: NextApiRequest,
-    res: NextApiResponse
+    res: NextApiResponse<FlightPlan>
 ) {
     const {method, query: {fplId}} = req
 

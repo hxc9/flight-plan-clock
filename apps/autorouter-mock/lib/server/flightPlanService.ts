@@ -10,15 +10,16 @@ import {
     readFlightPlanCtot
 } from "./ctotService";
 import {addMessage, deleteMessagesForFlightPlan} from "./messageService";
+import {allowedTransitionFrom, FlightPlan} from "autorouter-dto/dist";
 
-export async function listFlightPlans(): Promise<Array<Object>> {
+export async function listFlightPlans(): Promise<Array<FlightPlan>> {
     let res1 = await redis.lrange("flightPlans", 0, -1)
     if (res1.length === 0) return []
     let res2 = await redis.json_mget(res1.map((key) => fplKey(key)), '$')
-    return (<Array<Array<Object>> | null>res2)?.map((v) => v[0]) ?? []
+    return (<Array<Array<FlightPlan>> | null>res2)?.map((v) => v[0]) ?? []
 }
 
-export async function getFlightPlan(fplId: number) {
+export async function getFlightPlan(fplId: number) : Promise<FlightPlan|null> {
     // @ts-ignore
     const [data] = await redis.json_get(fplKey(fplId), '$')??[]
     return data
@@ -37,18 +38,18 @@ export async function createFlightPlan() {
 }
 
 export async function changeFlightPlanStatus(fplId: number, newStatusStr: string) {
-    let newStatus = Status.fromString(newStatusStr)
+    let newStatus = newStatusStr as Status
 
     let oldStatusStr = await getFplField(fplId, 'status');
     if (!oldStatusStr) throw new FlightPlanNotFoundError()
 
-    let oldStatus = Status.fromString(oldStatusStr)
+    let oldStatus = oldStatusStr as Status
 
-    if (!newStatus.allowedTransitionFrom(oldStatus)) {
+    if (!allowedTransitionFrom(oldStatus, newStatus)) {
         throw new IllegalFlightPlanStatusTransition()
     }
 
-    await setFplField(fplId, 'status', newStatus.name)
+    await setFplField(fplId, 'status', newStatus)
 
     await addMessage(buildFplStatusChangeMessage(fplId, oldStatus, newStatus))
 }

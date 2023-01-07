@@ -1,4 +1,4 @@
-import {FplMessages} from "../message";
+import {FplMessages} from "autorouter-dto";
 import Redis from "ioredis-rejson";
 import genericPool from "generic-pool"
 

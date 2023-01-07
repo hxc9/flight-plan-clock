@@ -1,4 +1,4 @@
-import {FplMessage, FplMessages} from "../message";
+import {FplMessage, FplMessages} from "autorouter-dto";
 import {redis} from "./dbService";
 import {mapStreamData} from "./messageStreamService";
 

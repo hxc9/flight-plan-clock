@@ -3,7 +3,7 @@ import utc from "dayjs/plugin/utc"
 
 dayjs.extend(utc)
 
-export const flightPlanArray = {
+const flightPlanArray = {
     // the total number of records that match the criteria (not the number returned)
     "total": 2,
     // array of records

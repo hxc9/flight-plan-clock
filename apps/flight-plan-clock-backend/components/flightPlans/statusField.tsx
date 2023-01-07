@@ -2,11 +2,11 @@ import { Status } from "autorouter-dto";
 import {fetchFlightPlan} from "../../lib/apiClient";
 
 export const StatusField = async ({fplId}: { fplId: number }): Promise<JSX.Element> => {
-    const currentStatus = Status.fromString((await fetchFlightPlan(fplId)).status)
+    const currentStatus = (await fetchFlightPlan(fplId))?.status as Status
 
     return <form>
-        <select value={currentStatus.name} disabled={true}>
-            <option key={currentStatus.name} value={currentStatus.name}>{currentStatus.name}</option>
+        <select value={currentStatus} disabled={true}>
+            <option key={currentStatus} value={currentStatus}>{currentStatus}</option>
         </select>
     </form>
 }

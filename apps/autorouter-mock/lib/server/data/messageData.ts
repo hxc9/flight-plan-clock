@@ -31,8 +31,8 @@ export const baseMessage = {
 export function buildFplStatusChangeMessage(fplId: number, previousStatus: Status, nextStatus: Status) : Message<FplStatusChangeMessage> {
     return buildMessage('fplan_status_changed', {
         "fplid": fplId,
-        "status_previous": previousStatus.name,
-        "status": nextStatus.name
+        "status_previous": previousStatus,
+        "status": nextStatus
     })
 }
 

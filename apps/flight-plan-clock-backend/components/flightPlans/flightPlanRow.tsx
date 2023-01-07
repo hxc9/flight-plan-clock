@@ -13,7 +13,11 @@ const postArrivalStatus = [Status.Arrived, Status.Terminated, Status.Cancelled, 
 export const FlightPlanRow = async ({fplId, mark} : {fplId: number, mark: boolean}) : Promise<JSX.Element> => {
     const fpl = await fetchFlightPlan(fplId)
 
-    const status = Status.fromString(fpl.status)
+    if (!fpl) {
+        return <td colSpan={7}><em>FPL data not found</em></td>
+    }
+
+    const status = fpl.status as Status
     const isBeforeDeparture = preDepartureStatuses.includes(status)
 
     let statusLampClass = styles.statusLamp + ' '

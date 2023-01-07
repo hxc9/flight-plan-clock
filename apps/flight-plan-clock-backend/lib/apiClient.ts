@@ -1,10 +1,10 @@
-import {FplMessages} from "./message";
+import {FlightPlan, FplMessages} from "autorouter-dto";
 
-export async function fetchFlightPlans() : Promise<any[]> {
+export async function fetchFlightPlans() : Promise<FlightPlan[]> {
     return await fetchFromAutoRouter('/flightPlan/file')
 }
 
-export async function fetchFlightPlan(id: number) {
+export async function fetchFlightPlan(id: number) : Promise<FlightPlan|null> {
     return await fetchFromAutoRouter('/flightPlan/file/' + id)
 }
 
