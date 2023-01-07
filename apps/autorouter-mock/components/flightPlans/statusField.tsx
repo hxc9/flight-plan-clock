@@ -1,6 +1,6 @@
 "use client"
 
-import Status from "../../lib/status";
+import {Status} from "autorouter-dto"
 import {ChangeEvent, useEffect, useState, useTransition} from "react";
 import {useRouter} from "next/navigation";
 

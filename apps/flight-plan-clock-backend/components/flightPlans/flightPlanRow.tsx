@@ -1,5 +1,5 @@
 import {ZuluTimestamp} from "../time/zuluTimestamp";
-import Status from "../../lib/status";
+import {Status} from "autorouter-dto";
 import {StatusField} from "./statusField";
 import styles from "./flightPlanRow.module.css";
 import {fetchFlightPlan} from "../../lib/apiClient";

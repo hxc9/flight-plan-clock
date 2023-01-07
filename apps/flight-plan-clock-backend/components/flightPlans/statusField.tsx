@@ -1,4 +1,4 @@
-import Status from "../../lib/status";
+import { Status } from "autorouter-dto";
 import {fetchFlightPlan} from "../../lib/apiClient";
 
 export const StatusField = async ({fplId}: { fplId: number }): Promise<JSX.Element> => {

@@ -1,6 +1,6 @@
 import {redis} from "./dbService";
 import {FlightPlanNotFoundError, fplCtotKey, fplKey, IllegalFlightPlanStatusTransition} from "./utils";
-import Status from "../status";
+import {Status} from "autorouter-dto"
 import {buildFplStatusChangeMessage} from "./data/messageData";
 import {defaultFlightPlan, pickRoute} from "./data/flightPlanData";
 import {error} from "next/dist/build/output/log";

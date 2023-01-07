@@ -3,7 +3,7 @@ import {DeleteFlightPlan} from "./deleteFlightPlan";
 import {ChangeEobt} from "./changeEobt";
 import {ChangeCtot} from "./changeCtot";
 import {readFlightPlanCtot} from "../../lib/server/ctotService";
-import Status from "../../lib/status";
+import {Status} from "autorouter-dto";
 import {StatusField} from "./statusField";
 import styles from "../../app/page.module.css";
 

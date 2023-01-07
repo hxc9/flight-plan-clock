@@ -1,4 +1,5 @@
-import Status from "../../status";
+import {Status} from "autorouter-dto"
+
 import {
     FplDpiUpdated,
     FplSlotCancelledMessage,
@@ -6,7 +7,7 @@ import {
     FplStatusChangeMessage,
     FplSubMessage,
     Message
-} from "../../message";
+} from "autorouter-dto";
 
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc"

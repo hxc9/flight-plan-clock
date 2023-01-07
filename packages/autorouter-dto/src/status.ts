@@ -1,4 +1,4 @@
-export default class Status {
+export class Status {
     static readonly values : Array<Status> = []
 
     static Created = new Status('created', [], 1)
