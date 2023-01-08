@@ -1,20 +1,27 @@
 .grid {
+    margin: 2em;
     display: grid;
     grid-template-columns: 1fr 1fr 2fr 1fr 1fr;
     gap: 10px;
     grid-auto-rows: minmax(100px, auto);
 }
 
-.dept {
+.left {
     grid-column: 1;
+    text-align: start;
 }
 
-.callSign {
+.center {
     grid-column: 3;
     text-align: center;
 }
 
-.dest {
+.right {
     grid-column: 5;
     text-align: end;
+}
+
+.wide {
+    grid-column: 1/6;
+    text-align: center;
 }
