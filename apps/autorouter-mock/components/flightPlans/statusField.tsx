@@ -55,7 +55,11 @@ export const StatusField = ({
     return <form>
         <select value={selectedTransition} onChange={handleChange}>
             {allOptions.map((status) => <option key={status}
-                                                value={status}>{status}</option>)}
+                                                value={status}>{capitalize(status)}</option>)}
         </select>
     </form>
+}
+
+function capitalize(status: Status) {
+    return status.charAt(0).toUpperCase() + status.slice(1)
 }

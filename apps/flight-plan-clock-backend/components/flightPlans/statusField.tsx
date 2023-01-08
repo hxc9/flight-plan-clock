@@ -5,8 +5,8 @@ export const StatusField = async ({fplId}: { fplId: number }): Promise<JSX.Eleme
     const currentStatus = (await fetchFlightPlan(fplId))?.status as Status
 
     return <form>
-        <select value={currentStatus} disabled={true}>
-            <option key={currentStatus} value={currentStatus}>{currentStatus}</option>
+        <select value={currentStatus}>
+            <option key={currentStatus} value={currentStatus}>{currentStatus.charAt(0).toUpperCase() + currentStatus.slice(1)}</option>
         </select>
     </form>
 }
