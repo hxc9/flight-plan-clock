@@ -1,14 +1,16 @@
 import {redis} from "./dbService";
 import {FlightPlanNotFoundError, fplCtotKey, fplKey, IllegalFlightPlanStatusTransition} from "./utils";
 import {Status} from "autorouter-dto"
-import {buildFplStatusChangeMessage} from "./data/messageData";
+import {
+    buildFplCancelledMessage,
+    buildFplDesuspendedMessage,
+    buildFplFiledMessage, buildFplQueuedMessage, buildFplRejectedMessage,
+    buildFplStatusChangeMessage, buildFplSuspendedMessage
+} from "./data/messageData";
 import {defaultFlightPlan, pickRoute} from "./data/flightPlanData";
 import {error} from "next/dist/build/output/log";
 import dayjs from "dayjs";
-import {
-    changeFlightPlanCtot,
-    readFlightPlanCtot
-} from "./ctotService";
+import {changeFlightPlanCtot, readFlightPlanCtot} from "./ctotService";
 import {addMessage, deleteMessagesForFlightPlan} from "./messageService";
 import {allowedTransitionFrom, FlightPlan} from "autorouter-dto/dist";
 
@@ -37,21 +39,37 @@ export async function createFlightPlan() {
     if (res2 === 0) error("Wrong return value when adding flight plan to index: " + res2)
 }
 
-export async function changeFlightPlanStatus(fplId: number, newStatusStr: string) {
-    let newStatus = newStatusStr as Status
-
-    let oldStatusStr = await getFplField(fplId, 'status');
-    if (!oldStatusStr) throw new FlightPlanNotFoundError()
-
-    let oldStatus = oldStatusStr as Status
+export async function changeFlightPlanStatus(fplId: number, newStatus: Status) {
+    let oldStatus = await getFplField(fplId, 'status') as Status;
+    if (!oldStatus) throw new FlightPlanNotFoundError()
 
     if (!allowedTransitionFrom(oldStatus, newStatus)) {
         throw new IllegalFlightPlanStatusTransition()
     }
 
     await setFplField(fplId, 'status', newStatus)
-
     await addMessage(buildFplStatusChangeMessage(fplId, oldStatus, newStatus))
+    switch (newStatus) {
+        case Status.Filed:
+            oldStatus === Status.Created && await addMessage(buildFplFiledMessage(fplId, false))
+            oldStatus === Status.Suspended && await addMessage(buildFplDesuspendedMessage(fplId))
+            break;
+        case Status.ManualCorrection:
+            await addMessage(buildFplFiledMessage(fplId, false))
+            await addMessage(buildFplQueuedMessage(fplId, false))
+            break;
+        case Status.Rejected:
+            await addMessage(buildFplRejectedMessage(fplId))
+            break;
+        case Status.Suspended:
+            await addMessage(buildFplSuspendedMessage(fplId))
+            break;
+        case Status.Cancelled:
+            await addMessage(buildFplCancelledMessage(fplId))
+            break;
+        default:
+            break;
+    }
 }
 
 export async function changeFlightPlanEobt(fplId: number, newEobt: number) {
