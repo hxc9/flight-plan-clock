@@ -1,43 +1,39 @@
 "use client"
 
-import {MouseEvent, useCallback, useEffect, useTransition} from "react";
+import {MouseEvent, useContext, useEffect, useTransition} from "react";
 import {useRouter} from "next/navigation";
-import io, {Socket} from "socket.io-client"
 
 import styles from './refreshGovernor.module.css'
-
-let socket : Socket
+import {SocketContext} from "./socketContext";
 
 export const RefreshGovernor = () : JSX.Element => {
     const router = useRouter();
+    const socket = useContext(SocketContext)
     const [isPending, startTransition] = useTransition();
 
-    const refreshData = useCallback(() => {
-        startTransition(() => { router.refresh() })
-    }, [router])
-
-    async function socketInitializer() {
-        await fetch('/api/socket')
-        socket = io()
-
-        socket.on('connect', () => {
-            console.debug("connected")
-            socket.on('new-messages', () => {
-                console.debug("Got new messages!")
-                refreshData()
-            })
+    function refreshData() {
+        startTransition(() => {
+            router.refresh()
+            console.log("refreshing")
         })
     }
 
     useEffect( () => {
-        socketInitializer().catch(console.error)
-        return () => { socket && socket.disconnect() }
-    }, [refreshData])
+        if (socket) {
+            let newMessageListener = () => {
+                console.log("Got message")
+                refreshData()
+            };
+            console.log("Listening for messages...")
+            socket.on('new-messages', newMessageListener)
+            return () => { socket && socket.off('new-messages', newMessageListener) }
+        }
+    }, [socket])
 
     useEffect(() => {
         const timerId = setInterval(refreshData, 60_000)
         return () => clearInterval(timerId)
-    }, [refreshData])
+    }, [])
 
     async function handleClick(event: MouseEvent<HTMLAnchorElement>){
         event.preventDefault()

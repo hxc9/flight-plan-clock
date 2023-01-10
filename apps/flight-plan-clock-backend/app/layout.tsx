@@ -6,6 +6,7 @@ import {RefreshGovernor} from "../components/refreshGovernor";
 import {Fira_Code} from "@next/font/google";
 import React from "react";
 import Navigation from "./navigation";
+import SocketProvider from "../components/socketContext";
 
 const firaCode = Fira_Code({subsets: ['latin']})
 
@@ -19,19 +20,21 @@ export default function RootLayout({children}: { children: React.ReactNode }) {
         <head/>
         <body>
         <ClockProvider>
-            <main className={styles.main + ' ' + firaCode.className}>
-                <div className={styles.description}>
-                    <p>
-                        Flight Plan Clock backend
-                    </p>
-                    <Navigation/>
-                    <div>
-                        <h3><ZuluClock/></h3>
-                        <RefreshGovernor/>
+            <SocketProvider>
+                <main className={styles.main + ' ' + firaCode.className}>
+                    <div className={styles.description}>
+                        <p>
+                            Flight Plan Clock backend
+                        </p>
+                        <Navigation/>
+                        <div>
+                            <h3><ZuluClock/></h3>
+                            <RefreshGovernor/>
+                        </div>
                     </div>
-                </div>
-                {children}
-            </main>
+                    {children}
+                </main>
+            </SocketProvider>
         </ClockProvider>
         </body>
         </html>
