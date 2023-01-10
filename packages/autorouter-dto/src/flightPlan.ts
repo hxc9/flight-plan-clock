@@ -1,4 +1,4 @@
-import {StatusStrings} from "./status";
+import {Status} from "./status";
 
 export type FlightPlan = {
     // the ID of the flight plan, used for all other APIs
@@ -34,7 +34,7 @@ export type FlightPlan = {
     // aircraft fuel unit ("l", "lb", "usgal")
     "fuelunit": "l"|"lb"|"usgal",
     // see below for possible status values and state machine transisitions
-    "status": StatusStrings,
+    "status": Status,
     "callsign": string,
     "aircraftdescription": string
 }

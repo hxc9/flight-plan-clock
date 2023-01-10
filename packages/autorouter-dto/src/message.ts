@@ -62,12 +62,22 @@ export type FplSlotRevisedMessage = FplMessage & {
     message: FplSlotSubMessage
 }
 
+export type FplSlotMessage = FplSlotAllocatedMessage|FplSlotRevisedMessage
+
+export function isFplSlotMessage(msg: FplMessage) : msg is FplSlotMessage {
+    return msg.type === 'fplan_slot_revised' || msg.type === 'fplan_slot_allocated'
+}
+
 export type FplSlotCancelledMessage = FplMessage & {
     type: "fplan_slot_cancelled",
     message: {
         "reasons": unknown[],
         "comments": unknown[]
     }
+}
+
+export function isFplSlotCancelledMessage(msg: FplMessage) : msg is FplSlotCancelledMessage {
+    return msg.type === 'fplan_slot_revised' || msg.type === 'fplan_slot_allocated'
 }
 
 export type FplSuspendedMessage = FplMessage & {

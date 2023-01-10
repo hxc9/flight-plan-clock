@@ -3,7 +3,7 @@ import {DeleteFlightPlan} from "./deleteFlightPlan";
 import {ChangeEobt} from "./changeEobt";
 import {ChangeCtot} from "./changeCtot";
 import {readFlightPlanCtot} from "../../lib/server/ctotService";
-import {Status} from "autorouter-dto";
+import {eobtCanBeChanged, Status} from "autorouter-dto";
 import {StatusField} from "./statusField";
 import styles from "../../app/page.module.css";
 
@@ -11,7 +11,7 @@ export const FlightPlanRow = async ({flightplanid: fplId, ...fpl}: any) : Promis
     const ctot = await readFlightPlanCtot(fplId)
 
     const status = fpl.status
-    const isBeforeDeparture = [Status.Created, Status.ManualCorrection, Status.Filed, Status.Suspended].includes(fpl.status)
+    const isBeforeDeparture = eobtCanBeChanged(status)
 
     return <tr className={status === Status.Closed ? styles.italic : undefined }>
         <td>{fplId}</td>

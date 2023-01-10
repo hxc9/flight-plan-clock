@@ -7,9 +7,8 @@ import {allTransitionsFrom} from "autorouter-dto";
 
 export const StatusField = ({
                                 fplId,
-                                currentStatus: statusName
-                            }: { fplId: number, currentStatus: string }): JSX.Element => {
-    const currentStatus = statusName as Status
+                                currentStatus
+                            }: { fplId: number, currentStatus: Status }): JSX.Element => {
     const allowedTransitions = allTransitionsFrom(currentStatus)
     const allOptions = [currentStatus, ...allowedTransitions]
 

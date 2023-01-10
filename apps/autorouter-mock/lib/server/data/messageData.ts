@@ -131,9 +131,9 @@ export function buildFplBroughtForwardMessage(fplId: number, eobt: number, previ
     })
 }
 
-export function buildFplCancelledMessage(fplId: number) : FplCancelledMessage {
+export function buildFplCancelledMessage(fplId: number, broughtForward: boolean = false) : FplCancelledMessage {
     return buildMessage<FplCancelledMessage>('fplan_cancelled', fplId, {
-        reason: "mock cancellation reason"
+        reason: broughtForward ? "FPL brought forward" : "mock cancellation reason"
     })
 }
 

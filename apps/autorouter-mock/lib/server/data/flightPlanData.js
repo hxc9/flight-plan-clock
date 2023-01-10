@@ -50,17 +50,18 @@ const flightPlanArray = {
         ]
 }
 
-export const defaultFlightPlan = flightPlanArray.rows[0]
+const defaultFlightPlan = flightPlanArray.rows[0]
 
 const airfields = ["EDNY", "ETDN", "LSPV", "LSZG", "LSGC", "LSZB", "LSZH", "LSZB", "LSZR"]
 
-export function pickRoute() {
+export function generateFlightPlan() {
     let departure = airfields[Math.floor(Math.random() * airfields.length)]
     let destination
     do {
         destination = airfields[Math.floor(Math.random() * airfields.length)]
     } while (departure === destination)
     return {
+        ...defaultFlightPlan,
         departure,
         destination,
         callsign: "HBDIH",

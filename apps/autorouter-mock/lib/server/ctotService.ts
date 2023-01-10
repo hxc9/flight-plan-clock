@@ -5,6 +5,7 @@ import isSameOrAfter from "dayjs/plugin/isSameOrAfter"
 import {FlightPlanNotFoundError, fplCtotKey, fplKey} from "./utils";
 import {redis} from "./dbService";
 import {addMessage} from "./messageService";
+import {ChainableCommander} from "ioredis";
 
 dayjs.extend(utc)
 dayjs.extend(isSameOrAfter)
@@ -17,19 +18,22 @@ export async function readFlightPlanCtot(fplId: number|string) : Promise<Dayjs|n
     return dayjs.unix(timestamp).utc()
 }
 
-export async function changeFlightPlanCtot(fplId: number, newCtotTimestamp: number|null) {
+export async function changeFlightPlanCtot(fplId: number, newCtotTimestamp: number|null, transaction?: ChainableCommander) {
+
+    const commander = transaction || redis
+
     if ((await redis.exists(fplKey(fplId))) !== 1) {
         throw new FlightPlanNotFoundError()
     }
     const hasExistingCtot = (await redis.exists(fplCtotKey(fplId))) === 1
 
     if (newCtotTimestamp) {
-        await redis.set(fplCtotKey(fplId), newCtotTimestamp)
-        await addMessage(buildFplSlotMessage(fplId, dayjs.unix(newCtotTimestamp).utc().format('HHmm'), hasExistingCtot))
+        await commander.set(fplCtotKey(fplId), newCtotTimestamp)
+        await addMessage(buildFplSlotMessage(fplId, dayjs.unix(newCtotTimestamp).utc().format('HHmm'), hasExistingCtot), transaction)
     } else {
-        await redis.del(fplCtotKey(fplId))
+        await commander.del(fplCtotKey(fplId))
         if (hasExistingCtot) {
-            await addMessage(buildFplSlotCancelledMessage(fplId))
+            await addMessage(buildFplSlotCancelledMessage(fplId), transaction)
         }
     }
 }

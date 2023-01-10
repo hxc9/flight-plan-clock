@@ -44,3 +44,21 @@ export function allTransitionsFrom(from: Status): Status[] {
             return []
     }
 }
+
+export function eobtCanBeChanged(status: Status) : boolean {
+    switch (status) {
+        case Status.Created:
+        case Status.Filed:
+        case Status.Suspended:
+        case Status.ManualCorrection:
+            return true;
+        case Status.Departed:
+        case Status.Cancelled:
+        case Status.Closed:
+        case Status.Arriving:
+        case Status.Arrived:
+        case Status.Terminated:
+        case Status.Rejected:
+            return false
+    }
+}

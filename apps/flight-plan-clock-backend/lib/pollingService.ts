@@ -2,7 +2,7 @@ import {Socket} from "socket.io";
 import {ackMessages, fetchMessages} from "./apiClient";
 import {redis} from "./dbClient";
 import {deleteFplCtot, setFplCtot} from "./ctotService";
-import {FplSlotMessage} from "autorouter-dto";
+import {FplMessage, FplMessages, isFplSlotCancelledMessage, isFplSlotMessage} from "autorouter-dto";
 import {storeMessage} from "./messageService";
 
 let subscribers : Socket[] = []
@@ -67,23 +67,23 @@ export async function pollMessages(timeout: number) : Promise<boolean> {
 }
 
 async function processMessages(count: number, timeout: number=0) {
-    let messages = await fetchMessages(count, timeout)
+    let messages : FplMessages = await fetchMessages(count, timeout)
     if (messages.length === 0) {
         return 0
     }
 
     const pipeline = redis.pipeline()
 
-    messages.forEach((msg) => {
-        if (msg.type === 'fplan_slot_revised' || msg.type === 'fplan_slot_allocated') {
-            setFplCtot(pipeline, msg.message.fplid, (msg.message as FplSlotMessage).ctot)
-        } else if (msg.type === 'fplan_slot_cancelled') {
+    messages.forEach((msg : FplMessage) => {
+        if (isFplSlotMessage(msg)) {
+            setFplCtot(pipeline, msg.message.fplid, msg.message.ctot)
+        } else if (isFplSlotCancelledMessage(msg)) {
             deleteFplCtot(pipeline, msg.message.fplid)
         }
         storeMessage(pipeline, msg)
     })
 
     await pipeline.exec()
-    await ackMessages(messages.map((m) => m.id))
+    await ackMessages(messages.map((m : FplMessage) => m.id))
     return messages.length
 }

@@ -1,15 +1,18 @@
 import {FplMessage, FplMessages} from "autorouter-dto";
 import {redis} from "./dbService";
 import {mapStreamData} from "./messageStreamService";
+import {ChainableCommander} from "ioredis";
 
-export async function addMessage(message: FplMessage) {
+export async function addMessage(message: FplMessage, transaction?: ChainableCommander) {
+    const commander = transaction || redis
+
     message.id = await redis.incr("last_msgId")
 
-    await redis.xadd('messages', 'MAXLEN', '~', 1000, "" + message.id,
+    await commander.xadd('messages', 'MAXLEN', '~', 1000, "" + message.id,
         'content', JSON.stringify(message),
         'fplId', message.message.fplid)
 
-    await redis.sadd(`flightPlan:${message.message.fplid}:messages`, message.id)
+    await commander.sadd(`flightPlan:${message.message.fplid}:messages`, message.id)
 }
 
 export async function readAllMessages(): Promise<FplMessages> {
