@@ -1,20 +1,28 @@
 'use client'
 
-import React, {createContext, useEffect} from "react";
+import React, {createContext, useEffect, useState} from "react";
 import io, {Socket} from "socket.io-client";
 
-fetch('http://localhost:3001/api/socket').catch(console.error)
-let socket = io()
-
-export const SocketContext = createContext<Socket>(socket)
+export const SocketContext = createContext<Socket|undefined>(undefined)
 
 export default function SocketProvider({children} : {children : React.ReactNode}) {
+    const [socket, setSocket] = useState<Socket>()
+
     useEffect(() => {
-        socket.connect()
-        socket.on('connect', () => {
-            console.log("connected")
-        })
-        console.log("set " + socket.connected)
+        async function initSocket() {
+            let mySocket : Socket
+            if (!socket) {
+                await fetch('/api/socket').catch(console.error)
+                mySocket = io()
+                setSocket(mySocket)
+            } else {
+                mySocket = socket
+            }
+            mySocket.on('connect', () => {
+                console.debug("connected")
+            })
+        }
+        initSocket().then(() => console.debug("Socket initialized"))
         return () => { socket && socket.close() }
     }, [])
 

@@ -4,7 +4,6 @@ import {StatusField} from "./statusField";
 import styles from "./flightPlanRow.module.css";
 import {fetchFlightPlan} from "../../lib/apiClient";
 import {Ctot} from "./ctot";
-import {Suspense} from "react";
 import Link from "next/link"
 
 const preDepartureStatuses = [Status.Created, Status.ManualCorrection, Status.Filed, Status.Suspended];
@@ -45,10 +44,8 @@ export const FlightPlanRow = async ({fplId, mark} : {fplId: number, mark: boolea
             <StatusField fplId={fplId}/>
         </td>
         <td>
-            <Suspense>
                 {/* @ts-expect-error Server Component */}
                 <Ctot fplId={fplId} eobt={fpl.eobt}/>
-            </Suspense>
         </td>
     </tr>
 }

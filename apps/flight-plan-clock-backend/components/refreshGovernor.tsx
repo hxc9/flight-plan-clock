@@ -14,7 +14,6 @@ export const RefreshGovernor = () : JSX.Element => {
     function refreshData() {
         startTransition(() => {
             router.refresh()
-            console.log("refreshing")
         })
     }
 
