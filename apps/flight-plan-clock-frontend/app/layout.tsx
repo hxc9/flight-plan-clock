@@ -1,8 +1,8 @@
 import './globals.css'
-import { Inter } from '@next/font/google'
+import { Roboto_Flex } from '@next/font/google'
 import styles from './page.module.css'
 
-const inter = Inter({ subsets: ['latin'] })
+const roboto = Roboto_Flex({ subsets: ['latin'] })
 
 export default function RootLayout({
   children,
@@ -17,7 +17,7 @@ export default function RootLayout({
       */}
       <head />
       <body>
-      <main className={styles.main + ' ' + inter.className}>
+      <main className={styles.main + ' ' + roboto.className}>
           {children}
       </main>
       </body>

@@ -38,3 +38,16 @@ export type FlightPlan = {
     "callsign": string,
     "aircraftdescription": string
 }
+
+export type FlightPlansResult = {
+    total: number,
+    rows: FlightPlan[]
+}
+
+export type FlightPlanMini = {
+    id: number,
+    eobt: number,
+    callSign: string,
+    departure: string,
+    destination: string
+}

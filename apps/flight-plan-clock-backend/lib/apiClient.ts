@@ -1,7 +1,7 @@
 import {FlightPlan, FplMessages} from "autorouter-dto";
 
 export async function fetchFlightPlans() : Promise<FlightPlan[]> {
-    return await fetchFromAutoRouter('/flightPlan/file')
+    return (await fetchFromAutoRouter('/flightPlan/file'))?.rows
 }
 
 export async function fetchFlightPlan(id: number) : Promise<FlightPlan|null> {

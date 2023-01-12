@@ -1,3 +1,27 @@
 .main {
+    display: flex;
+    flex-direction: column;
+    height: 94vh;
+    margin: 3vh 3vw;
+}
 
+.content {
+    overflow-y: scroll;
+}
+
+.flightPlanTable {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.flightPlanTable tr {
+    height: 3.5em;
+}
+
+.flightPlanTable tr.link {
+    cursor: pointer;
+}
+
+.flightPlanTable tr:not(:last-child) {
+    border-bottom: grey 1px solid;
 }

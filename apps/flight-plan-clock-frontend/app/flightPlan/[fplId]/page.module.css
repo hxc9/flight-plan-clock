@@ -1,3 +1,28 @@
-.main {
+.header {
+    background-color: lightgreen;
+}
 
+.flightCard {
+    background-color: lightblue;
+    flex-grow: 1;
+}
+
+.timesBlock {
+    display: flex;
+    flex-direction: row;
+    height: 40vh;
+}
+
+.eobtCard {
+    background-color: lightpink;
+    flex-grow: 1;
+}
+
+.ctotCard {
+    background-color: lightyellow;
+    flex-grow: 1;
+}
+
+.footer {
+    background-color: mediumpurple;
 }

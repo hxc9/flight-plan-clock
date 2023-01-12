@@ -1,19 +1,24 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 
 import {listFlightPlans} from "../../../lib/server/flightPlanService";
-import {FlightPlan} from "autorouter-dto/dist";
+import {FlightPlansResult} from "autorouter-dto";
 
 
 export default async function handler(
     req: NextApiRequest,
-    res: NextApiResponse<FlightPlan[]>
+    res: NextApiResponse<FlightPlansResult>
 ) {
-    if (req.method !== 'GET') {
+    const {method, query: {sidx}} = req
+    if (method !== 'GET') {
         res.status(405).end()
         return
     }
 
     let data = await listFlightPlans()
 
-    res.status(200).json(data)
+    if (sidx === 'eobt') {
+        data.sort((a, b) => a.eobt - b.eobt)
+    }
+
+    res.status(200).json({total: data.length, rows: data})
 }
