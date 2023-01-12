@@ -7,6 +7,19 @@
     flex-grow: 1;
 }
 
+.flightCard .topRow {
+    display: flex;
+    flex-direction: row;
+}
+
+.flightCard .topRow h3 {
+    width: 50%;
+}
+
+.flightCard .topRow h3:last-child {
+    text-align: right;
+}
+
 .timesBlock {
     display: flex;
     flex-direction: row;
@@ -15,12 +28,12 @@
 
 .eobtCard {
     background-color: lightpink;
-    flex-grow: 1;
+    width: 50%;
 }
 
 .ctotCard {
     background-color: lightyellow;
-    flex-grow: 1;
+    width: 50%;
 }
 
 .footer {
