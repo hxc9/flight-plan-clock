@@ -1,6 +1,7 @@
 import './globals.css'
 import { Roboto_Flex } from '@next/font/google'
 import styles from './layout.module.css'
+import React from "react";
 
 const roboto = Roboto_Flex({ subsets: ['latin'] })
 
