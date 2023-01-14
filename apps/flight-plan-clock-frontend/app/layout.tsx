@@ -1,31 +1,35 @@
 import './globals.css'
-import { Roboto_Flex } from '@next/font/google'
+import {Roboto_Flex} from '@next/font/google'
 import styles from './layout.module.css'
 import React from "react";
+import ClockProvider from "../components/clockContext";
+import Clock from './clock';
 
-const roboto = Roboto_Flex({ subsets: ['latin'] })
+const roboto = Roboto_Flex({subsets: ['latin']})
 
 export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode
+                                       children,
+                                   }: {
+    children: React.ReactNode
 }) {
-  return (
-    <html lang="en">
-      {/*
+    return (
+        <html lang="en">
+        {/*
         <head /> will contain the components returned by the nearest parent
         head.tsx. Find out more at https://beta.nextjs.org/docs/api-reference/file-conventions/head
       */}
-      <head />
-      <body>
-      <main className={styles.main + ' ' + roboto.className}>
-          {children}
-          <div className={styles.footer}>
-              <div>last updated: 6 minutes ago</div>
-              <div>12:00Z</div>
-          </div>
-      </main>
-      </body>
-    </html>
-  )
+        <head/>
+        <body>
+        <ClockProvider>
+            <main className={styles.main + ' ' + roboto.className}>
+                {children}
+                <div className={styles.footer}>
+                    <div>last updated: 6 minutes ago</div>
+                    <div><Clock/></div>
+                </div>
+            </main>
+        </ClockProvider>
+        </body>
+        </html>
+    )
 }
