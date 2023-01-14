@@ -72,15 +72,3 @@
     background-color: lightyellow;
     width: 50%;
 }
-
-.footer {
-    background-color: mediumpurple;
-    padding: 0.3em 0.3em 0.5em;
-    display: flex;
-    flex-direction: row-reverse;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    height: 1.7em;
-    line-height: 2;
-    overflow: hidden;
-}

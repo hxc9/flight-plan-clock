@@ -43,10 +43,6 @@ export default function FlightPlan({params: {fplId}} : {params: {fplId: number}}
                     <div className={styles.bottomRow}>in 30 minutes</div>
                 </div>
             </div>
-            <div className={styles.footer}>
-                <div>last updated: 6 minutes ago</div>
-                <div>12:00Z</div>
-            </div>
         </div>
     )
 }
