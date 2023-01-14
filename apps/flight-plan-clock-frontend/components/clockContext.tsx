@@ -6,10 +6,10 @@ import utc from "dayjs/plugin/utc"
 
 dayjs.extend(utc)
 
-export const ClockContext = createContext(dayjs().utc().startOf('minute'))
+export const ClockContext = createContext(getTick())
 
 export default function ClockProvider({children} : {children : React.ReactNode}) {
-    const [tick, setTick] = useState<dayjs.Dayjs>(dayjs().utc().startOf('minute'))
+    const [tick, setTick] = useState(getTick())
 
     useEffect(() => {
         let timerId : ReturnType<typeof setTimeout>|null
@@ -23,8 +23,12 @@ export default function ClockProvider({children} : {children : React.ReactNode})
     }, [])
 
     return (
-        <ClockContext.Provider value={tick}>
-            {children}
-        </ClockContext.Provider>
-    )
+            <ClockContext.Provider value={tick}>
+                {children}
+            </ClockContext.Provider>
+            )
+}
+
+function getTick() {
+    return dayjs().utc().startOf('minute')
 }

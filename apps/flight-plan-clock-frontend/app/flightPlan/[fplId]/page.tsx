@@ -20,17 +20,27 @@ export default function FlightPlan({params: {fplId}} : {params: {fplId: number}}
                     </div>
                     <h2>Filed</h2>
                 </div>
-                <div className={styles.routeRow}>
+                <div className={styles.bottomRow}>
                     <p><b>Route:</b></p>
                     <p>OLBEN/N0149F110 IFR N869 BENOT BENOT1R</p>
                 </div>
             </div>
             <div className={styles.timesBlock}>
                 <div className={styles.eobtCard}>
-                    <h1>EOBT</h1>
+                    <h1 className={styles.topRow}>EOBT</h1>
+                    <div className={styles.midRow}>
+                        <h1>15:30Z</h1>
+                        <p>[15:15 - 15:45]</p>
+                    </div>
+                    <div className={styles.bottomRow}>in 30 minutes</div>
                 </div>
                 <div className={styles.ctotCard}>
-                    <h1>CTOT</h1>
+                    <h1 className={styles.topRow}>CTOT</h1>
+                    <div className={styles.midRow}>
+                        <h1>15:30Z</h1>
+                        <p>[15:15 - 15:45]</p>
+                    </div>
+                    <div className={styles.bottomRow}>in 30 minutes</div>
                 </div>
             </div>
             <div className={styles.footer}>
