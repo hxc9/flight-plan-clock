@@ -1,3 +1,11 @@
+.container {
+
+}
+
+.container h1, .container h2, .container h3, .container h4, .container h5, .container p {
+    margin: 0.4em;
+}
+
 .header {
     background-color: lightgreen;
 }
@@ -5,19 +13,33 @@
 .flightCard {
     background-color: lightblue;
     flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 0.2em;
+}
+
+.flightCard > div {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.flightCard > div > * {
+
 }
 
 .flightCard .topRow {
-    display: flex;
-    flex-direction: row;
+    flex-grow: 0.2;
 }
 
-.flightCard .topRow h3 {
-    width: 50%;
+.flightCard .midRow {
+    flex-grow: 0.4;
 }
 
-.flightCard .topRow h3:last-child {
-    text-align: right;
+.flightCard .routeRow {
+    flex-grow: 0.5;
+    justify-content: flex-start;
 }
 
 .timesBlock {
@@ -38,4 +60,12 @@
 
 .footer {
     background-color: mediumpurple;
+    padding: 0.3em 0.3em 0.5em;
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    height: 1.7em;
+    line-height: 2;
+    overflow: hidden;
 }

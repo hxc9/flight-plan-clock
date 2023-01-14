@@ -3,7 +3,7 @@ import TableBody from "./tableBody";
 
 export default function Home() {
   return (
-    <>
+    <div className={styles.container}>
         <h1>Upcoming flights</h1>
         <div className={styles.content}>
             <table className={styles.flightPlanTable}>
@@ -12,6 +12,6 @@ export default function Home() {
                 </tbody>
             </table>
         </div>
-    </>
+    </div>
   )
 }

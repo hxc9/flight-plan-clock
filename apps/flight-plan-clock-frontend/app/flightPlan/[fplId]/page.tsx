@@ -1,20 +1,29 @@
 import styles from './page.module.css'
+import Link from "next/link";
 
 export default function FlightPlan({params: {fplId}} : {params: {fplId: number}}) {
     return (
-        <>
+        <div className={styles.container}>
             <div className={styles.header}>
-                <p>{'<'} Back</p>
-                <h2>Flight</h2>
+                <p><Link href={'/'}>{'<'} Back</Link></p>
+                <h1>Flight</h1>
             </div>
             <div className={styles.flightCard}>
                 <div className={styles.topRow}>
-                    <h3>HB-DIH</h3>
-                    <h3>EDNY → LSZR</h3>
+                    <h2>HB-DIH</h2>
+                    <h2>EDNY → LSZR</h2>
                 </div>
-                <h3>2022/01/15 09:20Z</h3>
-                <p><b>Status: </b>Filed</p>
-                <p><b>Route: </b>OLBEN/N0149F110 IFR N869 BENOT BENOT1R</p>
+                <div className={styles.midRow}>
+                    <div>
+                        <h3>2022/01/15</h3>
+                        <h3>09:20Z</h3>
+                    </div>
+                    <h2>Filed</h2>
+                </div>
+                <div className={styles.routeRow}>
+                    <p><b>Route:</b></p>
+                    <p>OLBEN/N0149F110 IFR N869 BENOT BENOT1R</p>
+                </div>
             </div>
             <div className={styles.timesBlock}>
                 <div className={styles.eobtCard}>
@@ -25,8 +34,9 @@ export default function FlightPlan({params: {fplId}} : {params: {fplId: number}}
                 </div>
             </div>
             <div className={styles.footer}>
-                Footer
+                <div>last updated: 6 minutes ago</div>
+                <div>12:00Z</div>
             </div>
-        </>
+        </div>
     )
 }
