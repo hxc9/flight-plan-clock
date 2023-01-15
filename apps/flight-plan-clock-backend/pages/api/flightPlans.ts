@@ -1,12 +1,12 @@
 import {NextApiRequest, NextApiResponse} from "next";
-import {FlightPlan, FlightPlansResult, FlightPlanMini} from "autorouter-dto";
+import {FlightPlan, FlightPlansResult, FlightPlanMini, FlightPlansResponse} from "autorouter-dto";
 import uniqBy from "lodash/uniqBy"
 import Cors from 'cors'
+import {getLastUpdated} from "../../lib/lastUpdateService";
 
 // Initializing the cors middleware
 // You can read more about the available options here: https://github.com/expressjs/cors#configuration-options
-const cors = Cors({
-})
+const cors = Cors({})
 
 // Helper method to wait for a middleware to execute before continuing
 // And to throw an error when an error happens in a middleware
@@ -25,9 +25,10 @@ function runMiddleware(
         })
     })
 }
+
 export default async function handler(
     req: NextApiRequest,
-    res: NextApiResponse<FlightPlanMini[]>
+    res: NextApiResponse<FlightPlansResponse>
 ) {
     await runMiddleware(req, res, cors)
 
@@ -80,16 +81,18 @@ export default async function handler(
                                                                                          callsign,
                                                                                          eobt,
                                                                                          departure,
-                                                                                         destination
+                                                                                         destination,
+                                                                                         status
                                                                                      }) => {
         return {
             id: flightplanid,
             callSign: callsign,
             eobt,
             departure,
-            destination
+            destination,
+            status
         }
     })
 
-    res.status(200).json(data)
+    res.status(200).json({flightPlans: data, lastUpdated: await getLastUpdated()})
 }

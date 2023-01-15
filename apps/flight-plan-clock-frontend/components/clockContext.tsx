@@ -1,10 +1,7 @@
 'use client'
 
 import React, {createContext, useEffect, useState} from "react";
-import dayjs from "dayjs";
-import utc from "dayjs/plugin/utc"
-
-dayjs.extend(utc)
+import dayjs from "../lib/dayjs";
 
 export const ClockContext = createContext(getTick())
 

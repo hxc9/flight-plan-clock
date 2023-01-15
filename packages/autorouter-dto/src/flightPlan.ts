@@ -49,5 +49,10 @@ export type FlightPlanMini = {
     eobt: number,
     callSign: string,
     departure: string,
-    destination: string
+    destination: string,
+    status: Status
+}
+
+export type FlightPlansResponse = {
+    flightPlans: FlightPlanMini[], lastUpdated: number
 }

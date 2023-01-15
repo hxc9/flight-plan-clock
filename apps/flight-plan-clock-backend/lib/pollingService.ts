@@ -4,6 +4,7 @@ import {redis} from "./dbClient";
 import {deleteFplCtot, setFplCtot} from "./ctotService";
 import {FplMessage, FplMessages, isFplSlotCancelledMessage, isFplSlotMessage} from "autorouter-dto";
 import {storeMessage} from "./messageService";
+import {setLastUpdated} from "./lastUpdateService";
 
 let subscribers : Socket[] = []
 let timerId : NodeJS.Timeout|undefined
@@ -82,6 +83,8 @@ async function processMessages(count: number, timeout: number=0) {
         }
         storeMessage(pipeline, msg)
     })
+
+    setLastUpdated(pipeline, Math.max(...messages.map(m => m.timestamp)))
 
     await pipeline.exec()
     await ackMessages(messages.map((m : FplMessage) => m.id))

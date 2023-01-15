@@ -1,25 +1,32 @@
 'use client'
 
 import useSWR from 'swr';
-import {FlightPlanMini} from "autorouter-dto";
-import dayjs from "dayjs";
-import utc from "dayjs/plugin/utc"
+import {FlightPlansResponse, FlightPlanMini} from "autorouter-dto";
 import styles from "./page.module.css"
 import {useRouter} from "next/navigation";
-
-dayjs.extend(utc)
-
-const fetcher = (url: string) => fetch(process.env.NEXT_PUBLIC_BACKEND_URL + url).then(r => r.json())
+import {fetcher} from "../lib/restApi"
+import Callsign from "../components/callsign";
+import dayjs from "../lib/dayjs";
+import {useContext, useEffect} from 'react';
+import {RefreshContext} from "../components/refreshContext";
 
 export default function TableBody(): JSX.Element {
     const {
         data,
         error,
         isLoading
-    }: { data: FlightPlanMini[] | undefined, error: unknown | undefined, isLoading: boolean }
+    }: { data: FlightPlansResponse | undefined, error: unknown | undefined, isLoading: boolean }
         = useSWR('/api/flightPlans', fetcher, {
         refreshInterval: 30_000
     })
+
+    const {didRefresh} = useContext(RefreshContext)
+
+    useEffect(() => {
+        if (data?.lastUpdated) {
+            didRefresh(data.lastUpdated)
+        }
+        }, [didRefresh, data?.lastUpdated])
 
     if (!data || error || isLoading) {
         return <tr>
@@ -27,8 +34,10 @@ export default function TableBody(): JSX.Element {
         </tr>
     }
 
+    const {flightPlans} = data
+
     return <>
-        {data.map(fpl => <FplRow key={fpl.id} fpl={fpl}/>)}
+        {flightPlans.map(fpl => <FplRow key={fpl.id} fpl={fpl}/>)}
     </>
 }
 
@@ -39,7 +48,7 @@ function FplRow({fpl}: { fpl: FlightPlanMini }): JSX.Element {
     return <tr className={styles.link} onClick={() => {router.push("/flightPlan/" + fpl.id)}}>
         <td>{eobt.format('YYYY-MM-DD')}</td>
         <td>{eobt.format('HH:mm[Z]')}</td>
-        <td>{callSign}</td>
+        <td><Callsign callsign={callSign}/></td>
         <td>{departure}→{destination}</td>
     </tr>
 }

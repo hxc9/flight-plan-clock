@@ -4,6 +4,8 @@ import styles from './layout.module.css'
 import React from "react";
 import ClockProvider from "../components/clockContext";
 import Clock from './clock';
+import {RefreshContextProvider} from "../components/refreshContext";
+import UpdateInfo from "./updateInfo";
 
 const roboto = Roboto_Flex({subsets: ['latin']})
 
@@ -21,13 +23,15 @@ export default function RootLayout({
         <head/>
         <body>
         <ClockProvider>
-            <main className={styles.main + ' ' + roboto.className}>
-                {children}
-                <div className={styles.footer}>
-                    <div>last updated: 6 minutes ago</div>
-                    <div><Clock/></div>
-                </div>
-            </main>
+            <RefreshContextProvider>
+                <main className={styles.main + ' ' + roboto.className}>
+                    {children}
+                    <div className={styles.footer}>
+                        <div><UpdateInfo/></div>
+                        <div><Clock/></div>
+                    </div>
+                </main>
+            </RefreshContextProvider>
         </ClockProvider>
         </body>
         </html>

@@ -1,0 +1,1 @@
+export const fetcher = (url: string) => fetch(process.env.NEXT_PUBLIC_BACKEND_URL + url).then(r => r.json())

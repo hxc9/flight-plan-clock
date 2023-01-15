@@ -1,0 +1,28 @@
+.timeCard {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    width: 50%;
+}
+
+.timeCard > * {
+    flex-grow: 1;
+}
+
+.timesCard > .midRow {
+    flex-grow: 0.5;
+    text-align: center;
+}
+
+.midRow > * {
+    text-align: center;
+}
+
+.eobtCard {
+    background-color: lightpink;
+}
+
+.ctotCard {
+    background-color: lightyellow;
+}
