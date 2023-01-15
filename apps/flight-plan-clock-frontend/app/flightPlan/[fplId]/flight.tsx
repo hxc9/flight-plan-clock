@@ -6,10 +6,12 @@ import styles from './flight.module.css'
 import {FlightPlanMini, FlightPlansResponse} from "autorouter-dto";
 import useSWRImmutable from "swr/immutable";
 import { fetcher } from "../../../lib/restApi";
-import {useContext, useEffect, useMemo} from "react";
+import {useContext, useEffect, useMemo, useState} from "react";
 import {RefreshContext} from "../../../components/refreshContext";
 
 export default function Flight({fplId}: {fplId: number}) {
+    const [fpl, updatedFpl] = useState<FlightPlanFull>()
+
     const {
         data
     }: { data: FlightPlansResponse | undefined, error: unknown | undefined, isLoading: boolean }
@@ -25,9 +27,11 @@ export default function Flight({fplId}: {fplId: number}) {
         }
     }, [didRefresh, data?.lastUpdated])
 
-    const mini = useMemo(() => data?.flightPlans?.find(fpl => fpl.id === fplId), [data, fplId])
+    const fallback = useMemo(() => data?.flightPlans?.find(fpl => fpl.id === fplId), [data, fplId])
 
-    let fpl : FlightPlanFull|undefined = mini
+    useEffect(() => {
+        fallback && updatedFpl(fallback)
+        }, [fallback])
 
     return fpl ? <>
         <FlightPlanCard fpl={fpl}/>
