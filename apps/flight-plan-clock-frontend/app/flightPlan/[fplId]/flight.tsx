@@ -3,7 +3,7 @@
 import FlightPlanCard from "./flightPlanCard";
 import { TimeCard } from "./timeCard";
 import styles from './flight.module.css'
-import {FlightPlanMini, FlightPlansResponse} from "autorouter-dto";
+import {FlightPlansResponse, FlightPlanFull} from "autorouter-dto";
 import useSWRImmutable from "swr/immutable";
 import { fetcher } from "../../../lib/restApi";
 import {useContext, useEffect, useMemo, useState} from "react";
@@ -40,9 +40,4 @@ export default function Flight({fplId}: {fplId: number}) {
             <TimeCard type="CTOT" time={fpl.ctot}/>
         </div>
     </> : null
-}
-
-export type FlightPlanFull = FlightPlanMini & {
-    ctot?: number,
-    route?: string
 }

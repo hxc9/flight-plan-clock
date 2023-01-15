@@ -53,6 +53,11 @@ export type FlightPlanMini = {
     status: Status
 }
 
+export type FlightPlanFull = FlightPlanMini & {
+    ctot?: number,
+    route?: string
+}
+
 export type FlightPlansResponse = {
     flightPlans: FlightPlanMini[], lastUpdated: number
 }
