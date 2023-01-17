@@ -1,3 +1,22 @@
+export enum FplMessageType {
+    fplan_status_changed = "fplan_status_changed",
+    fplan_filed = "fplan_filed",
+    fplan_queued = "fplan_queued",
+    fplan_rejected = "fplan_rejected",
+    fplan_slot_allocated = "fplan_slot_allocated",
+    fplan_slot_revised = "fplan_slot_revised",
+    fplan_slot_cancelled = "fplan_slot_cancelled",
+    fplan_suspended = "fplan_suspended",
+    fplan_desuspended = "fplan_desuspended",
+    fplan_ssr_assigned = "fplan_ssr_assigned",
+    fplan_ssr_updated = "fplan_ssr_updated",
+    fplan_delayed = "fplan_delayed",
+    fplan_cancelled = "fplan_cancelled",
+    fplan_broughtforward = "fplan_broughtforward",
+    fplan_dpi_updated = "fplan_dpi_updated",
+    fplan_msg_operator = "fplan_msg_operator"
+}
+
 export type FplMessage = {
     /* unique message ID, 64-bit unsigned integer, used to acknowledge the message */
     "id": number,
@@ -6,7 +25,7 @@ export type FplMessage = {
     /* timestamp in seconds since the Unix epoch from when the message originates */
     "timestamp": number,
     /* message type identifier */
-    "type": string,
+    "type": FplMessageType,
     /* message specific data */
     "message": {
         fplid: number,
@@ -16,7 +35,7 @@ export type FplMessage = {
 export type FplMessages = Array<FplMessage>
 
 export type FplStatusChangeMessage = FplMessage & {
-    type: "fplan_status_changed",
+    type: FplMessageType.fplan_status_changed,
     message: {
         "status_previous": string,
         "status": string
@@ -29,17 +48,17 @@ type RefileSubMessage =   {
 }
 
 export type FplFiledMessage = FplMessage & {
-    type: "fplan_filed",
+    type: FplMessageType.fplan_filed,
     message: RefileSubMessage
 }
 
 export type FplQueuedMessage = FplMessage & {
-    type: "fplan_queued",
+    type: FplMessageType.fplan_queued,
     message: RefileSubMessage
 }
 
 export type FplRejectedMessage = FplMessage & {
-    type: "fplan_rejected",
+    type: FplMessageType.fplan_rejected,
     message: {
         "errors": unknown[],
     }
@@ -53,23 +72,23 @@ type FplSlotSubMessage = {
 }
 
 export type FplSlotAllocatedMessage = FplMessage & {
-    type: "fplan_slot_allocated",
+    type: FplMessageType.fplan_slot_allocated,
     message: FplSlotSubMessage
 }
 
 export type FplSlotRevisedMessage = FplMessage & {
-    type: "fplan_slot_revised",
+    type: FplMessageType.fplan_slot_revised,
     message: FplSlotSubMessage
 }
 
 export type FplSlotMessage = FplSlotAllocatedMessage|FplSlotRevisedMessage
 
 export function isFplSlotMessage(msg: FplMessage) : msg is FplSlotMessage {
-    return msg.type === 'fplan_slot_revised' || msg.type === 'fplan_slot_allocated'
+    return msg.type === FplMessageType.fplan_slot_revised || msg.type === FplMessageType.fplan_slot_allocated
 }
 
 export type FplSlotCancelledMessage = FplMessage & {
-    type: "fplan_slot_cancelled",
+    type: FplMessageType.fplan_slot_cancelled,
     message: {
         "reasons": unknown[],
         "comments": unknown[]
@@ -77,11 +96,11 @@ export type FplSlotCancelledMessage = FplMessage & {
 }
 
 export function isFplSlotCancelledMessage(msg: FplMessage) : msg is FplSlotCancelledMessage {
-    return msg.type === 'fplan_slot_revised' || msg.type === 'fplan_slot_allocated'
+    return msg.type === FplMessageType.fplan_slot_revised || msg.type === FplMessageType.fplan_slot_allocated
 }
 
 export type FplSuspendedMessage = FplMessage & {
-    type: "fplan_suspended",
+    type: FplMessageType.fplan_suspended,
     message: {
         "comments": string[],
         "errors": unknown[],
@@ -90,7 +109,7 @@ export type FplSuspendedMessage = FplMessage & {
 }
 
 export type FplDesuspendedMessage = FplMessage & {
-    type: "fplan_desuspended"
+    type: FplMessageType.fplan_desuspended
 }
 
 type SsrCodeSubMessage = {
@@ -98,12 +117,12 @@ type SsrCodeSubMessage = {
 }
 
 export type FplSsrAssignedMessage = FplMessage & {
-    type: "fplan_ssr_assigned",
+    type: FplMessageType.fplan_ssr_assigned,
     message: SsrCodeSubMessage
 }
 
 export type FplSsrUpdatedMessage = FplMessage & {
-    type: "fplan_ssr_updated",
+    type: FplMessageType.fplan_ssr_updated,
     message: SsrCodeSubMessage
 }
 
@@ -113,26 +132,26 @@ type DelaySubMessage = {
 }
 
 export type FplDelayedMessge = FplMessage & {
-    type: "fplan_delayed",
+    type: FplMessageType.fplan_delayed,
     message: DelaySubMessage
 }
 
 export type FplCancelledMessage = FplMessage & {
-    type: "fplan_cancelled",
+    type: FplMessageType.fplan_cancelled,
     message: {
         reason: string
     }
 }
 
 export type FplBroughtForwardMessage = FplMessage & {
-    type: "fplan_broughtforward",
+    type: FplMessageType.fplan_broughtforward,
     message: DelaySubMessage & {
         "previous_fplid": number
     }
 }
 
 export type FplDpiUpdated = FplMessage & {
-    type: "fplan_dpi_updated",
+    type: FplMessageType.fplan_dpi_updated,
     message: {
         /* target offblock time in hhmm UTC */
         tobt?: string,
@@ -146,7 +165,7 @@ export type FplDpiUpdated = FplMessage & {
 }
 
 export type FplOperatorMessage = FplMessage & {
-    type: "fplan_msg_operator",
+    type: FplMessageType.fplan_msg_operator,
     message: {
         message: string,
         originator: string

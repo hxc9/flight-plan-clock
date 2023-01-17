@@ -17,7 +17,7 @@ export default function TableBody(): JSX.Element {
         isLoading
     }: { data: FlightPlansResponse | undefined, error: unknown | undefined, isLoading: boolean }
         = useSWR('/api/flightPlans', fetcher, {
-        refreshInterval: 30_000
+        refreshInterval: 60_000
     })
 
     const {didRefresh} = useContext(RefreshContext)

@@ -18,5 +18,5 @@ export default function UpdateInfo({}) {
         return () => {timerId && clearTimeout(timerId)}
         }, [lastRefresh])
 
-    return updated ? <>last updated: {updated}</> : ""
+    return  <>{updated ? `last updated: ${updated}` : ""}</>
 }

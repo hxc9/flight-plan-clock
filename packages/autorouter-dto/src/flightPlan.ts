@@ -55,7 +55,8 @@ export type FlightPlanMini = {
 
 export type FlightPlanFull = FlightPlanMini & {
     ctot?: number,
-    route?: string
+    route?: string,
+    refiledAs?: number
 }
 
 export type FlightPlansResponse = {
