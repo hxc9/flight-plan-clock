@@ -1,19 +1,20 @@
-import {FlightPlan, FplMessages} from "autorouter-dto";
+import {FlightPlan, FlightPlanMini, FplMessages} from "autorouter-dto";
 
-export async function fetchFlightPlans() : Promise<FlightPlan[]> {
+export async function fetchFlightPlans(): Promise<FlightPlan[]> {
     return (await fetchFromAutoRouter('/flightPlan/file'))?.rows
 }
 
-export async function fetchFlightPlan(id: number) : Promise<FlightPlan|null> {
+export async function fetchFlightPlan(id: number): Promise<FlightPlan | null> {
     return await fetchFromAutoRouter('/flightPlan/file/' + id)
 }
 
-export async function fetchMessages(limit: number, timeout: number) : Promise<FplMessages> {
+export async function fetchMessages(limit: number, timeout: number): Promise<FplMessages> {
     return await fetchFromAutoRouter(`/message?timeout=${timeout}&limit=${limit}`)
 }
 
 export async function ackMessages(keys: number[]) {
-    return await fetchFromAutoRouter('/message/acknowledge', {method: 'POST',
+    return await fetchFromAutoRouter('/message/acknowledge', {
+        method: 'POST',
         headers: {
             'Content-Type': 'application/json',
         },
@@ -21,7 +22,7 @@ export async function ackMessages(keys: number[]) {
     }, false)
 }
 
-async function fetchFromAutoRouter(uri: string, init?: RequestInit|undefined, withBody: boolean=true) {
+async function fetchFromAutoRouter(uri: string, init?: RequestInit | undefined, withBody: boolean = true) {
     const res = await fetch(process.env.AUTOROUTER_API_URL + uri, {cache: 'no-store', ...init})
 
     if (!res.ok) {
@@ -33,5 +34,23 @@ async function fetchFromAutoRouter(uri: string, init?: RequestInit|undefined, wi
 
     if (withBody) {
         return await res.json()
+    }
+}
+
+export function flightPlanToMini({
+                                     flightplanid,
+                                     callsign,
+                                     eobt,
+                                     departure,
+                                     destination,
+                                     status
+                                 }: FlightPlan): FlightPlanMini {
+    return {
+        id: flightplanid,
+        callSign: callsign,
+        eobt,
+        departure,
+        destination,
+        status
     }
 }

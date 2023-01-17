@@ -1,16 +1,17 @@
 import {Server, Socket} from "socket.io";
-import {ackMessages, fetchMessages} from "./apiClient";
+import {ackMessages, fetchFlightPlan, fetchMessages, flightPlanToMini} from "./apiClient";
 import {redis} from "./dbClient";
-import {deleteFplCtot, setFplCtot} from "./ctotService";
+import {deleteFplCtot, getFplCtot, setFplCtot} from "./ctotService";
 import {
     FlightPlanFull,
     FplMessage,
     fplMessageIs,
-    FplMessages,
+    FplMessages, UpdateMessage,
     WsMessage
-} from "autorouter-dto";
+} from "autorouter-dto"
 import {storeMessage} from "./messageService";
-import {setLastUpdated} from "./lastUpdateService";
+import {getLastUpdated, setLastUpdated} from "./lastUpdateService";
+import {parseRoute} from "./routeService";
 
 const batchSize = 30
 
@@ -24,13 +25,40 @@ export class PollingService {
         this.io = io
     }
 
+    private watchedFlightPlans : {[key: string] : number} = {}
+
     start() {
-        this.io.on('connection', socket => {
+        this.io.on('connection',  socket => {
             this.subscribe(socket)
+            socket.on('watch-flightPlan', async (id: number) => {
+                if (this.watchedFlightPlans[socket.id]) {
+                    socket.leave('' + this.watchedFlightPlans[socket.id])
+                }
+                socket.join('' + id)
+                this.watchedFlightPlans[socket.id] = id
+                const fpl = await fetchFlightPlan(id)
+                if (fpl) {
+                    const msg : UpdateMessage = {
+                        fplId: id,
+                        timestamp: await getLastUpdated(),
+                        update: {
+                            ...flightPlanToMini(fpl),
+                            ctot: (await getFplCtot(id))??undefined,
+                            route: parseRoute(fpl)
+                        }
+                    }
+                    socket.emit('fpl-change', msg)
+                }
+            })
+            socket.on('unwatch-flightPlan', () => {
+                if (this.watchedFlightPlans[socket.id]) {
+                    socket.leave('' + this.watchedFlightPlans[socket.id])
+                    delete this.watchedFlightPlans[socket.id]
+                }
+            })
             socket.on('disconnect', () => {
                 this.unsubscribe(socket)
             })
-
         })
     }
 
@@ -92,6 +120,7 @@ export class PollingService {
             if (fplMessageIs.slot(msg)) {
                 setFplCtot(pipeline, msg.message.fplid, msg.message.ctot)
             } else if (fplMessageIs.slotCancelled(msg)) {
+                console.log("slot deleted", JSON.stringify(msg))
                 deleteFplCtot(pipeline, msg.message.fplid)
             }
 
@@ -102,7 +131,7 @@ export class PollingService {
             } else if (fplMessageIs.slot(msg)) {
                 this.relayUpdateMessage(msg, {ctot: msg.message.ctot})
             } else if (fplMessageIs.slotCancelled(msg)) {
-                this.relayUpdateMessage(msg, {ctot: undefined})
+                this.relayUpdateMessage(msg, {ctot: null})
             } else if (fplMessageIs.delayed(msg)) {
                 this.relayUpdateMessage(msg, {eobt: msg.message.eobt})
             } else if (fplMessageIs.broughtForward(msg)) {

@@ -171,7 +171,7 @@ export const fplMessageIs = {
         return msg.type === FplMessageType.fplan_slot_revised || msg.type === FplMessageType.fplan_slot_allocated
     },
     slotCancelled: function(msg: FplMessage) : msg is FplSlotCancelledMessage {
-        return msg.type === FplMessageType.fplan_slot_revised || msg.type === FplMessageType.fplan_slot_allocated
+        return msg.type === FplMessageType.fplan_slot_cancelled
     },
     statusChanged: function(msg: FplMessage) : msg is FplStatusChangeMessage {
         return msg.type === FplMessageType.fplan_status_changed

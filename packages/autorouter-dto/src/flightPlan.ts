@@ -54,7 +54,7 @@ export type FlightPlanMini = {
 }
 
 export type FlightPlanFull = FlightPlanMini & {
-    ctot?: number,
+    ctot?: string|null,
     route?: string
 }
 

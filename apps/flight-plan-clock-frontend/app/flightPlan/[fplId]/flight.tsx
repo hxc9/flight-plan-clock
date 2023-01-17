@@ -11,6 +11,7 @@ import {RefreshContext} from "../../../components/refreshContext";
 import {useRefresh} from "../../../lib/utils";
 import {SocketContext} from "../../../components/socketContext";
 import {useRouter} from "next/navigation";
+import dayjs from "dayjs";
 
 export default function Flight({fplId}: { fplId: number }) {
     const router = useRouter()
@@ -52,11 +53,40 @@ export default function Flight({fplId}: { fplId: number }) {
         return () => { socket && socket.off("fpl-change") }
     }, [socket])
 
+    useEffect(() => {
+        if (socket) {
+            socket.emit("watch-flightPlan", fplId)
+        }
+        return () => { socket && socket.emit("unwatch-flightPlan") }
+    }, [fplId])
+
+    const parsedCtot = useMemo(() => fpl && parseCtot(fpl.ctot, fpl.eobt), [fpl])
+
     return fpl ? <>
         <FlightPlanCard fpl={fpl}/>
         <div className={styles.timesBlock}>
             <TimeCard type="EOBT" time={fpl.eobt}/>
-            <TimeCard type="CTOT" time={fpl.ctot}/>
+            <TimeCard type="CTOT" time={parsedCtot}/>
         </div>
     </> : <></>
+}
+
+function parseCtot(ctotString: string | null | undefined, eobtTimestamp: number): number | undefined {
+    if (!ctotString) {
+        return
+    }
+
+    const parsedCtot = /^(\d\d):?(\d\d)$/.exec(ctotString)
+    if (!parsedCtot) {
+        return
+    }
+    const [, hours, minutes] = parsedCtot
+
+    const eobt = dayjs.unix(eobtTimestamp).utc()
+
+    let ctot = eobt.hour(+hours).minute(+minutes)
+    if (ctot.isBefore(eobt)) {
+        ctot = ctot.add(1, 'day')
+    }
+    return ctot.unix()
 }

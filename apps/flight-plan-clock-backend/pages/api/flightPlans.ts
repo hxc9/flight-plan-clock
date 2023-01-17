@@ -3,6 +3,7 @@ import {FlightPlan, FlightPlansResult, FlightPlanMini, FlightPlansResponse} from
 import uniqBy from "lodash/uniqBy"
 import {getLastUpdated} from "../../lib/lastUpdateService";
 import { runCorsMiddleware } from "../../lib/middleware/cors";
+import {flightPlanToMini} from "../../lib/apiClient";
 
 
 export default async function handler(
@@ -55,23 +56,7 @@ export default async function handler(
         flightPlans.push(...rows)
     } while (total > flightPlans.length)
 
-    const data: FlightPlanMini[] = uniqBy(flightPlans, fpl => fpl.flightplanid).map(({
-                                                                                         flightplanid,
-                                                                                         callsign,
-                                                                                         eobt,
-                                                                                         departure,
-                                                                                         destination,
-                                                                                         status
-                                                                                     }) => {
-        return {
-            id: flightplanid,
-            callSign: callsign,
-            eobt,
-            departure,
-            destination,
-            status
-        }
-    })
+    const data: FlightPlanMini[] = uniqBy(flightPlans, fpl => fpl.flightplanid).map(flightPlanToMini)
 
     res.status(200).json({flightPlans: data, lastUpdated: await getLastUpdated()})
 }
