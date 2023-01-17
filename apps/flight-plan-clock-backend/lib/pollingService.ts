@@ -12,6 +12,7 @@ import {
 import {storeMessage} from "./messageService";
 import {getLastUpdated, setLastUpdated} from "./lastUpdateService";
 import {parseRoute} from "./routeService";
+import throttle from "lodash/throttle";
 
 const batchSize = 30
 
@@ -80,12 +81,16 @@ export class PollingService {
         }
     }
 
+    private notifyChanges = throttle(() => {
+        console.log("Notifying of new messages...")
+        this.io.emit("new-messages")
+    }, 3_000)
+
     private async poll() {
         try {
             const foundMessages = await this.pollMessages(batchSize)
             if (foundMessages) {
-                console.log("Notifying of new messages...")
-                this.io.emit("new-messages")
+                this.notifyChanges()
             }
         } catch (e) {
             console.error(e)

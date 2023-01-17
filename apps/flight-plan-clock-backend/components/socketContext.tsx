@@ -12,7 +12,7 @@ export default function SocketProvider({children} : {children : React.ReactNode}
         async function initSocket() {
             let mySocket : Socket
             if (!socket) {
-                await fetch('/api/socket').catch(console.error)
+                await fetch('/api/ping').catch(console.error)
                 mySocket = io()
                 setSocket(mySocket)
             } else {

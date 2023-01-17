@@ -4,6 +4,7 @@ import uniqBy from "lodash/uniqBy"
 import {getLastUpdated} from "../../lib/lastUpdateService";
 import { runCorsMiddleware } from "../../lib/middleware/cors";
 import {flightPlanToMini} from "../../lib/apiClient";
+import {runSocketInitMiddleware} from "../../lib/middleware/socketInit";
 
 
 export default async function handler(
@@ -11,6 +12,7 @@ export default async function handler(
     res: NextApiResponse<FlightPlansResponse>
 ) {
     await runCorsMiddleware(req, res)
+    await runSocketInitMiddleware(req, res)
 
     const flightPlans = []
     let total = 0

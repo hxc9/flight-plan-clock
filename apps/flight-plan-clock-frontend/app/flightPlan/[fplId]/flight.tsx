@@ -3,7 +3,7 @@
 import FlightPlanCard from "./flightPlanCard";
 import {TimeCard} from "./timeCard";
 import styles from './flight.module.css'
-import {FlightPlansResponse, FlightPlanFull, RefiledMessage, UpdateMessage} from "autorouter-dto";
+import {FlightPlanFull, FlightPlansResponse, RefiledMessage, Status, UpdateMessage} from "autorouter-dto";
 import useSWRImmutable from "swr/immutable";
 import {fetcher} from "../../../lib/restApi";
 import {useContext, useEffect, useMemo, useRef, useState} from "react";
@@ -12,6 +12,7 @@ import {useRefresh} from "../../../lib/utils";
 import {SocketContext} from "../../../components/socketContext";
 import {useRouter} from "next/navigation";
 import dayjs from "dayjs";
+import {SWRResponse} from "swr";
 
 export default function Flight({fplId}: { fplId: number }) {
     const router = useRouter()
@@ -21,8 +22,8 @@ export default function Flight({fplId}: { fplId: number }) {
     fplRef.current = fpl
 
     const {
-        data
-    }: { data: FlightPlansResponse | undefined, error: unknown | undefined, isLoading: boolean }
+        data, mutate
+    }: SWRResponse<FlightPlansResponse, unknown>
         = useSWRImmutable('/api/flightPlans', fetcher)
 
     useRefresh(data)
@@ -30,7 +31,7 @@ export default function Flight({fplId}: { fplId: number }) {
     const fallback = useMemo(() => data?.flightPlans?.find(fpl => fpl.id === fplId), [data, fplId])
 
     useEffect(() => {
-        fallback && updatedFpl({...fpl??{}, ...fallback})
+        fallback && updatedFpl({ ...fallback, ...fpl??{}})
     }, [fallback])
 
     const socket = useContext(SocketContext)
@@ -39,13 +40,17 @@ export default function Flight({fplId}: { fplId: number }) {
         if (socket) {
             socket.on("fpl-change", (msg: UpdateMessage) => {
                 if (fplRef.current && msg.fplId === fplId) {
-                    updatedFpl({...fplRef.current, ...msg.update})
-                    didRefresh(msg.timestamp)
+                    const newFpl : FlightPlanFull = {...fplRef.current, ...msg.update}
+                    setTimeout(() => {
+                        updatedFpl(newFpl)
+                        didRefresh(msg.timestamp)
+                    }, msg.update.status === Status.Cancelled ? 1_000 : 0)
                 }
             })
             socket.on("fpl-refiled", (msg: RefiledMessage) => {
                 if (fplRef.current && msg.fplId === fplId) {
                     didRefresh(msg.timestamp)
+                    mutate().catch(console.warn)
                     router.push('/flightPlan/' + msg.refiledAs)
                 }
             })

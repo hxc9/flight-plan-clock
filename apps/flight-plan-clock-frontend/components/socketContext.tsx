@@ -13,7 +13,7 @@ export default function SocketProvider({children} : {children : React.ReactNode}
     useEffect(() => {
         async function initSocket() {
             if (!socket.connected) {
-                fetch(backendUrl + '/api/socket').catch(console.error)
+                await fetch(backendUrl + '/api/ping').catch(console.error)
                 !socket.connected && socket.connect()
             }
             socket.on('connect', () => {
