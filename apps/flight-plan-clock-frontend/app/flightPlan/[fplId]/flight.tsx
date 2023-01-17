@@ -3,8 +3,7 @@
 import FlightPlanCard from "./flightPlanCard";
 import {TimeCard} from "./timeCard";
 import styles from './flight.module.css'
-import {FlightPlanFull, FlightPlansResponse, RefiledMessage, Status, UpdateMessage} from "autorouter-dto";
-import useSWRImmutable from "swr/immutable";
+import {FlightPlanFull, FlightPlanResponse, RefiledMessage, Status, UpdateMessage} from "autorouter-dto";
 import {fetcher} from "../../../lib/restApi";
 import {useContext, useEffect, useMemo, useRef, useState} from "react";
 import {RefreshContext} from "../../../components/refreshContext";
@@ -12,7 +11,7 @@ import {useRefresh} from "../../../lib/utils";
 import {SocketContext} from "../../../components/socketContext";
 import {useRouter} from "next/navigation";
 import dayjs from "dayjs";
-import {SWRResponse} from "swr";
+import useSWR, {SWRResponse} from "swr";
 
 export default function Flight({fplId}: { fplId: number }) {
     const router = useRouter()
@@ -23,12 +22,12 @@ export default function Flight({fplId}: { fplId: number }) {
 
     const {
         data, mutate
-    }: SWRResponse<FlightPlansResponse, unknown>
-        = useSWRImmutable('/api/flightPlans', fetcher)
+    }: SWRResponse<FlightPlanResponse, unknown>
+        = useSWR('/api/flightPlans/' + fplId, fetcher, {refreshInterval: 60_000, keepPreviousData: true})
+
+    const fallback = data?.flightPlan?? undefined
 
     useRefresh(data)
-
-    const fallback = useMemo(() => data?.flightPlans?.find(fpl => fpl.id === fplId), [data, fplId])
 
     useEffect(() => {
         fallback && updatedFpl({ ...fallback, ...fpl??{}})

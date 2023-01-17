@@ -22,7 +22,7 @@ export type FlightPlan = {
     // flight plan ICAO string
     "fplan": string,
     // filing method, currently NMB2B or AFTN
-    "method": "NMB2B"|"AFTN",
+    "method": "NMB2B" | "AFTN",
     // filed route distance in nautical miles
     "routedistance": number,
     // great circle distance in nautical miles
@@ -32,7 +32,7 @@ export type FlightPlan = {
     // legal minimum fuel in aircraft fuel units
     "minfuel": number,
     // aircraft fuel unit ("l", "lb", "usgal")
-    "fuelunit": "l"|"lb"|"usgal",
+    "fuelunit": "l" | "lb" | "usgal",
     // see below for possible status values and state machine transisitions
     "status": Status,
     "callsign": string,
@@ -54,10 +54,14 @@ export type FlightPlanMini = {
 }
 
 export type FlightPlanFull = FlightPlanMini & {
-    ctot?: string|null,
+    ctot?: string | null,
     route?: string
 }
 
 export type FlightPlansResponse = {
     flightPlans: FlightPlanMini[], lastUpdated: number
+}
+
+export type FlightPlanResponse = {
+    flightPlan: FlightPlanMini, lastUpdated: number
 }
