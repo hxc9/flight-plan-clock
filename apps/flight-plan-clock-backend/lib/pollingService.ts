@@ -3,15 +3,11 @@ import {ackMessages, fetchMessages} from "./apiClient";
 import {redis} from "./dbClient";
 import {deleteFplCtot, setFplCtot} from "./ctotService";
 import {
-    FplBroughtForwardMessage,
-    FplDelayedMessge,
+    FlightPlanFull,
     FplMessage,
+    fplMessageIs,
     FplMessages,
-    FplMessageType,
-    FplSlotMessage,
-    FplStatusChangeMessage,
-    isFplSlotCancelledMessage,
-    isFplSlotMessage
+    WsMessage
 } from "autorouter-dto";
 import {storeMessage} from "./messageService";
 import {setLastUpdated} from "./lastUpdateService";
@@ -93,36 +89,27 @@ export class PollingService {
         const pipeline = redis.pipeline()
 
         messages.forEach((msg: FplMessage) => {
-            if (isFplSlotMessage(msg)) {
+            if (fplMessageIs.slot(msg)) {
                 setFplCtot(pipeline, msg.message.fplid, msg.message.ctot)
-            } else if (isFplSlotCancelledMessage(msg)) {
+            } else if (fplMessageIs.slotCancelled(msg)) {
                 deleteFplCtot(pipeline, msg.message.fplid)
             }
+
             storeMessage(pipeline, msg)
-            const room = this.io.to('' + msg.message.fplid)
-            switch (msg.type) {
-                case FplMessageType.fplan_status_changed:
-                    const statusChangeMsg = (msg as FplStatusChangeMessage).message
-                    room.emit('fplChange', {status: statusChangeMsg.status})
-                    break;
-                case FplMessageType.fplan_slot_allocated:
-                case FplMessageType.fplan_slot_revised:
-                    const slotMsg = (msg as FplSlotMessage).message
-                    room.emit('fplChange', {ctot: slotMsg.ctot})
-                    break;
-                case FplMessageType.fplan_slot_cancelled:
-                    room.emit('fplChange', {ctot: null})
-                    break;
-                case FplMessageType.fplan_delayed:
-                    const delayMsg = (msg as FplDelayedMessge).message
-                    room.emit('fplChange', {eobt: delayMsg.eobt})
-                    break;
-                case FplMessageType.fplan_broughtforward:
-                    const bfMsg = (msg as FplBroughtForwardMessage).message
-                    room.emit('fplRefiled', bfMsg.fplid)
-                    break;
-                default:
-                    break;
+
+            if (fplMessageIs.statusChanged(msg)) {
+                this.relayUpdateMessage(msg, {status: msg.message.status})
+            } else if (fplMessageIs.slot(msg)) {
+                this.relayUpdateMessage(msg, {ctot: msg.message.ctot})
+            } else if (fplMessageIs.slotCancelled(msg)) {
+                this.relayUpdateMessage(msg, {ctot: undefined})
+            } else if (fplMessageIs.delayed(msg)) {
+                this.relayUpdateMessage(msg, {eobt: msg.message.eobt})
+            } else if (fplMessageIs.broughtForward(msg)) {
+                this.relayFplMessage('fpl-refiled', {
+                    fplId: msg.message.previous_fplid,
+                    timestamp: msg.timestamp,
+                    refiledAs: msg.message.fplid})
             }
         })
 
@@ -131,5 +118,13 @@ export class PollingService {
         await pipeline.exec()
         await ackMessages(messages.map((m: FplMessage) => m.id))
         return messages.length
+    }
+
+    private relayFplMessage<T extends WsMessage>(type: string, msg: T) {
+        this.io.to('' + msg.fplId).emit(type, msg)
+    }
+
+    private relayUpdateMessage(msg: FplMessage, payload: Partial<FlightPlanFull>) {
+        this.relayFplMessage('fpl-change', { fplId: msg.message.fplid, timestamp: msg.timestamp, update: payload})
     }
 }

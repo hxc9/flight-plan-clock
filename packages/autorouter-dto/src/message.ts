@@ -1,3 +1,5 @@
+import {Status} from "./status";
+
 export enum FplMessageType {
     fplan_status_changed = "fplan_status_changed",
     fplan_filed = "fplan_filed",
@@ -37,8 +39,8 @@ export type FplMessages = Array<FplMessage>
 export type FplStatusChangeMessage = FplMessage & {
     type: FplMessageType.fplan_status_changed,
     message: {
-        "status_previous": string,
-        "status": string
+        "status_previous": Status,
+        "status": Status
     }
 }
 
@@ -83,20 +85,12 @@ export type FplSlotRevisedMessage = FplMessage & {
 
 export type FplSlotMessage = FplSlotAllocatedMessage|FplSlotRevisedMessage
 
-export function isFplSlotMessage(msg: FplMessage) : msg is FplSlotMessage {
-    return msg.type === FplMessageType.fplan_slot_revised || msg.type === FplMessageType.fplan_slot_allocated
-}
-
 export type FplSlotCancelledMessage = FplMessage & {
     type: FplMessageType.fplan_slot_cancelled,
     message: {
         "reasons": unknown[],
         "comments": unknown[]
     }
-}
-
-export function isFplSlotCancelledMessage(msg: FplMessage) : msg is FplSlotCancelledMessage {
-    return msg.type === FplMessageType.fplan_slot_revised || msg.type === FplMessageType.fplan_slot_allocated
 }
 
 export type FplSuspendedMessage = FplMessage & {
@@ -169,5 +163,26 @@ export type FplOperatorMessage = FplMessage & {
     message: {
         message: string,
         originator: string
+    }
+}
+
+export const fplMessageIs = {
+    slot: function(msg: FplMessage) : msg is FplSlotMessage {
+        return msg.type === FplMessageType.fplan_slot_revised || msg.type === FplMessageType.fplan_slot_allocated
+    },
+    slotCancelled: function(msg: FplMessage) : msg is FplSlotCancelledMessage {
+        return msg.type === FplMessageType.fplan_slot_revised || msg.type === FplMessageType.fplan_slot_allocated
+    },
+    statusChanged: function(msg: FplMessage) : msg is FplStatusChangeMessage {
+        return msg.type === FplMessageType.fplan_status_changed
+    },
+    cancelled: function (msg: FplMessage) : msg is FplCancelledMessage {
+        return msg.type === FplMessageType.fplan_cancelled
+    },
+    delayed: function (msg: FplMessage) : msg is FplDelayedMessge {
+        return msg.type === FplMessageType.fplan_delayed
+    },
+    broughtForward: function (msg: FplMessage) : msg is FplBroughtForwardMessage {
+        return msg.type === FplMessageType.fplan_broughtforward
     }
 }

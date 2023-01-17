@@ -7,8 +7,7 @@ import {useRouter} from "next/navigation";
 import {fetcher} from "../lib/restApi"
 import Callsign from "../components/callsign";
 import dayjs from "../lib/dayjs";
-import {useContext, useEffect} from 'react';
-import {RefreshContext} from "../components/refreshContext";
+import {useRefresh} from "../lib/utils";
 
 export default function TableBody(): JSX.Element {
     const {
@@ -20,13 +19,7 @@ export default function TableBody(): JSX.Element {
         refreshInterval: 60_000
     })
 
-    const {didRefresh} = useContext(RefreshContext)
-
-    useEffect(() => {
-        if (data?.lastUpdated) {
-            didRefresh(data.lastUpdated)
-        }
-        }, [didRefresh, data?.lastUpdated])
+    useRefresh(data)
 
     if (!data || error || isLoading) {
         return <tr>
