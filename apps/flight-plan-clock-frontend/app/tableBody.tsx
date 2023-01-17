@@ -8,8 +8,10 @@ import {fetcher} from "../lib/restApi"
 import Callsign from "../components/callsign";
 import dayjs from "../lib/dayjs";
 import {useRefresh} from "../lib/utils";
+import {useEffect} from "react";
 
 export default function TableBody(): JSX.Element {
+    const router = useRouter()
     const {
         data,
         error,
@@ -20,6 +22,12 @@ export default function TableBody(): JSX.Element {
     })
 
     useRefresh(data)
+
+    useEffect(() => {
+        if (data && data.flightPlans.length > 0) {
+            router.prefetch('/flightPlan/' + data.flightPlans[0].id)
+        }
+    }, [data?.flightPlans?.at(0)?.id])
 
     if (!data || error || isLoading) {
         return <tr>

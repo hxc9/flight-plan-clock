@@ -1,7 +1,7 @@
 import styles from './flightPlanCard.module.css'
-import {FlightPlanFull} from "./flight";
 import Callsign from "../../../components/callsign";
 import dayjs from '../../../lib/dayjs';
+import {FlightPlanFull} from "autorouter-dto";
 
 export default function FlightPlanCard({fpl} : {fpl: FlightPlanFull}) {
     const eobt = dayjs.unix(fpl.eobt).utc()
