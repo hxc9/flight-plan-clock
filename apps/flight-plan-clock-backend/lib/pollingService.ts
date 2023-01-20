@@ -13,13 +13,14 @@ import {storeMessage} from "./messageService";
 import {getLastUpdated, setLastUpdated} from "./lastUpdateService";
 import {parseRoute} from "./routeService";
 import throttle from "lodash/throttle";
+import {clearImmediate} from "timers";
 
 const batchSize = 30
 
 export class PollingService {
     private io: Server
     private subscribers: Socket[] = []
-    private timerId: NodeJS.Timeout | undefined
+    private timerId: NodeJS.Immediate | undefined
     private running = false
 
     constructor(io: Server) {
@@ -67,7 +68,7 @@ export class PollingService {
         this.subscribers.push(socket)
         if (this.subscribers.length > 0 && !this.running) {
             this.running = true
-            this.timerId = setTimeout(this.poll.bind(this), 0)
+            this.timerId = setImmediate(this.poll.bind(this))
             console.log("Polling started")
         }
     }
@@ -75,7 +76,7 @@ export class PollingService {
     private unsubscribe(socket: Socket): void {
         this.subscribers = this.subscribers.filter(v => v !== socket)
         if (this.subscribers.length === 0) {
-            this.timerId && clearTimeout(this.timerId)
+            this.timerId && clearImmediate(this.timerId)
             this.running = false
             console.log("Polling stopped")
         }
@@ -87,6 +88,9 @@ export class PollingService {
     }, 3_000)
 
     private async poll() {
+        if (!this.running) {
+            return
+        }
         try {
             const foundMessages = await this.pollMessages(batchSize)
             if (foundMessages) {
@@ -96,7 +100,7 @@ export class PollingService {
             console.error(e)
         }
         if (this.running) {
-            this.timerId = setTimeout(this.poll.bind(this), 5000)
+            this.timerId = setImmediate(this.poll.bind(this))
         }
     }
 
