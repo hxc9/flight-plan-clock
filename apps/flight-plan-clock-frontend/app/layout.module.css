@@ -12,7 +12,7 @@
 }
 
 .footer {
-    background-color: mediumpurple;
+    border-top: #C8C7CC 1px solid;
     padding: 0.3em 0.3em 0.5em;
     display: flex;
     flex-direction: row-reverse;

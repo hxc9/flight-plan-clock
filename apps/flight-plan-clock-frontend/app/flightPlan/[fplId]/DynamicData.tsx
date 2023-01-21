@@ -46,6 +46,11 @@ export function TimeFromTickValue({fallback} : {fallback?: string}) {
     return value ? <TimeFromTick time={value}/> : <>{fallback}</>
 }
 
+export function FallbackValue({children}: { children: React.ReactNode }) {
+    const value = useContext(DynamicDataContext)
+    return value ? <></> : <>{children}</>
+}
+
 function formatTimestamp(timestamp: number, format: string) {
     return dayjs.unix(timestamp).utc().format(format)
 }
@@ -81,7 +86,7 @@ function parseCtot(ctotString: string | null | undefined, eobtTimestamp: number)
 }
 
 const timestampFormatters: { [K in DynamicDataFormatter]: (value: number) => string } = {
-    date: (timestamp: number) => formatTimestamp(timestamp, 'YYYY-MM-DD'),
+    date: (timestamp: number) => formatTimestamp(timestamp, 'YYYY/MM/DD'),
     time: (timestamp: number) => formatTimestamp(timestamp, 'HH:mm[Z]'),
     eobtInterval: (timestamp: number) => interval(timestamp, -15, 15),
     ctotInterval: (timestamp: number) => interval(timestamp, -5, 10)

@@ -38,10 +38,10 @@ function FplRow({fpl}: { fpl: FlightPlanMini }): JSX.Element {
     </Link>
 
     return <tr className={styles.link}>
-        <td>{linker(eobt.format('YYYY-MM-DD'))}</td>
+        <td>{linker(eobt.format('YYYY/MM/DD'))}</td>
         <td>{linker(eobt.format('HH:mm[Z]'))}</td>
         <td>{linker(<Callsign callsign={callSign}/>)}</td>
-        <td>{linker(departure + ' → ' + destination)}</td>
-        <td>{'>'}</td>
+        <td>{linker(<>{departure} <br/> → {destination}</>)}</td>
+        <td>{linker('>')}</td>
     </tr>
 }

@@ -4,25 +4,30 @@
     justify-content: space-between;
     align-items: center;
     width: 50%;
+    border-top: #C8C7CC 1px solid;
 }
 
 .timeCard > * {
     flex-grow: 1;
 }
 
-.timesCard > .midRow {
+.timeCard > .midRow {
     flex-grow: 0.5;
     text-align: center;
+    color: slategrey;
 }
 
 .midRow > * {
     text-align: center;
 }
 
+.bottomRow {
+    color: slategrey;
+}
+
 .eobtCard {
-    background-color: lightpink;
+    border-right: #C8C7CC 1px solid;
 }
 
 .ctotCard {
-    background-color: lightyellow;
 }

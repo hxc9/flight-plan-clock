@@ -1,5 +1,5 @@
 .container {
-
+    padding: 0.5em;
 }
 
 .container h1, .container h2, .container h3, .container h4, .container h5, .container p {
@@ -7,7 +7,12 @@
 }
 
 .header {
-    background-color: lightgreen;
+    border-bottom: #C8C7CC 1px solid;
+}
+
+.header a {
+    color: #007aff;
+    text-decoration: none;
 }
 
 .timesBlock {
