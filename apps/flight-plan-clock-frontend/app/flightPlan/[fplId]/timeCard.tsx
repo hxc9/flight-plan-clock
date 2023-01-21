@@ -1,45 +1,44 @@
 import styles from './timeCard.module.css'
-import dayjs, {Dayjs} from "../../../lib/dayjs";
-import TimeFromTick from "../../../components/timeFromTick";
+import {DateValue, DynamicCtot, DynamicData, TimeFromTickValue} from "./DynamicData";
 
-export function TimeCard({type, time: timestamp} : {type: "EOBT"|"CTOT", time?: number}) {
-    const config = configs[type]
-    const time = timestamp ? dayjs.unix(timestamp).utc() : undefined
-    return <div className={styles.timeCard + ' ' + config.style}>
-        <h1 className={styles.topRow}>{config.title}</h1>
+export function TimeCardEobt({time: timestamp}: { time?: number }) {
+    return <div className={styles.timeCard + ' ' + styles.eobtCard}>
+        <h1 className={styles.topRow}>EOBT</h1>
         <div className={styles.midRow}>
-            <h1>{hhmmZ(time)}</h1>
-            <p>{time ? config.interval(time) : '\u00A0'}</p>
+            <h1>
+                <DynamicData attr='eobt' baseValue={timestamp}>
+                    <DateValue format="time"/>
+                </DynamicData>
+            </h1>
+            <p>
+                <DynamicData attr='eobt' baseValue={timestamp}>
+                    <DateValue format="eobtInterval" fallback={'\u00A0'}/>
+                </DynamicData>
+            </p>
         </div>
         <div className={styles.bottomRow}>
-            {timestamp ? <TimeFromTick time={timestamp}/> : '\u00A0'}
+            <DynamicData attr='eobt' baseValue={timestamp}>
+                <TimeFromTickValue fallback={'\u00A0'}/>
+            </DynamicData>
         </div>
     </div>
 }
 
-const configs = {
-    EOBT: {
-        title: 'EOBT',
-        style: styles.eobtCard,
-        interval: (time: Dayjs) => interval(time, -15, 15)
-    },
-    CTOT: {
-        title: 'CTOT',
-        style: styles.ctotCard,
-        interval: (time: Dayjs) => interval(time, -5, 10)
-    }
-}
-
-function interval(time: Dayjs, start: number, end: number) {
-    const rangeStart = hhmm(time.add(start, 'minutes'))
-    const rangeEnd = hhmm(time.add(end, 'minutes'))
-    return `[${rangeStart} - ${rangeEnd}]`
-}
-
-function hhmm(time: Dayjs) {
-    return time.format("HH:mm")
-}
-
-function hhmmZ(time?: Dayjs) {
-    return time?.format("HH:mm[Z]")??'--:--'
+export function TimeCardCtot({ctot, eobt}: { ctot?: string | null, eobt: number }) {
+    return <div className={styles.timeCard + ' ' + styles.ctotCard}>
+        <h1 className={styles.topRow}>CTOT</h1>
+        <div className={styles.midRow}>
+            <h1><DynamicCtot baseCtot={ctot} baseEobt={eobt}>
+                <DateValue format="time"/>
+            </DynamicCtot></h1>
+            <p><DynamicCtot baseCtot={ctot} baseEobt={eobt}>
+                <DateValue format="ctotInterval" fallback={'\u00A0'}/>
+            </DynamicCtot></p>
+        </div>
+        <div className={styles.bottomRow}>
+            <DynamicCtot baseCtot={ctot} baseEobt={eobt}>
+                <TimeFromTickValue fallback={'\u00A0'}/>
+            </DynamicCtot>
+        </div>
+    </div>
 }

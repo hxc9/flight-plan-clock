@@ -34,9 +34,9 @@ export class PollingService {
             this.subscribe(socket)
             socket.on('watch-flightPlan', async (id: number) => {
                 if (this.watchedFlightPlans[socket.id]) {
-                    socket.leave('' + this.watchedFlightPlans[socket.id])
+                    socket.leave('fpl:' + this.watchedFlightPlans[socket.id])
                 }
-                socket.join('' + id)
+                socket.join('fpl:' + id)
                 this.watchedFlightPlans[socket.id] = id
                 const fpl = await fetchFlightPlan(id)
                 if (fpl) {
@@ -54,7 +54,7 @@ export class PollingService {
             })
             socket.on('unwatch-flightPlan', () => {
                 if (this.watchedFlightPlans[socket.id]) {
-                    socket.leave('' + this.watchedFlightPlans[socket.id])
+                    socket.leave('fpl:' + this.watchedFlightPlans[socket.id])
                     delete this.watchedFlightPlans[socket.id]
                 }
             })
@@ -83,8 +83,7 @@ export class PollingService {
     }
 
     private notifyChanges = throttle(() => {
-        console.log("Notifying of new messages...")
-        this.io.emit("new-messages")
+        this.io.emit("refresh-overview")
     }, 3_000)
 
     private async poll() {
@@ -92,8 +91,8 @@ export class PollingService {
             return
         }
         try {
-            const foundMessages = await this.pollMessages(batchSize)
-            if (foundMessages) {
+            const [,refreshRequired] = await this.pollMessages(batchSize)
+            if (refreshRequired) {
                 this.notifyChanges()
             }
         } catch (e) {
@@ -107,20 +106,23 @@ export class PollingService {
     private async pollMessages(timeout: number) {
         let messageCount
         let totalMessages = 0
+        let overviewRefreshRequired = false
 
         do {
-            messageCount = await this.processMessages(batchSize, timeout)
+            let refresh
+            [messageCount, refresh] = await this.processMessages(batchSize, timeout)
             totalMessages += messageCount
+            overviewRefreshRequired ||= refresh
             timeout = 0
         } while (messageCount === batchSize)
 
-        return totalMessages > 0
+        return [totalMessages > 0, overviewRefreshRequired]
     }
 
-    private async processMessages(count: number, timeout: number = 0) {
+    private async processMessages(count: number, timeout: number = 0) : Promise<[number, boolean]> {
         let messages: FplMessages = await fetchMessages(count, timeout)
         if (messages.length === 0) {
-            return 0
+            return [0, false]
         }
 
         const pipeline = redis.pipeline()
@@ -129,7 +131,6 @@ export class PollingService {
             if (fplMessageIs.slot(msg)) {
                 setFplCtot(pipeline, msg.message.fplid, msg.message.ctot)
             } else if (fplMessageIs.slotCancelled(msg)) {
-                console.log("slot deleted", JSON.stringify(msg))
                 deleteFplCtot(pipeline, msg.message.fplid)
             }
 
@@ -155,11 +156,11 @@ export class PollingService {
 
         await pipeline.exec()
         await ackMessages(messages.map((m: FplMessage) => m.id))
-        return messages.length
+        return [messages.length, messages.some(msg => fplMessageIs.overviewRefreshRequired(msg))]
     }
 
     private relayFplMessage<T extends WsMessage>(type: string, msg: T) {
-        this.io.to('' + msg.fplId).emit(type, msg)
+        this.io.to('fpl:' + msg.fplId).emit(type, msg)
     }
 
     private relayUpdateMessage(msg: FplMessage, payload: Partial<FlightPlanFull>) {

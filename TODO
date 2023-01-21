@@ -1,3 +1,4 @@
+* error handling for frontend fetch calls
 * authentication
 * user separation
 * styling

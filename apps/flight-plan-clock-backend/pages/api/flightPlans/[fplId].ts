@@ -4,6 +4,8 @@ import {runCorsMiddleware} from "../../../lib/middleware/cors";
 import {flightPlanToMini} from "../../../lib/apiClient";
 import {runSocketInitMiddleware} from "../../../lib/middleware/socketInit";
 import {getLastUpdated} from "../../../lib/lastUpdateService";
+import {getFplCtot} from "../../../lib/ctotService";
+import {parseRoute} from "../../../lib/routeService";
 
 
 export default async function handler(
@@ -17,6 +19,11 @@ export default async function handler(
 
     if (method !== 'GET') {
         res.status(405).end()
+        return
+    }
+
+    if (!fplId) {
+        res.status(404).end()
         return
     }
 
@@ -39,7 +46,7 @@ export default async function handler(
     const fpl: FlightPlan = await apiResponse.json()
 
     res.status(200).json({
-        flightPlan: flightPlanToMini(fpl),
+        flightPlan: {...flightPlanToMini(fpl), ctot: await getFplCtot(+fplId), route: parseRoute(fpl)},
         lastUpdated: await getLastUpdated()
     })
 }

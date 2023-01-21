@@ -63,5 +63,5 @@ export type FlightPlansResponse = {
 }
 
 export type FlightPlanResponse = {
-    flightPlan: FlightPlanMini, lastUpdated: number
+    flightPlan: FlightPlanFull, lastUpdated: number
 }

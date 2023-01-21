@@ -27,3 +27,8 @@
 .flightPlanTable tr:not(:last-child) {
     border-bottom: grey 1px solid;
 }
+
+.flightPlanTable a {
+    color: inherit;
+    text-decoration: inherit;
+}

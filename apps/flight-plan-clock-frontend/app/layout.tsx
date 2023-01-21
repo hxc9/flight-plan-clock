@@ -7,7 +7,6 @@ import Clock from './clock';
 import {RefreshContextProvider} from "../components/refreshContext";
 import UpdateInfo from "./updateInfo";
 import SocketProvider from "../components/socketContext";
-import RevalidationRequester from "./revalidationRequester";
 
 const roboto = Roboto_Flex({subsets: ['latin']})
 
@@ -27,7 +26,6 @@ export default function RootLayout({
         <ClockProvider>
             <SocketProvider>
                 <RefreshContextProvider>
-                    <RevalidationRequester/>
                     <main className={styles.main + ' ' + roboto.className}>
                         {children}
                         <div className={styles.footer}>

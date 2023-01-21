@@ -1,10 +1,10 @@
 import styles from './flightPlanCard.module.css'
 import Callsign from "../../../components/callsign";
-import dayjs from '../../../lib/dayjs';
 import {FlightPlanFull} from "autorouter-dto";
+import {DateValue, DynamicData, PlainValue} from "./DynamicData";
 
-export default function FlightPlanCard({fpl} : {fpl: FlightPlanFull}) {
-    const eobt = dayjs.unix(fpl.eobt).utc()
+export default function FlightPlanCard({fpl}: { fpl: FlightPlanFull }) {
+
     return <div className={styles.flightCard}>
         <div className={styles.topRow}>
             <h2><Callsign callsign={fpl.callSign}/></h2>
@@ -12,10 +12,18 @@ export default function FlightPlanCard({fpl} : {fpl: FlightPlanFull}) {
         </div>
         <div className={styles.midRow}>
             <div>
-                <h3>{eobt.format('YYYY-MM-DD')}</h3>
-                <h3>{eobt.format('HH:mm[Z]')}</h3>
+                <h3><DynamicData attr={'eobt'} baseValue={fpl.eobt}>
+                    <DateValue format="date"/>
+                </DynamicData></h3>
+                <h3><DynamicData attr={'eobt'} baseValue={fpl.eobt}>
+                    <DateValue format="time"/>
+                </DynamicData></h3>
             </div>
-            <h2 className={styles.status}>{fpl.status}</h2>
+            <h2 className={styles.status}>
+                <DynamicData attr={'status'} baseValue={fpl.status}>
+                    <PlainValue/>
+                </DynamicData>
+            </h2>
         </div>
         <div className={styles.bottomRow}>
             <p><b>Route:</b></p>
