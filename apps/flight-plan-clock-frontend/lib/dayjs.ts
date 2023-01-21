@@ -1,8 +1,10 @@
 import dayjs, {Dayjs} from "dayjs";
 import utc from "dayjs/plugin/utc"
+import IsBetween from "dayjs/plugin/IsBetween"
 import RelativeTime from "dayjs/plugin/relativeTime"
 
 dayjs.extend(utc)
+dayjs.extend(IsBetween)
 dayjs.extend(RelativeTime, {thresholds: [
     { l: 's', r: 44, d: 'second' },
     { l: 'm', r: 70 },

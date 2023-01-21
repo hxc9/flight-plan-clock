@@ -1,7 +1,7 @@
 import styles from './flightPlanCard.module.css'
 import Callsign from "../../../components/callsign";
 import {FlightPlanFull} from "autorouter-dto";
-import {DateValue, DynamicData, PlainValue} from "./DynamicData";
+import {DateValue, DynamicData, PlainValue} from "./dynamicData";
 
 export default function FlightPlanCard({fpl}: { fpl: FlightPlanFull }) {
 

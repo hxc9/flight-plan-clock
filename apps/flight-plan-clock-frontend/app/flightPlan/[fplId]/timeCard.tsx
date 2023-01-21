@@ -1,5 +1,5 @@
 import styles from './timeCard.module.css'
-import {DateValue, DynamicCtot, DynamicData, FallbackValue, TimeFromTickValue} from "./DynamicData";
+import {DateValue, DynamicCtot, DynamicData, FallbackValue, TimeFromTickValue} from "./dynamicData";
 
 export function TimeCardEobt({time: timestamp}: { time?: number }) {
     return <div className={styles.timeCard + ' ' + styles.eobtCard}>
@@ -7,7 +7,7 @@ export function TimeCardEobt({time: timestamp}: { time?: number }) {
         <div className={styles.midRow}>
             <h1>
                 <DynamicData attr='eobt' baseValue={timestamp}>
-                    <DateValue format="time"/>
+                    <DateValue format="time" style="eobtMain"/>
                 </DynamicData>
             </h1>
             <p>
@@ -29,7 +29,7 @@ export function TimeCardCtot({ctot, eobt}: { ctot?: string | null, eobt: number 
         <h1 className={styles.topRow}>CTOT</h1>
         <div className={styles.midRow}>
             <h1><DynamicCtot baseCtot={ctot} baseEobt={eobt}>
-                <DateValue format="time"/>
+                <DateValue format="time" style="ctotMain"/>
             </DynamicCtot></h1>
             <p>
                 <DynamicCtot baseCtot={ctot} baseEobt={eobt}>

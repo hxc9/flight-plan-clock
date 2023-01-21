@@ -21,6 +21,10 @@
     text-align: center;
 }
 
+.midRow h1 {
+    position: relative;
+}
+
 .bottomRow {
     color: slategrey;
 }
