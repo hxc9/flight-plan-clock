@@ -8,13 +8,13 @@ export default async function handler(
     req: NextApiRequest,
     res: NextApiResponse<FlightPlansResult>
 ) {
-    const {method, query: {sidx}} = req
+    const {method, query: {sidx, showclosed}} = req
     if (method !== 'GET') {
         res.status(405).end()
         return
     }
 
-    let data = await listFlightPlans()
+    let data = await listFlightPlans(showclosed === 'yes')
 
     if (sidx === 'eobt') {
         data.sort((a, b) => a.eobt - b.eobt)

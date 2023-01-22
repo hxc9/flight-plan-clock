@@ -18,17 +18,19 @@ import {
     buildFplStatusChangeMessage,
     buildFplSuspendedMessage
 } from "./data/messageData";
-import { generateFlightPlan } from "./data/flightPlanData";
+import {generateFlightPlan} from "./data/flightPlanData";
 import {error} from "next/dist/build/output/log";
 import dayjs from "dayjs";
 import {changeFlightPlanCtot, readFlightPlanCtot} from "./ctotService";
 import {addMessage, deleteMessagesForFlightPlan} from "./messageService";
 
-export async function listFlightPlans(): Promise<Array<FlightPlan>> {
+export async function listFlightPlans(showClosed: boolean): Promise<Array<FlightPlan>> {
     let res1 = await redis.lrange("flightPlans", 0, -1)
     if (res1.length === 0) return []
     let res2 = await redis.json_mget(res1.map((key) => fplKey(key)), '$')
-    return (<Array<Array<FlightPlan>> | null>res2)?.map((v) => v[0]) ?? []
+    return (<Array<Array<FlightPlan>> | null>res2)
+        ?.map((v) => v[0])
+        .filter(fpl => showClosed || (fpl.status !== Status.Closed && fpl.status !== Status.Cancelled)) ?? []
 }
 
 export async function getFlightPlan(fplId: number): Promise<FlightPlan | null> {
