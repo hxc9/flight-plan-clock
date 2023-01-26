@@ -8,7 +8,7 @@ import {RefreshCanary} from "../components/refreshCanary";
 import RefreshGovernor from "./refreshGovernor";
 
 export default async function Home() {
-    const data = (await fetch(process.env.NEXT_PUBLIC_BACKEND_URL + '/api/flightPlans/',
+    const data = (await fetch(process.env.NEXT_PUBLIC_BACKEND_URL + '/api/flightPlans',
         {next: {revalidate: 0}})
         .then(r => r.json())) as FlightPlansResponse
     const {flightPlans} = data

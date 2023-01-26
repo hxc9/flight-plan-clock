@@ -1,8 +1,18 @@
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
+This backend loads and process data from the Autorouter API
+([https://www.autorouter.aero/wiki/api/](https://www.autorouter.aero/wiki/api/)).
+
+The backend stores data in a Redis instance.
+
 ## Getting Started
 
-First, run the development server:
+First, start your Redis instance (either local, remote, Dockerized).
+
+Provide the address to the Redis instance as the REDIS_URL variable in `.env.local`
+(leave empty for the default URL - localhost and port 6379).
+
+Then, run the development server:
 
 ```bash
 npm run dev
