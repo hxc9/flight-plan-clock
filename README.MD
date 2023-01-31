@@ -21,6 +21,7 @@ take off (only provided in some cases)
 
 Here is an example of the frontend app's flight plan detail page.
 
+<img src="screenshot.png" width="300" alt="Frontend screenshot"/>
 ![Frontend screenshot](screenshot.png)
 1. Call sign of the flight
 2. Airport of departure and destination 
