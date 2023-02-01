@@ -4,7 +4,7 @@ import {
     FplDesuspendedMessage,
     FplDpiUpdated,
     FplFiledMessage,
-    FplMessage,
+    FplMessage, FplMessageType,
     FplQueuedMessage,
     FplRejectedMessage,
     FplSlotAllocatedMessage,
@@ -37,26 +37,26 @@ const baseMessage = {
 }
 
 export function buildFplStatusChangeMessage(fplId: number, previousStatus: Status, nextStatus: Status) : FplStatusChangeMessage {
-    return buildMessage<FplStatusChangeMessage>('fplan_status_changed', fplId, {
+    return buildMessage<FplStatusChangeMessage>(FplMessageType.fplan_status_changed, fplId, {
         "status_previous": previousStatus,
         "status": nextStatus
     })
 }
 
 export function buildFplFiledMessage(fplId: number, refile: boolean) : FplFiledMessage {
-    return buildMessage<FplFiledMessage>('fplan_filed', fplId, {
+    return buildMessage<FplFiledMessage>(FplMessageType.fplan_filed, fplId, {
         refile: refile
     })
 }
 
 export function buildFplQueuedMessage(fplId: number, refile: boolean) : FplQueuedMessage {
-    return buildMessage<FplQueuedMessage>('fplan_queued', fplId, {
+    return buildMessage<FplQueuedMessage>(FplMessageType.fplan_queued, fplId, {
         refile: refile
     })
 }
 
 export function buildFplRejectedMessage(fplId: number) : FplRejectedMessage {
-    return buildMessage<FplRejectedMessage>('fplan_rejected', fplId, {
+    return buildMessage<FplRejectedMessage>(FplMessageType.fplan_rejected, fplId, {
         errors: []
     })
 }
@@ -85,12 +85,12 @@ export function buildFplSlotMessage(fplId: number, ctot: string, revision: boole
             ]
     }
     return revision
-        ? buildMessage<FplSlotRevisedMessage>( 'fplan_slot_revised', fplId, subMessage)
-        : buildMessage<FplSlotAllocatedMessage>( 'fplan_slot_allocated', fplId, subMessage)
+        ? buildMessage<FplSlotRevisedMessage>( FplMessageType.fplan_slot_revised, fplId, subMessage)
+        : buildMessage<FplSlotAllocatedMessage>( FplMessageType.fplan_slot_allocated, fplId, subMessage)
 }
 
 export function buildFplSlotCancelledMessage(fplId: number) : FplSlotCancelledMessage {
-    return buildMessage<FplSlotCancelledMessage>('fplan_slot_cancelled', fplId, {
+    return buildMessage<FplSlotCancelledMessage>(FplMessageType.fplan_slot_cancelled, fplId, {
         "reasons":
             [],
         "comments":
@@ -99,7 +99,7 @@ export function buildFplSlotCancelledMessage(fplId: number) : FplSlotCancelledMe
 }
 
 export function buildFplSuspendedMessage(fplId: number) : FplSuspendedMessage {
-    return buildMessage<FplSuspendedMessage>('fplan_suspended', fplId, {
+    return buildMessage<FplSuspendedMessage>(FplMessageType.fplan_suspended, fplId, {
         comments: [],
         errors: [],
         newrte: []
@@ -107,7 +107,7 @@ export function buildFplSuspendedMessage(fplId: number) : FplSuspendedMessage {
 }
 
 export function buildFplDesuspendedMessage(fplId: number) : FplDesuspendedMessage {
-    return buildMessage<FplDesuspendedMessage>('fplan_desuspended', fplId, {})
+    return buildMessage<FplDesuspendedMessage>(FplMessageType.fplan_desuspended, fplId, {})
 }
 
 export function buildFplSsrMessage(fplId: number, code: string, update: boolean) : FplSsrAssignedMessage|FplSsrUpdatedMessage {
@@ -115,30 +115,30 @@ export function buildFplSsrMessage(fplId: number, code: string, update: boolean)
         ssrcode: code
     }
     return update
-        ? buildMessage<FplSsrUpdatedMessage>('fplan_ssr_updated', fplId, subMsg)
-        : buildMessage<FplSsrAssignedMessage>('fplan_ssr_assigned', fplId, subMsg)
+        ? buildMessage<FplSsrUpdatedMessage>(FplMessageType.fplan_ssr_updated, fplId, subMsg)
+        : buildMessage<FplSsrAssignedMessage>(FplMessageType.fplan_ssr_assigned, fplId, subMsg)
 }
 
 export function buildFplDelayedMessage(fplId: number, eobt: number, previousEobt: number) : FplDelayedMessge {
-    return buildMessage<FplDelayedMessge>('fplan_delayed', fplId, {
+    return buildMessage<FplDelayedMessge>(FplMessageType.fplan_delayed, fplId, {
         eobt, previous_eobt: previousEobt
     })
 }
 
 export function buildFplBroughtForwardMessage(fplId: number, eobt: number, previousFplId: number, previousEobt: number) : FplBroughtForwardMessage {
-    return buildMessage<FplBroughtForwardMessage>('fplan_broughtforward', fplId, {
+    return buildMessage<FplBroughtForwardMessage>(FplMessageType.fplan_broughtforward, fplId, {
         eobt, previous_eobt: previousEobt, previous_fplid: previousFplId
     })
 }
 
 export function buildFplCancelledMessage(fplId: number, broughtForward: boolean = false) : FplCancelledMessage {
-    return buildMessage<FplCancelledMessage>('fplan_cancelled', fplId, {
+    return buildMessage<FplCancelledMessage>(FplMessageType.fplan_cancelled, fplId, {
         reason: broughtForward ? "FPL brought forward" : "mock cancellation reason"
     })
 }
 
 export function buildFplDpiUpdatedMessage(fplId: number, tobt?: string, taxiTime?: string, ttot?: string, sid?: string) : FplDpiUpdated {
-    return buildMessage<FplDpiUpdated>('fplan_dpi_updated', fplId,{
+    return buildMessage<FplDpiUpdated>(FplMessageType.fplan_dpi_updated, fplId,{
         /* target offblock time in hhmm UTC */
         "tobt": tobt,
         /* taxi time in minutes */
