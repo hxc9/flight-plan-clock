@@ -13,6 +13,11 @@ in `.env.local` (see the `.env.local.example` files in each application folder).
 
 To run everything at once for development, you can run `pnpm run devAll` from the top-level folder.
 
+By default:
+- the GUI for the AutoRouter mock API runs on port 3001, and lets us change the data served by the API (by 
+adding/editing flightplans)
+- the frontend runs on port 3002 and displays data served by the mock (via the backend on port 3002)
+
 ## Purpose
 
 The Flight Plan Clock is designed for pilots who use the 
