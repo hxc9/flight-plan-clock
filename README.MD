@@ -5,7 +5,13 @@ This project is made of several JS applications working together,
 
 ## Quick start
 
-The application 
+This project is built using `pnpm` which needs to be installed first.
+
+The application requires a Redis DB instance to run.
+Environment details are provided using `.env`: when developing locally, you can provide the required parameters
+in `.env.local` (see the `.env.local.example` files in each application folder).
+
+To run everything at once for development, you can run `pnpm run devAll` from the top-level folder.
 
 ## Purpose
 
@@ -26,7 +32,7 @@ take off (only provided in some cases)
 Here is an example of the frontend app's flight plan detail page.
 
 <img src="screenshot.png" width="300" alt="Frontend screenshot"/>
-![Frontend screenshot](screenshot.png)
+
 1. Call sign of the flight
 2. Airport of departure and destination 
 (using each airport's ICAO code)
