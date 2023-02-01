@@ -19,7 +19,6 @@ export async function readFlightPlanCtot(fplId: number|string) : Promise<Dayjs|n
 }
 
 export async function changeFlightPlanCtot(fplId: number, newCtotTimestamp: number|null, transaction?: ChainableCommander) {
-
     const commander = transaction || redis
 
     if ((await redis.exists(fplKey(fplId))) !== 1) {

@@ -3,6 +3,10 @@
 This project is made of several JS applications working together,
  which can be found in the `/apps` folder.
 
+## Quick start
+
+The application 
+
 ## Purpose
 
 The Flight Plan Clock is designed for pilots who use the 

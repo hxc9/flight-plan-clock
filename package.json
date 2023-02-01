@@ -4,9 +4,19 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dtoBuild": "cd packages/autorouter-dto && pnpm run build:main",
+    "dtoWatchBuild": "cd packages/autorouter-dto && pnpm run watch:build",
+    "devMockGui": "cd apps/autorouter-mock-gui && pnpm run dev",
+    "devMock": "echo \"Error: not implemented\" && exit 1",
+    "devBackend": "cd apps/flight-plan-clock-backend && pnpm run dev",
+    "devFrontend": "cd apps/flight-plan-clock-frontend && pnpm run dev",
+    "devAll": "pnpm run dtoBuild && concurrently \"pnpm run dtoWatchBuild\" \"pnpm run devMockGui\" \"pnpm run devBackend\" \"pnpm run devFrontend\""
   },
   "keywords": [],
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "concurrently": "^7.6.0"
+  }
 }
