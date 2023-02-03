@@ -1,6 +1,6 @@
 import {FplMessages} from "autorouter-dto";
-import Redis from "ioredis-rejson";
 import genericPool from "generic-pool"
+import Redis from "ioredis";
 
 const redisPool = genericPool.createPool({
     create: async function () {
@@ -93,7 +93,7 @@ async function groupReadAndClean(redis, ...params): Promise<Result[]> {
 }
 
 export function mapStreamData(data: StreamData): Result {
-    return data.reduce((acc: Result, v, i, arr) => {
+    return data.reduce((acc: Result, _v, i, arr) => {
         if (i % 2 == 0) {
             acc[arr[i]] = arr[i + 1]
         }
