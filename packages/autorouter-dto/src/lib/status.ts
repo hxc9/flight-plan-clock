@@ -12,8 +12,6 @@ export enum Status {
     Rejected = 'rejected',
 }
 
-export type StatusStrings = keyof typeof Status
-
 export function allowedTransitionFrom(from: Status, to: Status): boolean {
     return allTransitionsFrom(from).includes(to)
 }

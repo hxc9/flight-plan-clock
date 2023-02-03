@@ -185,18 +185,4 @@ export const fplMessageIs = {
     broughtForward: function (msg: FplMessage) : msg is FplBroughtForwardMessage {
         return msg.type === FplMessageType.fplan_broughtforward
     },
-    overviewRefreshRequired: function (msg: FplMessage) {
-        switch (msg.type) {
-            case FplMessageType.fplan_status_changed:
-            case FplMessageType.fplan_filed:
-            case FplMessageType.fplan_queued:
-            case FplMessageType.fplan_rejected:
-            case FplMessageType.fplan_delayed:
-            case FplMessageType.fplan_cancelled:
-            case FplMessageType.fplan_broughtforward:
-                return true
-            default:
-                return false
-        }
-    }
 }

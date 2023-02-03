@@ -1,4 +1,5 @@
-import {FlightPlan, FlightPlanMini, FplMessages} from "autorouter-dto";
+import {FlightPlan, FplMessages} from "autorouter-dto";
+import {FlightPlanMini} from "flight-plan-clock-dto";
 
 export async function fetchFlightPlans(): Promise<FlightPlan[]> {
     return (await fetchFromAutoRouter('/flightPlan/file'))?.rows

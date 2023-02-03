@@ -1,5 +1,5 @@
 import {ChainableCommander} from "ioredis";
-import {FplMessage, FplMessages} from "autorouter-dto";
+import {FplMessage, FplMessages, FplMessageType} from "autorouter-dto";
 import {defaultExpiry, fplKey, redis, schemaPrefix} from "./dbClient";
 
 export function storeMessage(pipeline: ChainableCommander, msg: FplMessage) {
@@ -27,4 +27,19 @@ function messageKey(msg: FplMessage) {
 
 function fplMessageListKey(fplId: number) {
     return `${fplKey(fplId)}:messages`
+}
+
+export function overviewRefreshRequired(msg: FplMessage) {
+    switch (msg.type) {
+        case FplMessageType.fplan_status_changed:
+        case FplMessageType.fplan_filed:
+        case FplMessageType.fplan_queued:
+        case FplMessageType.fplan_rejected:
+        case FplMessageType.fplan_delayed:
+        case FplMessageType.fplan_cancelled:
+        case FplMessageType.fplan_broughtforward:
+            return true
+        default:
+            return false
+    }
 }

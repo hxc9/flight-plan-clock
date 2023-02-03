@@ -1,8 +1,9 @@
 "use client"
 
+import {FlightPlanFull, RefiledMessage, UpdateMessage} from "flight-plan-clock-dto";
 import React, {createContext, useContext, useEffect, useRef, useState} from "react";
 import {SocketContext} from "../../../components/socketContext";
-import {FlightPlanFull, RefiledMessage, Status, UpdateMessage} from "autorouter-dto";
+import { Status} from "autorouter-dto";
 import {RefreshContext} from "../../../components/refreshContext";
 import {useRouter} from "next/navigation";
 
@@ -44,7 +45,7 @@ export function FlightProvider({children, fplId} : {children: React.ReactNode, f
             socket && socket.off("fpl-change")
             socket && socket.off("fpl-refiled")
         }
-    }, [socket])
+    }, [socket, fplId, didRefresh, router])
 
     useEffect(() => {
         if (socket && fplId) {

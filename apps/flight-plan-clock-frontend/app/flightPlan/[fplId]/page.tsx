@@ -1,15 +1,20 @@
-import styles from './page.module.css'
+import {FlightPlanResponse, FlightPlansResponse} from "flight-plan-clock-dto";
 import Link from "next/link";
-import {FlightPlanResponse} from "autorouter-dto";
-import FlightPlanCard from "./flightPlanCard";
-import {TimeCardEobt, TimeCardCtot} from "./timeCard";
-import {FlightProvider} from "./flightContext";
+import {redirect} from "next/navigation";
 import {RefreshCanary} from "../../../components/refreshCanary";
+import {fetchFromBackend} from "../../../lib/apiClient";
+import {FlightProvider} from "./flightContext";
+import FlightPlanCard from "./flightPlanCard";
+import styles from './page.module.css'
+import {TimeCardCtot, TimeCardEobt} from "./timeCard";
 
-export default async function FlightPlan({params: {fplId}}: { params: { fplId: string } }) {
-    const data = (await fetch(process.env.NEXT_PUBLIC_BACKEND_URL + '/api/flightPlans/' + fplId,
+export default async function FlightPlan({params: {fplId='1'}}: { params: { fplId: string } }) {
+    const data = await fetchFromBackend<FlightPlanResponse>('/api/flightPlans/' + fplId,
         {next: {revalidate: 0}})
-        .then(r => r.json())) as FlightPlanResponse
+
+    if (!data) {
+        redirect('/')
+    }
 
     const {flightPlan: fpl} = data
 
@@ -31,5 +36,10 @@ export default async function FlightPlan({params: {fplId}}: { params: { fplId: s
     )
 }
 
-
+export async function generateStaticParams() : Promise<{fplId: string}[]> {
+    return (await fetchFromBackend<FlightPlansResponse>('/api/flightPlans'))
+        ?.flightPlans?.map(({id}) => {
+            return {fplId: '' + id}
+    })??[{fplId: '1'}]
+}
 

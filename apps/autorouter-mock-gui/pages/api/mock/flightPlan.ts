@@ -12,6 +12,7 @@ export default async function handler(
             await createFlightPlan()
             res.status(200).end()
         } catch (e) {
+            console.error(e)
             res.status(500).end()
         }
     } else {

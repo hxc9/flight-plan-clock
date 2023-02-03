@@ -3,7 +3,7 @@ import styles from "../../app/page.module.css";
 import {readAllMessages} from "../../lib/server/messageService";
 import {readMessages} from "../../lib/server/messageStreamService";
 import {PendingMessage} from "./pendingMessage";
-import {FplMessage} from "autorouter-dto/dist";
+import {FplMessage} from "autorouter-dto";
 
 export const revalidate = 0
 

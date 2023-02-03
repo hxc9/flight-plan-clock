@@ -7,7 +7,9 @@ This project is made of several JS applications working together,
 
 This project is built using `pnpm` which needs to be installed first.
 
-The application requires a Redis DB instance to run.
+The application requires a Redis Stack DB instance to run (Redis Stack is required by the Autorouter mock since it uses
+the Redis JSON module - the backend can run with vanilla Redis).
+
 Environment details are provided using `.env`: when developing locally, you can provide the required parameters
 in `.env.local` (see the `.env.local.example` files in each application folder).
 

@@ -1,5 +1,6 @@
+import {FlightPlanMini, FlightPlansResponse} from "flight-plan-clock-dto";
 import {NextApiRequest, NextApiResponse} from "next";
-import {FlightPlan, FlightPlansResult, FlightPlanMini, FlightPlansResponse} from "autorouter-dto";
+import {FlightPlan, FlightPlansResult} from "autorouter-dto";
 import uniqBy from "lodash/uniqBy"
 import {getLastUpdated} from "../../lib/lastUpdateService";
 import { runCorsMiddleware } from "../../lib/middleware/cors";

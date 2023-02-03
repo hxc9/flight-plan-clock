@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 
 import {readMessages} from "../../lib/server/messageStreamService";
-import {FplMessages} from "autorouter-dto/dist";
+import {FplMessages} from "autorouter-dto";
 
 
 export default async function handler(

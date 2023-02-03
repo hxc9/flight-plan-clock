@@ -1,15 +1,14 @@
+import {FlightPlanFull, UpdateMessage, WsMessage} from "flight-plan-clock-dto";
 import {Server, Socket} from "socket.io";
 import {ackMessages, fetchFlightPlan, fetchMessages, flightPlanToMini} from "./apiClient";
 import {redis} from "./dbClient";
 import {deleteFplCtot, getFplCtot, setFplCtot} from "./ctotService";
 import {
-    FlightPlanFull,
     FplMessage,
     fplMessageIs,
-    FplMessages, UpdateMessage,
-    WsMessage
+    FplMessages,
 } from "autorouter-dto"
-import {storeMessage} from "./messageService";
+import {overviewRefreshRequired, storeMessage} from "./messageService";
 import {getLastUpdated, setLastUpdated} from "./lastUpdateService";
 import {parseRoute} from "./routeService";
 import throttle from "lodash/throttle";
@@ -156,7 +155,7 @@ export class PollingService {
 
         await pipeline.exec()
         await ackMessages(messages.map((m: FplMessage) => m.id))
-        return [messages.length, messages.some(msg => fplMessageIs.overviewRefreshRequired(msg))]
+        return [messages.length, messages.some(msg => overviewRefreshRequired(msg))]
     }
 
     private relayFplMessage<T extends WsMessage>(type: string, msg: T) {

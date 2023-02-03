@@ -1,6 +1,6 @@
 'use client'
 
-import {FlightPlanFull} from "autorouter-dto";
+import {FlightPlanFull} from "flight-plan-clock-dto";
 import dayjs, {Dayjs} from "../../../lib/dayjs";
 import React, {createContext, useContext} from "react";
 import {FlightContext} from "./flightContext";

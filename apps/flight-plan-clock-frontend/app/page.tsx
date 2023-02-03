@@ -1,5 +1,6 @@
+import {fetchFromBackend} from "../lib/apiClient";
 import styles from './page.module.css'
-import {FlightPlanMini, FlightPlansResponse} from "autorouter-dto";
+import {FlightPlanMini, FlightPlansResponse} from "flight-plan-clock-dto";
 import dayjs from "../lib/dayjs";
 import Callsign from "../components/callsign";
 import Link from "next/link";
@@ -8,9 +9,13 @@ import {RefreshCanary} from "../components/refreshCanary";
 import RefreshGovernor from "./refreshGovernor";
 
 export default async function Home() {
-    const data = (await fetch(process.env.NEXT_PUBLIC_BACKEND_URL + '/api/flightPlans',
+    const data = await fetchFromBackend<FlightPlansResponse>('/api/flightPlans',
         {next: {revalidate: 0}})
-        .then(r => r.json())) as FlightPlansResponse
+
+    if (!data) {
+        throw new Error("Unable to load flight plans")
+    }
+
     const {flightPlans} = data
 
     return (

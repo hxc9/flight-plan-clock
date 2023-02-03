@@ -1,5 +1,6 @@
+import {FlightPlanResponse} from "flight-plan-clock-dto";
 import {NextApiRequest, NextApiResponse} from "next";
-import { FlightPlan, FlightPlanResponse} from "autorouter-dto";
+import { FlightPlan} from "autorouter-dto";
 import {runCorsMiddleware} from "../../../lib/middleware/cors";
 import {flightPlanToMini} from "../../../lib/apiClient";
 import {runSocketInitMiddleware} from "../../../lib/middleware/socketInit";

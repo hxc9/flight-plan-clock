@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import {getFlightPlan} from "../../../../lib/server/flightPlanService";
-import {FlightPlan} from "autorouter-dto/dist";
+import {FlightPlan} from "autorouter-dto";
 
 export default async function handler(
     req: NextApiRequest,
