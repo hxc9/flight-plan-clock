@@ -11,9 +11,7 @@ from the frontend to the backend.
 Once the status of a flight plan moves to "departed",
 information about the EOBT and CTOT isn't as relevant.
 
-Once could instead display the estimated arrival time.
-
-### 2. 
+One could instead display the estimated arrival time.
 
 ## Backend
 
