@@ -1,6 +1,6 @@
 import {FlightPlanFull, UpdateMessage, WsMessage} from "flight-plan-clock-dto";
 import {Server, Socket} from "socket.io";
-import {ackMessages, fetchFlightPlan, fetchMessages, flightPlanToMini} from "./apiClient";
+import {ackMessages, fetchFlightPlan, fetchMessages} from "./apiClient";
 import {redis} from "./dbClient";
 import {deleteFplCtot, getFplCtot, setFplCtot} from "./ctotService";
 import {
@@ -13,6 +13,7 @@ import {getLastUpdated, setLastUpdated} from "./lastUpdateService";
 import {parseRoute} from "./routeService";
 import throttle from "lodash/throttle";
 import {clearImmediate} from "timers";
+import { flightPlanToMini } from './utils';
 
 const batchSize = 30
 

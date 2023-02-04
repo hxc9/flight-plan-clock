@@ -5,9 +5,6 @@
   "description": "DTOs from the AutoRouter API",
   "main": "build/main/index.js",
   "typings": "build/main/index.d.ts",
-  "module": "build/module/index.js",
-  "repository": "https://github.com/hxc9/autorouter-dto-2",
-  "license": "MIT",
   "keywords": [],
   "scripts": {
     "build": "tsc -p tsconfig.json",

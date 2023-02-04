@@ -1,37 +1,54 @@
 {
-  "name": "flight-plan-clock-backend",
-  "version": "0.1.0",
-  "private": true,
+  "name": "flight-plan-clock-backend-express",
+  "version": "1.0.0",
+  "description": "AutoRouter API mock server",
+  "main": "build/main/index.js",
+  "typings": "build/main/index.d.ts",
+  "module": "build/module/index.js",
+  "repository": "https://github.com/hxc9/autorouter-mock",
+  "keywords": [],
   "scripts": {
-    "dev": "next dev -p 3002",
-    "build": "next build",
-    "start": "next start -p 3002",
-    "lint": "next lint"
+    "build": "npx tsc",
+    "start": "node build/main/index.js",
+    "dev": "concurrently \"npx tsc --watch\" \"nodemon -q build/main/index.js\""
+  },
+  "engines": {
+    "node": ">=10"
   },
   "dependencies": {
-    "@next/font": "13.1.1",
-    "@types/node": "18.11.18",
-    "@types/react": "18.0.26",
-    "@types/react-dom": "18.0.10",
+    "@bitauth/libauth": "^1.17.1",
     "autorouter-dto": "workspace:*",
-    "flight-plan-clock-dto": "workspace:*",
-    "bufferutil": "^4.0.7",
+    "autorouter-mock-services": "workspace:*",
     "cors": "^2.8.5",
     "dayjs": "^1.11.7",
-    "eslint": "8.31.0",
-    "eslint-config-next": "13.1.1",
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "flight-plan-clock-dto": "workspace:*",
+    "generic-pool": "^3.9.0",
     "ioredis": "^5.2.5",
     "lodash": "^4.17.21",
-    "next": "13.1.3",
-    "react": "18.2.0",
-    "react-dom": "18.2.0",
-    "socket.io": "^4.5.4",
-    "socket.io-client": "^4.5.4",
-    "typescript": "4.9.4",
-    "utf-8-validate": "^5.0.10"
+    "node-fetch": "^2.6.9",
+    "socket.io": "^4.5.4"
   },
   "devDependencies": {
     "@types/cors": "^2.8.13",
-    "@types/lodash": "^4.14.191"
-  }
+    "@types/express": "^4.17.17",
+    "@types/ioredis": "^5.0.0",
+    "@types/lodash": "^4.14.191",
+    "@types/node": "18.11.18",
+    "concurrently": "^7.6.0",
+    "nodemon": "^2.0.20",
+    "ts-node": "^9.0.0",
+    "typedoc": "^0.19.0",
+    "typescript": "^4.0.2"
+  },
+  "files": [
+    "build/main",
+    "build/module",
+    "!**/*.spec.*",
+    "!**/*.json",
+    "CHANGELOG.md",
+    "LICENSE",
+    "README.md"
+  ]
 }

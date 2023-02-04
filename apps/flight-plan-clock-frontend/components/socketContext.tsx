@@ -12,15 +12,12 @@ const socket = io(backendUrl, {autoConnect: false})
 export default function SocketProvider({children} : {children : React.ReactNode}) {
     useEffect(() => {
         async function initSocket() {
-            if (!socket.connected) {
-                await fetch(backendUrl + '/api/ping').catch(console.error)
-                !socket.connected && socket.connect()
-            }
+            !socket.connected && socket.connect()
             socket.on('connect', () => {
                 console.debug("connected")
             })
         }
-        initSocket().then(() => console.debug("Socket initialized"))
+        initSocket().catch(console.error).then(() => console.debug("Socket initialized"))
         return () => { socket && socket.close() }
     }, [])
 
