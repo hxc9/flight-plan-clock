@@ -1,10 +1,8 @@
 import type {NextApiRequest, NextApiResponse} from 'next'
 
 import {
-    changeFlightPlanCtot
-} from '../../../../lib/server/ctotService'
-import {changeFlightPlanEobt, changeFlightPlanStatus, deleteFlightPlan} from "../../../../lib/server/flightPlanService";
-import {FlightPlanNotFoundError} from "../../../../lib/server/utils";
+    ctotService, FlightPlanNotFoundError, flightPlanService
+} from 'autorouter-mock-services';
 
 
 export default async function handler(
@@ -22,17 +20,17 @@ export default async function handler(
 
     try {
         if (method === "DELETE") {
-            await deleteFlightPlan(fplId)
+            await flightPlanService.deleteFlightPlan(fplId)
             res.status(200).end()
         } else if (method === "POST") {
             if (newStatus) {
-                await changeFlightPlanStatus(fplId, newStatus)
+                await flightPlanService.changeFlightPlanStatus(fplId, newStatus)
             }
             if (newEobt) {
-                await changeFlightPlanEobt(fplId, newEobt)
+                await flightPlanService.changeFlightPlanEobt(fplId, newEobt)
             }
             if (newCtot !== undefined) {
-                await changeFlightPlanCtot(fplId, newCtot)
+                await ctotService.changeFlightPlanCtot(fplId, newCtot)
             }
             res.status(200).end()
         } else {

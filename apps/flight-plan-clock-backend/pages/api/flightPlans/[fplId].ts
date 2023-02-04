@@ -40,7 +40,7 @@ export default async function handler(
 
     if (apiResponse && !apiResponse.ok) {
         console.error("Cannot fetch flight plans: " + apiResponse.status + ' ' + await apiResponse.text())
-        res.status(500).end()
+        res.status(apiResponse.status === 404 ? 404 : 500).end()
         return
     }
 

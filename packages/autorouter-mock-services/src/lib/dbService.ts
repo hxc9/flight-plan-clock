@@ -4,7 +4,7 @@ export const redis = createDb()
 
 function createDb() {
     const redis = new Redis(process.env.REDIS_URL)
-    initDb(redis)
+    initDb(redis).catch(console.error)
     return redis
 }
 

@@ -8,6 +8,8 @@ import React from "react";
 import {RefreshCanary} from "../components/refreshCanary";
 import RefreshGovernor from "./refreshGovernor";
 
+export const dynamic = 'force-dynamic'
+
 export default async function Home() {
     const data = await fetchFromBackend<FlightPlansResponse>('/api/flightPlans',
         {next: {revalidate: 0}})

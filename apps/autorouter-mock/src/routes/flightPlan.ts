@@ -1,17 +1,13 @@
 import { FlightPlan, FlightPlansResult } from 'autorouter-dto';
 import express, { Request, Response, Router } from 'express';
-
-import {
-  getFlightPlan,
-  listFlightPlans
-} from '../lib/server/flightPlanService';
+import { flightPlanService } from "autorouter-mock-services"
 
 const router : Router = express.Router()
 
 router.get('/file', async (req: Request, res: Response<FlightPlansResult>) => {
   const {query: {sidx, showclosed}} = req
 
-  const data = await listFlightPlans(showclosed === 'yes')
+  const data = await flightPlanService.listFlightPlans(showclosed === 'yes')
 
   if (sidx === 'eobt') {
     [...data].sort((a, b) => a.eobt - b.eobt)
@@ -28,7 +24,7 @@ router.get('/file/:fplId', async (req: Request, res: Response<FlightPlan>) => {
     return
   }
 
-  const data = await getFlightPlan(+fplId)
+  const data = await flightPlanService.getFlightPlan(+fplId)
 
   if (!data) {
     res.status(404).end()

@@ -1,7 +1,9 @@
 import {FplMessage, FplMessages} from "autorouter-dto";
+import {ChainableCommander} from "ioredis";
+
 import {redis} from "./dbService";
 import {mapStreamData} from "./messageStreamService";
-import {ChainableCommander} from "ioredis";
+
 
 export async function addMessage(message: FplMessage, transaction?: ChainableCommander) {
     const commander = transaction || redis

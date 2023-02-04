@@ -3,6 +3,8 @@
 This project is made of several JS applications working together,
  which can be found in the `/apps` folder.
 
+This is a work-in-progress and not officially supported in any form by AutoRouter AG.
+
 ## Quick start
 
 This project is built using `pnpm` which needs to be installed first.

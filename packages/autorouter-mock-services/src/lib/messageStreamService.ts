@@ -1,6 +1,6 @@
 import {FplMessages} from "autorouter-dto";
-import Redis from "ioredis-rejson";
 import genericPool from "generic-pool"
+import Redis from "ioredis-rejson";
 
 const redisPool = genericPool.createPool({
     create: async function () {
@@ -46,9 +46,8 @@ export async function countMessages() : Promise<number> {
         // pull new messages to pending queue
         await redis.xreadgroup("GROUP", "messageGroup", "api",
             "STREAMS", "messages", ">")
-        // @ts-ignore
-        const [pendingCount] : [pendingCount: number]
-          = await redis.xpending("messages", "messageGroup")
+        const [pendingCount]
+          = <[pendingCount: number]>await redis.xpending("messages", "messageGroup")
         return pendingCount
     })
 }
@@ -59,21 +58,17 @@ export async function acknowledgeMessages(...ids: number[]) {
     })
 }
 
-// @ts-ignore
 async function groupReadAndClean(redis, ...params): Promise<Result[]> {
-    // @ts-ignore
-    const result = await redis.xreadgroup(...params)
+    const result = <[[unknown, StreamEntry[]]]>await redis.xreadgroup(...params)
 
     if (!result) {
         return []
     }
 
-    let data: StreamEntry[]
-    // @ts-ignore
-    [[, data]] = result
+    const [[, data]] = result
 
     const {valid, deleted} = data.reduce((sp: { valid: Result[], deleted: string[] }, v) => {
-        let [key, msg] = v
+        const [key, msg] = v
         if (msg) {
             sp.valid.push(mapStreamData(msg))
         } else {
@@ -93,7 +88,7 @@ async function groupReadAndClean(redis, ...params): Promise<Result[]> {
 }
 
 export function mapStreamData(data: StreamData): Result {
-    return data.reduce((acc: Result, v, i, arr) => {
+    return data.reduce((acc: Result, _v, i, arr) => {
         if (i % 2 == 0) {
             acc[arr[i]] = arr[i + 1]
         }
