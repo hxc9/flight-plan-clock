@@ -12,6 +12,8 @@ app.get('/', (_req: Request, res: Response) => {
   res.send('Autorouter mock server');
 });
 
+app.use(express.json())
+
 app.use('/api/flightPlan', flightPlan)
 app.use('/api/message', message)
 

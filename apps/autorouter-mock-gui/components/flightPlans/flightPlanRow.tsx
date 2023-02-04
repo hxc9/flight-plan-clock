@@ -22,7 +22,7 @@ export const FlightPlanRow = async ({flightplanid: fplId, ...fpl}: any) : Promis
             { isBeforeDeparture ? <ChangeEobt fplId={fplId} eobt={fpl.eobt}/> : null}
         </td>
         <td>
-            <StatusField fplId={fplId} currentStatus={fpl.status}/>
+            <StatusField key={fplId} fplId={fplId} currentStatus={fpl.status}/>
         </td>
         <td>
             { ctot ? <ZuluTimestamp unixTimestamp={ctot.unix()}/> : null}

@@ -13,7 +13,7 @@ export const PendingMessage = ({msgId} : {msgId : number}) : JSX.Element => {
         event.preventDefault()
 
         setIsFetching(true)
-        await fetch(`/api/message/${msgId}/acknowledge`,
+        await fetch(`${process.env.AUTOROUTER_API_URL}/message/${msgId}/acknowledge`,
             {method: 'POST'})
         setIsFetching(false)
         startTransition(() => {
