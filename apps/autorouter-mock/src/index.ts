@@ -1,10 +1,9 @@
 import dotenv from 'dotenv';
-
-dotenv.config();
 import express, { Express, Request, Response } from 'express';
-
 import flightPlan from './routes/flightPlan';
 import message from './routes/message';
+
+dotenv.config({path: `.env.${process.env.NODE_ENV || 'local'}`})
 
 const app: Express = express();
 const port = process.env.PORT || 3000;

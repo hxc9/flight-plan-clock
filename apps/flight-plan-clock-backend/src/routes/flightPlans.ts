@@ -3,6 +3,7 @@ import express, { Request, Response, Router } from 'express';
 import { FlightPlanMini, FlightPlansResponse } from 'flight-plan-clock-dto';
 import uniqBy from 'lodash/uniqBy';
 import fetch from 'node-fetch';
+import { AUTOROUTER_API_URL } from '../config';
 import { getFplCtot } from '../services/ctotService';
 import { getLastUpdated } from '../services/lastUpdateService';
 import { parseRoute } from '../services/routeService';
@@ -16,7 +17,7 @@ router.get('/', async (req: Request, res: Response<FlightPlansResponse>) => {
   let rows: FlightPlan[]
 
   do {
-    let url = process.env.AUTOROUTER_API_URL + '/flightPlan/file?'
+    let url = AUTOROUTER_API_URL + '/flightPlan/file?'
       + new URLSearchParams({
         offset: flightPlans.length.toString(),
         sidx: 'eobt'
@@ -68,7 +69,7 @@ router.get("/:fplId", async (req: Request, res: Response) => {
     return
   }
 
-  let url = process.env.AUTOROUTER_API_URL + '/flightPlan/file/' + fplId;
+  let url = AUTOROUTER_API_URL + '/flightPlan/file/' + fplId;
   let apiResponse
   try {
     apiResponse = await fetch(url)
