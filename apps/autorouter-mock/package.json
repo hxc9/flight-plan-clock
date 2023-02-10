@@ -9,7 +9,8 @@
   "scripts": {
     "build": "npx tsc",
     "start": "node build/main/index.js",
-    "dev": "concurrently \"npx tsc --watch\" \"nodemon -q build/main/index.js\""
+    "dev": "concurrently \"npx tsc --watch\" \"nodemon -q build/main/index.js\"",
+    "stage": "pnpm run build && pnpm install && pnpm run start"
   },
   "engines": {
     "node": ">=10"
