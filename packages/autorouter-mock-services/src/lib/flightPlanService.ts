@@ -40,7 +40,7 @@ export async function listFlightPlans(showClosed: boolean): Promise<Array<Flight
     .filter(fpl => showClosed || (fpl.status !== Status.Closed && fpl.status !== Status.Cancelled)) ?? [];
 }
 
-export async function getFlightPlan(fplId: number): Promise<FlightPlan | null> {
+export async function getFlightPlan(fplId: number): Promise<FlightPlan | undefined> {
   const [data] = <[FlightPlan] | null>await redis.json_get(fplKey(fplId), '$') ?? [];
   return data;
 }
@@ -151,8 +151,8 @@ export async function deleteFlightPlan(fplId: number) {
   if (res1 === 0) throw new FlightPlanNotFoundError();
 }
 
-async function getFplField<T>(fplId: number, field: string): Promise<T | null> {
-  const [result] = <[T] | null>await redis.json_get(fplKey(fplId), `$.${field}`);
+async function getFplField<T>(fplId: number, field: string): Promise<T | undefined> {
+  const [result] = (<[T] | null>await redis.json_get(fplKey(fplId), `$.${field}`))??[];
   return result;
 }
 

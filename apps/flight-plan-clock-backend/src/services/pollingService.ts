@@ -120,7 +120,7 @@ export class PollingService {
     }
 
     private async processMessages(count: number, timeout: number = 0) : Promise<[number, boolean]> {
-        let messages: FplMessages = await fetchMessages(count, timeout)
+        let messages: FplMessages = (await fetchMessages(count, timeout))??[]
         if (messages.length === 0) {
             return [0, false]
         }

@@ -10,16 +10,17 @@ export const RefreshGovernor = () : JSX.Element => {
     const router = useRouter();
     const [isPending, startTransition] = useTransition();
 
-    function refreshData() {
-        startTransition(() => { router.refresh() })
-    }
+
 
     useEffect(() => {
+        function refreshData() {
+            startTransition(() => { router.refresh() })
+        }
         const refreshId = setInterval(refreshData, 15_000)
         return () => {
             clearInterval(refreshId)
         }
-    }, [])
+    }, [router])
 
     async function handleClick(event: MouseEvent<HTMLAnchorElement>){
         event.preventDefault()

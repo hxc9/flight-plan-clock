@@ -1,11 +1,11 @@
 'use client'
 
-import React, {createContext, useEffect } from "react";
+import React, { Context, createContext, useEffect } from 'react';
 import io, {Socket} from "socket.io-client";
 
 const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL as string
 
-export const SocketContext = createContext<Socket|undefined>(undefined)
+export const SocketContext : Context<Socket|undefined> = createContext<Socket|undefined>(undefined)
 
 const socket = io(backendUrl, {autoConnect: false})
 

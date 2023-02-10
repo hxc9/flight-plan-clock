@@ -1,7 +1,7 @@
 "use client"
 
 import {Status} from "autorouter-dto"
-import {ChangeEvent, useEffect, useState, useTransition} from "react";
+import { ChangeEvent, useEffect, useMemo, useState, useTransition } from 'react';
 import {useRouter} from "next/navigation";
 import {allTransitionsFrom} from "autorouter-dto";
 
@@ -10,7 +10,7 @@ export const StatusField = ({
                                 currentStatus
                             }: { fplId: number, currentStatus: Status }): JSX.Element => {
     const allowedTransitions = allTransitionsFrom(currentStatus)
-    const allOptions = [currentStatus, ...allowedTransitions]
+    const allOptions = useMemo(() => [currentStatus, ...allowedTransitions], [currentStatus, allowedTransitions])
 
     const router = useRouter();
     const [, startTransition] = useTransition();
@@ -24,7 +24,7 @@ export const StatusField = ({
         if (!allOptions.includes(selectedTransition)) {
             setTransition(allOptions[0])
         }
-    }, [allowedTransitions])
+    }, [allowedTransitions, allOptions, selectedTransition])
 
     if (allowedTransitions.length === 0) {
         return <></>

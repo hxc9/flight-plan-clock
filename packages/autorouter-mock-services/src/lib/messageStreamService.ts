@@ -16,24 +16,24 @@ const redisPool = genericPool.createPool({
 
 export async function readMessages(count: number, timeout: number): Promise<FplMessages> {
     return await redisPool.use(async (redis) => {
-        const messages: Result[] = []
+        const messages: MsgData[] = []
 
-        const pendingMessages = await groupReadAndClean(redis, "GROUP", "messageGroup", "api",
-            "COUNT", count, "STREAMS", "messages", "0");
+        const pendingMessages = await groupReadAndClean(redis, redis.xreadgroup("GROUP", "messageGroup", "api",
+          "COUNT", count, "STREAMS", "messages", "0"));
         messages.push(...pendingMessages)
 
         if (messages.length > 0 || timeout === 0) {
             // immediate return
             if (messages.length < count) {
                 // non-blocking additional query
-                const newMessages = await groupReadAndClean(redis, "GROUP", "messageGroup", "api",
-                    "COUNT", count - messages.length, "STREAMS", "messages", ">")
+                const newMessages = await groupReadAndClean(redis, redis.xreadgroup("GROUP", "messageGroup", "api",
+                    "COUNT", count - messages.length, "STREAMS", "messages", ">"))
                 messages.push(...newMessages)
             }
         } else {
             // blocking query
-            const newMessages = await groupReadAndClean(redis, "GROUP", "messageGroup", "api",
-                "COUNT", count, "BLOCK", timeout * 1000, "STREAMS", "messages", ">")
+            const newMessages = await groupReadAndClean(redis, redis.xreadgroup("GROUP", "messageGroup", "api",
+                "COUNT", count, "BLOCK", timeout * 1000, "STREAMS", "messages", ">"))
             messages.push(...newMessages)
         }
 
@@ -58,8 +58,10 @@ export async function acknowledgeMessages(...ids: number[]) {
     })
 }
 
-async function groupReadAndClean(redis, ...params): Promise<Result[]> {
-    const result = <[[unknown, StreamEntry[]]]>await redis.xreadgroup(...params)
+type XReadGroupResult = [[unknown, StreamEntry[]]]
+
+async function groupReadAndClean(redis: Redis, res: Promise<unknown[]>): Promise<MsgData[]> {
+    const result = <XReadGroupResult>await res
 
     if (!result) {
         return []
@@ -67,7 +69,7 @@ async function groupReadAndClean(redis, ...params): Promise<Result[]> {
 
     const [[, data]] = result
 
-    const {valid, deleted} = data.reduce((sp: { valid: Result[], deleted: string[] }, v) => {
+    const {valid, deleted} = data.reduce((sp: { valid: MsgData[], deleted: string[] }, v) => {
         const [key, msg] = v
         if (msg) {
             sp.valid.push(mapStreamData(msg))
@@ -87,8 +89,8 @@ async function groupReadAndClean(redis, ...params): Promise<Result[]> {
     return valid
 }
 
-export function mapStreamData(data: StreamData): Result {
-    return data.reduce((acc: Result, _v, i, arr) => {
+export function mapStreamData(data: StreamData): MsgData {
+    return data.reduce((acc: MsgData, _v, i, arr) => {
         if (i % 2 == 0) {
             acc[arr[i]] = arr[i + 1]
         }
@@ -96,9 +98,7 @@ export function mapStreamData(data: StreamData): Result {
     }, {})
 }
 
-type Result = {
-    [key: string]: string;
-}
+type MsgData = Record<string, string>
 
 type StreamEntry = [string, Array<string>|null]
 

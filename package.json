@@ -2,27 +2,27 @@
   "name": "flight-plan-clock",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "autorouterDtoBuild": "cd packages/autorouter-dto && pnpm run build",
-    "autorouterServicesBuild": "cd packages/autorouter-mock-services && pnpm run build",
-    "fplClockDtoBuild": "cd packages/flight-plan-clock-dto && pnpm run build",
-    "libsBuild": "pnpm run autorouterDtoBuild && pnpm run autorouterServicesBuild && pnpm run fplClockDtoBuild",
-    "autorouterDtoWatchBuild": "cd packages/autorouter-dto && pnpm run watch:build",
-    "autorouterServicesWatchBuild": "cd packages/autorouter-mock-services && pnpm run watch:build",
-    "fplClockDtoWatchBuild": "cd packages/flight-plan-clock-dto && pnpm run watch:build",
-    "libsWatchBuild": "concurrently \"pnpm run autorouterDtoWatchBuild\" \"pnpm run autorouterServicesWatchBuild\" \"pnpm run fplClockDtoWatchBuild\"",
-    "devMockGui": "cd apps/autorouter-mock-gui && pnpm run dev",
-    "devMock": "cd apps/autorouter-mock && pnpm run dev",
-    "devBackend": "cd apps/flight-plan-clock-backend && pnpm run dev",
-    "devFrontend": "cd apps/flight-plan-clock-frontend && pnpm run dev",
-    "devAll": "pnpm run libsBuild && concurrently \"pnpm run libsWatchBuild\" \"pnpm run devMock\" \"pnpm run devMockGui\" \"pnpm run devBackend\" \"pnpm run devFrontend\""
+    "build": "turbo run build",
+    "dev": "turbo run dev",
+    "lint": "turbo run lint",
+    "format": "prettier --write \"**/*.{ts,tsx,md}\""
   },
   "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "author": "Alexis Hafner",
+  "engines": {
+    "node": ">=14.0.0"
+  },
   "devDependencies": {
-    "concurrently": "^7.6.0"
-  }
+    "eslint-config-custom": "workspace:*",
+    "prettier": "latest",
+    "turbo": "latest"
+
+  },
+  "packageManager": "pnpm@7.27.0"
 }
