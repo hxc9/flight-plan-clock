@@ -38,6 +38,10 @@
   border-radius: var(--border-radius);
 }
 
+.right_header {
+  text-align: center;
+}
+
 .code {
   font-weight: 700;
   font-family: var(--font-mono);
