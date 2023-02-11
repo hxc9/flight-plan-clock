@@ -1,7 +1,7 @@
 {
   "$schema": "https://turbo.build/schema.json",
   "globalDependencies": ["**/.env.*local"],
-  "globalEnv": ["REDIS_URL", "NEXT_PUBLIC_BACKEND_URL", "AUTOROUTER_API_URL", "ADMIN_PASSWORD", "MOCK_PORT", "NODE_ENV"],
+  "globalEnv": ["REDIS_URL", "NEXT_PUBLIC_BACKEND_URL", "AUTOROUTER_API_URL", "ADMIN_PASSWORD", "PORT", "NODE_ENV"],
   "pipeline": {
     "clean": {},
     "build": {
