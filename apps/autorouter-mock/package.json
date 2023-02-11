@@ -2,14 +2,14 @@
   "name": "autorouter-mock",
   "version": "1.0.0",
   "description": "AutoRouter API mock server",
-  "main": "dist/api/server.js",
+  "main": "dist/server.js",
   "license": "MIT",
   "keywords": [],
   "scripts": {
     "clean": "rimraf dist tsconfig.tsbuildinfo",
     "build": "tsc",
-    "start": "node dist/api/server.js",
-    "dev": "concurrently \"tsc --watch\" \"nodemon -q dist/api/server.js\""
+    "start": "node dist/index.js",
+    "dev": "tsc && concurrently \"tsc --watch\" \"nodemon -q dist/index.js\""
   },
   "engines": {
     "node": ">=10"
