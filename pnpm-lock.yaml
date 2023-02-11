@@ -28,6 +28,7 @@ importers:
       ioredis: ^5.3.0
       ioredis-rejson: ^1.0.10
       nodemon: ^2.0.20
+      rimraf: latest
       ts-node: ^9.0.0
       tsconfig: workspace:*
       typescript: ^4.5.2
@@ -47,6 +48,7 @@ importers:
       eslint: 7.32.0
       eslint-config-custom: link:../../packages/eslint-config-custom
       nodemon: 2.0.20
+      rimraf: 4.1.2
       ts-node: 9.1.1_typescript@4.9.4
       tsconfig: link:../../packages/tsconfig
       typescript: 4.9.4
@@ -114,6 +116,7 @@ importers:
       lodash: ^4.17.21
       node-fetch: ^2.6.9
       nodemon: ^2.0.20
+      rimraf: latest
       socket.io: ^4.5.4
       ts-node: ^9.0.0
       tsconfig: workspace:*
@@ -141,6 +144,7 @@ importers:
       eslint: 7.32.0
       eslint-config-custom: link:../../packages/eslint-config-custom
       nodemon: 2.0.20
+      rimraf: 4.1.2
       ts-node: 9.1.1_typescript@4.9.4
       tsconfig: link:../../packages/tsconfig
       typescript: 4.9.4
@@ -190,12 +194,14 @@ importers:
     specifiers:
       eslint: ^7.32.0
       eslint-config-custom: workspace:*
+      rimraf: latest
       ts-node: ^9.1.1
       tsconfig: workspace:*
       typescript: ^4.5.2
     devDependencies:
       eslint: 7.32.0
       eslint-config-custom: link:../eslint-config-custom
+      rimraf: 4.1.2
       ts-node: 9.1.1_typescript@4.9.4
       tsconfig: link:../tsconfig
       typescript: 4.9.4
@@ -209,6 +215,7 @@ importers:
       generic-pool: ^3.9.0
       ioredis: ^5.2.5
       ioredis-rejson: ^1.0.10
+      rimraf: latest
       ts-node: ^9.1.1
       tsconfig: workspace:*
       typescript: 4.9.4
@@ -221,6 +228,7 @@ importers:
     devDependencies:
       eslint: 7.32.0
       eslint-config-custom: link:../eslint-config-custom
+      rimraf: 4.1.2
       ts-node: 9.1.1_typescript@4.9.4
       tsconfig: link:../tsconfig
       typescript: 4.9.4
@@ -247,6 +255,7 @@ importers:
       autorouter-dto: workspace:*
       eslint: ^7.32.0
       eslint-config-custom: workspace:*
+      rimraf: latest
       tsconfig: workspace:*
       typescript: ^4.5.2
     dependencies:
@@ -254,6 +263,7 @@ importers:
     devDependencies:
       eslint: 7.32.0
       eslint-config-custom: link:../eslint-config-custom
+      rimraf: 4.1.2
       tsconfig: link:../tsconfig
       typescript: 4.9.4
 
@@ -3052,6 +3062,12 @@ packages:
     hasBin: true
     dependencies:
       glob: 7.2.3
+
+  /rimraf/4.1.2:
+    resolution: {integrity: sha512-BlIbgFryTbw3Dz6hyoWFhKk+unCcHMSkZGrTFVAx2WmttdBSonsdtRlwiuTbDqTKr+UlXIUqJVS4QT5tUzGENQ==}
+    engines: {node: '>=14'}
+    hasBin: true
+    dev: true
 
   /run-parallel/1.2.0:
     resolution: {integrity: sha512-5l4VyZR86LZ/lDxZTR6jqL8AFE2S0IFLMP26AbjsLVADxHdhB/c0GUsH+y39UfCi3dzz8OlQuPmnaJOMoDHQBA==}

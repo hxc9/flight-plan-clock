@@ -8,6 +8,7 @@
   "license": "MIT",
   "keywords": [],
   "scripts": {
+    "clean": "rimraf dist tsconfig.tsbuildinfo",
     "build": "tsc -p tsconfig.json",
     "dev": "tsc -p tsconfig.json -w"
   },
@@ -17,6 +18,7 @@
   "devDependencies": {
     "eslint": "^7.32.0",
     "eslint-config-custom": "workspace:*",
+    "rimraf": "latest",
     "ts-node": "^9.1.1",
     "tsconfig": "workspace:*",
     "typescript": "^4.5.2"
