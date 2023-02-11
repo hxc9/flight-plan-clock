@@ -4,8 +4,11 @@
   "extends": "./base.json",
   "compilerOptions": {
     "lib": ["ES2021"],
-    "module": "ESNext",
-    "target": "es6",
-    "outDir": "build/main"
+    "esModuleInterop": true,
+    "moduleResolution": "node",
+    "module": "commonjs",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "target": "es6"
   }
 }

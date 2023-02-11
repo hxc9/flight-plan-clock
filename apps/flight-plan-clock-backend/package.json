@@ -2,15 +2,13 @@
   "name": "flight-plan-clock-backend",
   "version": "1.0.0",
   "description": "Flight Plan Clock backend",
-  "main": "build/main/index.js",
-  "typings": "build/main/index.d.ts",
-  "module": "build/module/index.js",
+  "main": "dist/index.js",
   "repository": "https://github.com/hxc9/autorouter-mock",
   "keywords": [],
   "scripts": {
     "build": "tsc",
-    "start": "node build/main/index.js",
-    "dev": "concurrently \"tsc --watch\" \"nodemon -q build/main/index.js\""
+    "start": "node dist/index.js",
+    "dev": "concurrently \"tsc --watch\" \"nodemon -q dist/index.js\""
   },
   "engines": {
     "node": ">=10"

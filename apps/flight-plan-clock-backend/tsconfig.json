@@ -1,5 +1,7 @@
 {
   "extends": "tsconfig/express.json",
-  "include": ["."],
   "exclude": ["dist", "build", "node_modules"],
+  "compilerOptions": {
+    "outDir": "dist"
+  }
 }
