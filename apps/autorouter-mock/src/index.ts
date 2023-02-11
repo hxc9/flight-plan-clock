@@ -7,7 +7,7 @@ dotenv.config({path: `.env.${process.env.NODE_ENV || 'local'}`})
 
 const app: Express = express();
 
-app.get('/', (_req: Request, res: Response) => {
+app.get('/api', (_req: Request, res: Response) => {
   res.send('Autorouter mock server');
 });
 
