@@ -7,6 +7,18 @@ This is a work-in-progress and not officially supported in any form by AutoRoute
 
 ## Quick start
 
+By default:
+- the GUI for the AutoRouter mock API runs on port 3001, and lets us change the data served by the API (by
+  adding/editing flight plans)
+- the frontend runs on port 3002 and displays data served by the mock (via the backend on port 3002)
+
+### With Docker
+
+A `docker-compose.yml` file is provided, use `docker compose up` to run all applications and a database on Docker.
+
+
+### With Node/pnpm/TurboRepo
+
 This project is built using `pnpm` which needs to be installed first.
 
 The application requires a Redis Stack DB instance to run (Redis Stack is required by the Autorouter mock since it uses
@@ -15,12 +27,7 @@ the Redis JSON module - the backend can run with vanilla Redis).
 Environment details are provided using `.env`: when developing locally, you can provide the required parameters
 in `.env.local` (see the `.env.local.example` files in each application folder).
 
-To run everything at once for development, you can run `pnpm run devAll` from the top-level folder.
-
-By default:
-- the GUI for the AutoRouter mock API runs on port 3001, and lets us change the data served by the API (by 
-adding/editing flightplans)
-- the frontend runs on port 3002 and displays data served by the mock (via the backend on port 3002)
+To run everything at once for development, you can run `pnpm run dev` from the top-level folder.
 
 ## Purpose
 
