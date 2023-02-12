@@ -8,7 +8,8 @@ const nextConfig = {
     return config
   },
   reactStrictMode: true,
-  transpilePackages: ["autorouter-dto", "autorouter-mock-services"]
+  transpilePackages: ["autorouter-dto", "autorouter-mock-services"],
+  output: 'standalone',
 }
 
 module.exports = nextConfig

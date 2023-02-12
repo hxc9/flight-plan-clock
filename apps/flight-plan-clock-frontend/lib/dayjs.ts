@@ -1,6 +1,6 @@
 import dayjs, {Dayjs} from "dayjs";
 import utc from "dayjs/plugin/utc"
-import IsBetween from "dayjs/plugin/IsBetween"
+import IsBetween from "dayjs/plugin/isBetween"
 import RelativeTime from "dayjs/plugin/relativeTime"
 
 dayjs.extend(utc)

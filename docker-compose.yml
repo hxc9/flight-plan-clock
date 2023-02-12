@@ -1,0 +1,62 @@
+version: "3"
+
+services:
+  autorouter-mock:
+    container_name: autorouter-mock
+    build:
+      context: .
+      dockerfile: ./apps/autorouter-mock/Dockerfile
+    restart: always
+    ports:
+      - "3000:3000"
+    environment:
+      - REDIS_URL=redis:6379
+    depends_on:
+      - redis
+  autorouter-mock-gui:
+    container_name: autorouter-mock-gui
+    build:
+      context: .
+      dockerfile: ./apps/autorouter-mock-gui/Dockerfile
+    restart: always
+    ports:
+      - "3001:3000"
+    environment:
+      - REDIS_URL=redis:6379
+      - AUTOROUTER_API_URL=http://autorouter-mock:3000/api
+      - ADMIN_PASSWORD=admin
+      - NEXTAUTH_URL=http://localhost:3001
+      - NEXTAUTH_SECRET=hkdfhgibdgshewrsACBGN35
+    depends_on:
+      - redis
+      - autorouter-mock
+  flight-plan-clock-backend:
+    container_name: flight-plan-clock-backend
+    build:
+      context: .
+      dockerfile: ./apps/flight-plan-clock-backend/Dockerfile
+    restart: always
+    ports:
+      - "3002:3002"
+    environment:
+      - REDIS_URL=redis:6379
+      - AUTOROUTER_API_URL=http://autorouter-mock:3000/api
+    depends_on:
+      - redis
+      - autorouter-mock
+  flight-plan-clock-frontend:
+    container_name: flight-plan-clock-frontend
+    build:
+      context: .
+      dockerfile: ./apps/flight-plan-clock-frontend/Dockerfile
+      args:
+        - NEXT_PUBLIC_BACKEND_URL=http://localhost:3002
+    restart: always
+    ports:
+      - "3003:3000"
+    environment:
+      - BACKEND_URL=http://flight-plan-clock-backend:3002
+    depends_on:
+      - flight-plan-clock-backend
+  redis:
+    image: redis/redis-stack-server

@@ -4,7 +4,8 @@ const nextConfig = {
     appDir: true,
   },
   reactStrictMode: true,
-  transpilePackages: ["autorouter-dto", "flight-plan-clock-dto"]
+  transpilePackages: ["autorouter-dto", "flight-plan-clock-dto"],
+  output: 'standalone'
 }
 
 module.exports = nextConfig
