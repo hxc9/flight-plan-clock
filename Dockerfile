@@ -9,7 +9,7 @@
 #RUN turbo prune --docker
 
 # Add lockfile and package.json's of isolated subworkspace
-FROM node:alpine
+FROM node:alpine as builder
 RUN apk add --no-cache libc6-compat
 RUN apk update
 WORKDIR /app
@@ -38,5 +38,14 @@ COPY . .
 RUN pnpm install
 RUN turbo run build
 RUN pnpm install -r --offline --prod
+
+# Add lockfile and package.json's of isolated subworkspace
+FROM node:alpine
+RUN apk add --no-cache libc6-compat
+RUN apk update
+WORKDIR /app
+RUN npm i -g turbo pnpm dotenv-cli
+
+COPY --from=builder /app .
 
 CMD dotenv -e .env.heroku -- turbo run start
