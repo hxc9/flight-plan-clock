@@ -3,3 +3,5 @@
 **/.turbo
 **/.env.local
 **/.next
+docker-compose.yml
+**/Dockerfile

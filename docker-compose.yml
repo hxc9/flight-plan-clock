@@ -20,7 +20,7 @@ services:
       dockerfile: ./apps/autorouter-mock-gui/Dockerfile
     restart: always
     ports:
-      - "3001:3000"
+      - "3001:3001"
     environment:
       - REDIS_URL=redis:6379
       - AUTOROUTER_API_URL=http://autorouter-mock:3000/api
@@ -53,7 +53,7 @@ services:
         - NEXT_PUBLIC_BACKEND_URL=http://localhost:3002
     restart: always
     ports:
-      - "3003:3000"
+      - "3003:3003"
     environment:
       - BACKEND_URL=http://flight-plan-clock-backend:3002
     depends_on:
