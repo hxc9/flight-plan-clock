@@ -39,4 +39,4 @@ RUN pnpm install
 RUN turbo run build
 RUN pnpm install -r --offline --prod
 
-RUN dotenv -e .env.heroku -- turbo run start
+CMD dotenv -e .env.heroku -- turbo run start
