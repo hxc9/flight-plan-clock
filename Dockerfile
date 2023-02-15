@@ -35,7 +35,7 @@ COPY . .
 # ARG TURBO_TOKEN
 # ENV TURBO_TOKEN=$TURBO_TOKEN
 
-RUN pnpm install --offline
+RUN pnpm install
 RUN turbo run build
 RUN pnpm install -r --offline --prod
 
