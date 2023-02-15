@@ -8,9 +8,7 @@
       "dependsOn": ["^build", "clean"],
       "outputs": ["build/**", "dist/**", ".next/**"]
     },
-    "start": {
-      "dependsOn": ["build"]
-    },
+    "start": {},
     "lint": {
       "outputs": []
     },
