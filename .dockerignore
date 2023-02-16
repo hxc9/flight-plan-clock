@@ -5,3 +5,6 @@
 **/.next
 docker-compose.yml
 **/Dockerfile
+heroku.yml
+.idea
+.fleet

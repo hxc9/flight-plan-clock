@@ -1,13 +1,3 @@
-#FROM node:alpine AS builder
-## Check https://github.com/nodejs/docker-node/tree/b4117f9333da4138b03a546ec926ef50a31506c3#nodealpine to understand why libc6-compat might be needed.
-#RUN apk add --no-cache libc6-compat
-#RUN apk update
-## Set working directory
-#WORKDIR /app
-#RUN npm i -g turbo pnpm
-#COPY . .
-#RUN turbo prune --docker
-
 # Add lockfile and package.json's of isolated subworkspace
 FROM node:alpine as builder
 RUN apk add --no-cache libc6-compat
@@ -36,7 +26,7 @@ COPY . .
 # ENV TURBO_TOKEN=$TURBO_TOKEN
 
 RUN pnpm install
-RUN turbo run build
+RUN dotenv -e .env.heroku -- turbo run build
 RUN pnpm install -r --offline --prod
 
 # Add lockfile and package.json's of isolated subworkspace
@@ -47,5 +37,10 @@ WORKDIR /app
 RUN npm i -g turbo pnpm dotenv-cli
 
 COPY --from=builder /app .
+
+EXPOSE 3004
+
+ENV NEXTAUTH_URL=http://localhost:3004/ar-mock-gui
+#ENV NEXTAUTH_SECRET=<set value>
 
 CMD dotenv -e .env.heroku -- turbo run start

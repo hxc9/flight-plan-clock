@@ -1,5 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  basePath: process.env.AR_MOCK_GUI_BASE_PATH??'',
   experimental: {
     appDir: true,
   },

@@ -42,3 +42,6 @@ process.on('exit', function() {
 httpServer.listen(port, () => {
   console.log(`⚡️[server]: Server is running at http://localhost:${port}`);
 });
+
+process.on('SIGINT', () => httpServer.close());
+process.on('SIGTERM', () => httpServer.close());

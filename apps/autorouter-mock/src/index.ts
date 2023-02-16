@@ -17,8 +17,11 @@ app.use(express.json());
 app.use('/api/flightPlan', flightPlan);
 app.use('/api/message', message);
 
-app.listen(port, () => {
+const server = app.listen(port, () => {
   console.log(`⚡️[server]: Server is running at http://localhost:${port}`);
 });
+
+process.on('SIGINT', () => server.close());
+process.on('SIGTERM', () => server.close());
 
 export default app

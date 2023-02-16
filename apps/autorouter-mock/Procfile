@@ -1,1 +1,0 @@
-web: cd apps/autorouter-mock && pnpm stage
