@@ -10,8 +10,6 @@ app.use('/ar-mock', createProxyMiddleware({ target: 'http://localhost:3000', cha
   pathRewrite: {
     '^/ar-mock' : '/'
   },
-  followRedirects: true,
-  logLevel: "debug"
 }));
 app.use('/ar-mock-gui', createProxyMiddleware({ target: 'http://localhost:3001', changeOrigin: true,
 }))
