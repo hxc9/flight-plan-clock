@@ -1,5 +1,6 @@
 "use client"
 
+import { fetchFromMock } from '@/components/flightPlans/utils';
 import styles from "../../app/page.module.css";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc"
@@ -17,7 +18,7 @@ export const ChangeCtot = ({fplId, eobt, hasCtot} : {fplId : number, eobt: numbe
     async function handleEobtPlus(minutes : number|null){
         const newCtot = minutes ? dayjs.unix(eobt).utc().add(minutes, 'm').startOf('m') : null
         setIsFetching(true)
-        await fetch(`/api/mock/flightPlan/${fplId}`,
+        await fetchFromMock(`/api/mock/flightPlan/${fplId}`,
             {method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

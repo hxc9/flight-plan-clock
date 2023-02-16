@@ -1,3 +1,4 @@
+import cors from 'cors';
 import dotenv from 'dotenv';
 
 dotenv.config();
@@ -17,6 +18,7 @@ app.get('/', (_req: Request, res: Response) => {
 });
 
 app.use(express.json());
+app.use(cors())
 
 app.get('/api/ping', (req: Request, res: Response) => {
   res.status(200).end();

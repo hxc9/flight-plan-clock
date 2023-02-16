@@ -9,7 +9,10 @@ app.use(morgan('combined'));
 app.use('/ar-mock', createProxyMiddleware({ target: 'http://localhost:3000', changeOrigin: true,
   pathRewrite: {
     '^/ar-mock' : '/'
-  }}));
+  },
+  followRedirects: true,
+  logLevel: "debug"
+}));
 app.use('/ar-mock-gui', createProxyMiddleware({ target: 'http://localhost:3001', changeOrigin: true,
 }))
 app.use('/api', createProxyMiddleware({ target: 'http://localhost:3002', changeOrigin: true,

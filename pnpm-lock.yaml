@@ -61,6 +61,7 @@ importers:
       '@types/react-dom': 18.0.10
       autorouter-dto: workspace:*
       autorouter-mock-services: workspace:*
+      cors: ^2.8.5
       dayjs: ^1.11.7
       eslint: 8.30.0
       eslint-config-custom: workspace:*
@@ -77,6 +78,7 @@ importers:
       '@next/font': 13.1.6
       autorouter-dto: link:../../packages/autorouter-dto
       autorouter-mock-services: link:../../packages/autorouter-mock-services
+      cors: 2.8.5
       dayjs: 1.11.7
       generic-pool: 3.9.0
       ioredis: 5.3.0

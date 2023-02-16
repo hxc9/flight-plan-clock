@@ -1,5 +1,6 @@
 "use client"
 
+import { fetchFromMock } from '@/components/flightPlans/utils';
 import {Status} from "autorouter-dto"
 import { ChangeEvent, useEffect, useMemo, useState, useTransition } from 'react';
 import {useRouter} from "next/navigation";
@@ -35,7 +36,7 @@ export const StatusField = ({
         const newStatus = event.target.value as Status;
         setTransition(newStatus)
         setIsFetching(true)
-        await fetch(`/api/mock/flightPlan/${fplId}`,
+        await fetchFromMock(`/api/mock/flightPlan/${fplId}`,
             {
                 method: 'POST',
                 headers: {

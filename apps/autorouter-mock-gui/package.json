@@ -12,6 +12,7 @@
     "@next/font": "13.1.6",
     "autorouter-dto": "workspace:*",
     "autorouter-mock-services": "workspace:*",
+    "cors": "^2.8.5",
     "dayjs": "^1.11.7",
     "generic-pool": "^3.9.0",
     "ioredis": "^5.2.5",
@@ -22,12 +23,12 @@
     "react-dom": "18.2.0"
   },
   "devDependencies": {
-    "eslint-config-custom": "workspace:*",
-    "eslint": "8.30.0",
-    "tsconfig": "workspace:*",
     "@types/node": "18.11.18",
     "@types/react": "18.0.26",
     "@types/react-dom": "18.0.10",
+    "eslint": "8.30.0",
+    "eslint-config-custom": "workspace:*",
+    "tsconfig": "workspace:*",
     "typescript": "4.9.4"
   }
 }

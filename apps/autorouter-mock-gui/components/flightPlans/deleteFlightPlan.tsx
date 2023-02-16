@@ -1,5 +1,6 @@
 "use client"
 
+import { fetchFromMock } from '@/components/flightPlans/utils';
 import { FormEvent, useState, useTransition} from "react";
 import {useRouter} from "next/navigation";
 
@@ -10,7 +11,7 @@ export const DeleteFlightPlan = ({fplId} : {fplId: number}) : JSX.Element => {
     async function handleSubmit(event: FormEvent<HTMLFormElement>) {
         event.preventDefault()
         setIsFetching(true)
-        await fetch(`/api/mock/flightPlan/${fplId}`,
+        await fetchFromMock(`/api/mock/flightPlan/${fplId}`,
             {method: 'DELETE'})
         setIsFetching(false)
         startTransition(() => {
