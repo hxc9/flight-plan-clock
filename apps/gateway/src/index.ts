@@ -12,6 +12,11 @@ app.use('/ar-mock', createProxyMiddleware({ target: 'http://localhost:3000', cha
   }}));
 app.use('/ar-mock-gui', createProxyMiddleware({ target: 'http://localhost:3001', changeOrigin: true,
 }))
+app.use('/api', createProxyMiddleware({ target: 'http://localhost:3002', changeOrigin: true,
+}))
+app.use('/', createProxyMiddleware({ target: 'http://localhost:3003', changeOrigin: true,
+}))
+
 
 const port = process.env.GATEWAY_PORT || 3004;
 

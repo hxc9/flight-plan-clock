@@ -40,7 +40,12 @@ COPY --from=builder /app .
 
 EXPOSE 3004
 
-ENV NEXTAUTH_URL=http://localhost:3004/ar-mock-gui
+ENV BACKEND_URL=http://127.0.0.1:3002
+ENV AUTOROUTER_API_URL=http://127.0.0.1:3000/api
+
+# set the following environment variables
+#ENV NEXTAUTH_URL=http://localhost:3004/ar-mock-gui
+#ENV NEXT_PUBLIC_BACKEND_URL=http://127.0.0.1:3002
 #ENV NEXTAUTH_SECRET=<set value>
 
 CMD dotenv -e .env.heroku -- turbo run start
