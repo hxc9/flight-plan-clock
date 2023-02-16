@@ -4,13 +4,13 @@ dotenv.config();
 import express, { Express, Request, Response } from 'express';
 import { createServer } from 'http';
 import { Server } from 'socket.io';
-import { PORT } from './config';
+import { FPC_BACKEND_PORT } from './config';
 
 import flightPlans from './routes/flightPlans';
 import { PollingService } from './services/pollingService';
 
 const app: Express = express();
-const port = PORT || 3002;
+const port = FPC_BACKEND_PORT || 3002;
 
 app.get('/', (_req: Request, res: Response) => {
   res.send('Autorouter mock server');

@@ -6,7 +6,7 @@ import message from './routes/message';
 dotenv.config({path: `.env.${process.env.NODE_ENV || 'local'}`})
 
 const app: Express = express();
-const port = process.env.PORT || 3000;
+const port = process.env.AR_MOCK_PORT || 3000;
 
 app.get('/', (_req: Request, res: Response) => {
   res.send('Autorouter mock server');
