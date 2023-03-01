@@ -9,15 +9,15 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@next/font": "^13.1.6",
+    "@next/font": "^13.2.3",
     "autorouter-dto": "workspace:*",
     "dayjs": "^1.11.7",
     "flight-plan-clock-dto": "workspace:*",
-    "next": "^13.1.6",
+    "next": "^13.2.3",
     "react": "18.2.0",
     "react-dom": "18.2.0",
-    "socket.io-client": "^4.5.4",
-    "swr": "^2.0.1"
+    "socket.io-client": "^4.6.1",
+    "swr": "^2.0.4"
   },
   "devDependencies": {
     "@types/node": "18.11.18",
@@ -28,6 +28,6 @@
     "eslint-config-custom": "workspace:*",
     "tsconfig": "workspace:*",
     "typescript": "4.9.4",
-    "utf-8-validate": "^5.0.2"
+    "utf-8-validate": "^5.0.10"
   }
 }
