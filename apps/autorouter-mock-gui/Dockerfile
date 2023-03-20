@@ -34,6 +34,7 @@ COPY turbo.json turbo.json
 # ENV TURBO_TOKEN=$TURBO_TOKEN
 
 RUN turbo run build --filter=autorouter-mock-gui...
+RUN pnpm install -r --offline --prod
 
 FROM node:alpine AS runner
 RUN apk add --no-cache libc6-compat

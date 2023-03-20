@@ -9,25 +9,25 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@next/font": "^13.2.3",
+    "@next/font": "^13.2.4",
     "autorouter-dto": "workspace:*",
     "dayjs": "^1.11.7",
     "flight-plan-clock-dto": "workspace:*",
-    "next": "^13.2.3",
+    "next": "^13.2.4",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "socket.io-client": "^4.6.1",
-    "swr": "^2.0.4"
+    "swr": "^2.1.0"
   },
   "devDependencies": {
     "@types/node": "18.11.18",
     "@types/react": "18.0.26",
     "@types/react-dom": "18.0.10",
     "bufferutil": "^4.0.7",
-    "eslint": "8.31.0",
+    "eslint": "^8.36.0",
     "eslint-config-custom": "workspace:*",
     "tsconfig": "workspace:*",
-    "typescript": "4.9.4",
+    "typescript": "^5.0.2",
     "utf-8-validate": "^5.0.10"
   }
 }
