@@ -10,6 +10,18 @@ import SocketProvider from "../components/socketContext";
 
 const roboto = Roboto_Flex({subsets: ['latin']})
 
+export const metadata = {
+    title: 'FPL Clock',
+    viewport: {
+        width: 'device-width',
+        initialScale: 1
+    },
+    description: 'Flight plan clock application',
+    icons: {
+        icon: '/favicon.ico'
+    }
+}
+
 export default function RootLayout({
                                        children,
                                    }: {
@@ -17,11 +29,6 @@ export default function RootLayout({
 }) {
     return (
         <html lang="en">
-        {/*
-        <head /> will contain the components returned by the nearest parent
-        head.tsx. Find out more at https://beta.nextjs.org/docs/api-reference/file-conventions/head
-      */}
-        <head/>
         <body>
         <ClockProvider>
             <SocketProvider>

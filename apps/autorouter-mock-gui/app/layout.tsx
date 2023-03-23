@@ -1,6 +1,18 @@
 import './globals.css'
 import React from "react";
 
+export const metadata = {
+    title: 'MockoRouter',
+    viewport: {
+        width: 'device-width',
+        initialScale: 1
+    },
+    description: 'Mock for the autorouter API',
+    icons: {
+        icon: '/favicon.ico'
+    }
+}
+
 export default function RootLayout({
   children,
 }: {
@@ -8,11 +20,6 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      {/*
-        <head /> will contain the components returned by the nearest parent
-        head.tsx. Find out more at https://beta.nextjs.org/docs/api-reference/file-conventions/head
-      */}
-      <head />
       <body>{children}</body>
     </html>
   )
