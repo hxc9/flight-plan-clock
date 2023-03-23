@@ -12,6 +12,7 @@ RUN turbo prune --scope=autorouter-mock-gui --docker
 FROM node:alpine AS installer
 RUN apk add --no-cache libc6-compat
 RUN apk update
+RUN apk add --no-cache py3-pip make g++
 WORKDIR /app
 RUN npm i -g turbo pnpm
 
