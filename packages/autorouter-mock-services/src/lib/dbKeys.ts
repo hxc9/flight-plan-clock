@@ -1,0 +1,34 @@
+const schemaPrefix = "mockoRouter"
+
+export function schemaKey(next: string) {
+  return extendKey(schemaPrefix, next)
+}
+
+export type ID = number | string
+
+function userKey(userId: ID) {
+  return schemaKey(extendKey('user', '' + userId))
+}
+
+function fplKey(userId: ID, fplId: ID) {
+  return extendKey(userKey(userId), 'flightPlan', '' + fplId)
+}
+
+function extendKey(key: string, ...newParts: string[]) {
+  let newKey = key
+  for (const part of newParts) {
+    newKey += ':' + part
+  }
+  return newKey
+}
+
+export const DbKeys = {
+  schemaVersion: schemaKey("schemaVersion"),
+  lastFplId: schemaKey("last_fpl_id"),
+  lastMsgId: schemaKey("last_msg_id"),
+  fplKey,
+  fplListKey: (userId: ID) => extendKey(userKey(userId), 'flightPlans'),
+  fplCtotKey: (userId: ID, fplId: ID) => extendKey(fplKey(userId, fplId), "ctot"),
+  fplMsgKey: (userId: ID, fplId: ID) => extendKey(fplKey(userId, fplId), 'messages'),
+  userMsgKey: (userId: ID) => extendKey(userKey(userId), 'messages')
+}

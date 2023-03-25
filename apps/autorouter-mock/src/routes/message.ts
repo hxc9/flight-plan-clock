@@ -16,7 +16,7 @@ router.post('/acknowledge', async (req: Request, res: Response) => {
   const { body } = req;
 
   if (body && body.length > 0) {
-    await messageStreamService.acknowledgeMessages(body);
+    await messageStreamService.acknowledgeMessages(userId, body);
     res.status(200).end();
   } else {
     res.status(400).end();
@@ -26,7 +26,7 @@ router.post('/:id/acknowledge', async (req: Request, res: Response) => {
   const { params: { id } } = req;
 
   if (id) {
-    await messageStreamService.acknowledgeMessages(+id);
+    await messageStreamService.acknowledgeMessages(userId, +id);
     res.status(200).end();
   } else {
     res.status(400).end();

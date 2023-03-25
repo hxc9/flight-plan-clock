@@ -1,39 +1,29 @@
 import {FplMessages} from "autorouter-dto";
-import genericPool from "generic-pool"
 import Redis from "ioredis-rejson";
+import {redisPool} from "./dbService";
+import {DbKeys, ID} from "./dbKeys";
 
-const redisPool = genericPool.createPool({
-    create: async function () {
-        return new Redis(process.env.REDIS_URL)
-    },
-    destroy: async function (client: Redis) {
-        client.disconnect()
-    }
-}, {
-    max: 10, // maximum size of the pool
-    min: 2 // minimum size of the pool
-});
-
-export async function readMessages(count: number, timeout: number): Promise<FplMessages> {
+export async function readMessages(userId: ID, count: number, timeout: number): Promise<FplMessages> {
     return await redisPool.use(async (redis) => {
         const messages: MsgData[] = []
 
-        const pendingMessages = await groupReadAndClean(redis, redis.xreadgroup("GROUP", "messageGroup", "api",
-          "COUNT", count, "STREAMS", "messages", "0"));
+      const userMsgKey = DbKeys.userMsgKey(userId);
+      const pendingMessages = await groupReadAndClean(userMsgKey, redis, redis.xreadgroup("GROUP", "messageGroup", "api",
+          "COUNT", count, "STREAMS", userMsgKey, "0"));
         messages.push(...pendingMessages)
 
         if (messages.length > 0 || timeout === 0) {
             // immediate return
             if (messages.length < count) {
                 // non-blocking additional query
-                const newMessages = await groupReadAndClean(redis, redis.xreadgroup("GROUP", "messageGroup", "api",
-                    "COUNT", count - messages.length, "STREAMS", "messages", ">"))
+                const newMessages = await groupReadAndClean(userMsgKey, redis, redis.xreadgroup("GROUP", "messageGroup", "api",
+                    "COUNT", count - messages.length, "STREAMS", userMsgKey, ">"))
                 messages.push(...newMessages)
             }
         } else {
             // blocking query
-            const newMessages = await groupReadAndClean(redis, redis.xreadgroup("GROUP", "messageGroup", "api",
-                "COUNT", count, "BLOCK", timeout * 1000, "STREAMS", "messages", ">"))
+            const newMessages = await groupReadAndClean(userMsgKey, redis, redis.xreadgroup("GROUP", "messageGroup", "api",
+                "COUNT", count, "BLOCK", timeout * 1000, "STREAMS", userMsgKey, ">"))
             messages.push(...newMessages)
         }
 
@@ -41,26 +31,27 @@ export async function readMessages(count: number, timeout: number): Promise<FplM
     })
 }
 
-export async function countMessages() : Promise<number> {
+export async function countMessages(userId: ID) : Promise<number> {
     return await redisPool.use(async (redis) => {
         // pull new messages to pending queue
-        await redis.xreadgroup("GROUP", "messageGroup", "api",
-            "STREAMS", "messages", ">")
+      const userMsgKey = DbKeys.userMsgKey(userId);
+      await redis.xreadgroup("GROUP", "messageGroup", "api",
+            "STREAMS", userMsgKey, ">")
         const [pendingCount]
-          = <[pendingCount: number]>await redis.xpending("messages", "messageGroup")
+          = <[pendingCount: number]>await redis.xpending(userMsgKey, "messageGroup")
         return pendingCount
     })
 }
 
-export async function acknowledgeMessages(...ids: number[]) {
+export async function acknowledgeMessages(userId: ID, ...ids: number[]) {
     await redisPool.use(async (redis) => {
-        await redis.xack("messages", "messageGroup", ...ids)
+        await redis.xack(DbKeys.userMsgKey(userId), "messageGroup", ...ids)
     })
 }
 
 type XReadGroupResult = [[unknown, StreamEntry[]]]
 
-async function groupReadAndClean(redis: Redis, res: Promise<unknown[]>): Promise<MsgData[]> {
+async function groupReadAndClean(userMsgKey: string, redis: Redis, res: Promise<unknown[]>): Promise<MsgData[]> {
     const result = <XReadGroupResult>await res
 
     if (!result) {
@@ -83,7 +74,7 @@ async function groupReadAndClean(redis: Redis, res: Promise<unknown[]>): Promise
     })
 
     if (deleted.length > 0) {
-        await redis.xack("messages", "messageGroup", ...deleted)
+        await redis.xack(userMsgKey, "messageGroup", ...deleted)
     }
 
     return valid

@@ -7,34 +7,34 @@ import {buildFplSlotCancelledMessage, buildFplSlotMessage} from "./data/messageD
 import {redis} from "./dbService";
 import { FlightPlanNotFoundError } from './errors';
 import {addMessage} from "./messageService";
-import { fplCtotKey, fplKey} from "./utils";
+import {DbKeys, ID} from "./dbKeys";
 
 dayjs.extend(utc)
 dayjs.extend(isSameOrAfter)
 
-export async function readFlightPlanCtot(fplId: number|string) : Promise<Dayjs|null> {
-    const timestampAsString = await redis.get(fplCtotKey(fplId))
+export async function readFlightPlanCtot(userId: ID, fplId: ID) : Promise<Dayjs|null> {
+    const timestampAsString = await redis.get(DbKeys.fplCtotKey(userId, fplId))
     if (!timestampAsString) return null
 
     const timestamp : number = +timestampAsString
     return dayjs.unix(timestamp).utc()
 }
 
-export async function changeFlightPlanCtot(fplId: number, newCtotTimestamp: number|null, transaction?: ChainableCommander) {
+export async function changeFlightPlanCtot(userId: ID, fplId: number, newCtotTimestamp: number|null, transaction?: ChainableCommander) {
     const commander = transaction || redis
 
-    if ((await redis.exists(fplKey(fplId))) !== 1) {
+    if ((await redis.exists(DbKeys.fplKey(userId, fplId))) !== 1) {
         throw new FlightPlanNotFoundError()
     }
-    const hasExistingCtot = (await redis.exists(fplCtotKey(fplId))) === 1
+    const hasExistingCtot = (await redis.exists(DbKeys.fplCtotKey(userId, fplId))) === 1
 
     if (newCtotTimestamp) {
-        await commander.set(fplCtotKey(fplId), newCtotTimestamp)
-        await addMessage(buildFplSlotMessage(fplId, dayjs.unix(newCtotTimestamp).utc().format('HHmm'), hasExistingCtot), transaction)
+        await commander.set(DbKeys.fplCtotKey(userId, fplId), newCtotTimestamp)
+        await addMessage(userId, buildFplSlotMessage(fplId, dayjs.unix(newCtotTimestamp).utc().format('HHmm'), hasExistingCtot), transaction)
     } else {
-        await commander.del(fplCtotKey(fplId))
+        await commander.del(DbKeys.fplCtotKey(userId, fplId))
         if (hasExistingCtot) {
-            await addMessage(buildFplSlotCancelledMessage(fplId), transaction)
+            await addMessage(userId, buildFplSlotCancelledMessage(fplId), transaction)
         }
     }
 }
