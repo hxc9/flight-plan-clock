@@ -2,6 +2,7 @@
 FROM node:alpine as builder
 RUN apk add --no-cache libc6-compat
 RUN apk update
+RUN apk add --no-cache py3-pip make g++
 WORKDIR /app
 RUN npm i -g turbo pnpm dotenv-cli
 
