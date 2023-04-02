@@ -22,6 +22,7 @@ export function FlightProvider({children, fplId} : {children: React.ReactNode, f
             socket.on("fpl-change", (msg: UpdateMessage) => {
                 if (msg.fplId === fplId) {
                     const newFpl = {...fplRef.current, ...msg.update}
+                    console.log("Got fpl-change msg", newFpl)
                     setTimeout(() => {
                         updateFpl(newFpl)
                         didRefresh(msg.timestamp)

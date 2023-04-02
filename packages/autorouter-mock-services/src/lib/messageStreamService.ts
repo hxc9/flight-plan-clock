@@ -5,9 +5,12 @@ import {DbKeys, ID} from "./dbKeys";
 
 export async function readMessages(userId: ID, count: number, timeout: number): Promise<FplMessages> {
     return await redisPool.use(async (redis) => {
+      const userMsgKey = DbKeys.userMsgKey(userId);
+      if (await redis.exists(userMsgKey) !== 1) {
+        return []
+      }
         const messages: MsgData[] = []
 
-      const userMsgKey = DbKeys.userMsgKey(userId);
       const pendingMessages = await groupReadAndClean(userMsgKey, redis, redis.xreadgroup("GROUP", "messageGroup", "api",
           "COUNT", count, "STREAMS", userMsgKey, "0"));
         messages.push(...pendingMessages)

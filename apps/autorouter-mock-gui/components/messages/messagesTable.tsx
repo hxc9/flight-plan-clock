@@ -6,9 +6,9 @@ import { FplMessage } from 'autorouter-dto';
 
 export const revalidate = 0;
 
-export const MessagesTable = async (): Promise<JSX.Element> => {
-  const messages = await messageService.readAllMessages();
-  const queuedMessages = (await messageStreamService.readMessages(messages.length, 0))
+export const MessagesTable = async ({userId} : {userId: number}): Promise<JSX.Element> => {
+  const messages = await messageService.readAllMessages(userId);
+  const queuedMessages = (await messageStreamService.readMessages(userId, messages.length, 0))
     .map(({ id }: { id: number }) => id);
 
   return <div>

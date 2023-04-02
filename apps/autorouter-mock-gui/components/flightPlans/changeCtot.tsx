@@ -9,7 +9,7 @@ import {useState, useTransition} from "react";
 
 dayjs.extend(utc)
 
-export const ChangeCtot = ({fplId, eobt, hasCtot} : {fplId : number, eobt: number, hasCtot: boolean}) : JSX.Element => {
+export const ChangeCtot = ({userId, fplId, eobt, hasCtot} : {userId: number, fplId : number, eobt: number, hasCtot: boolean}) : JSX.Element => {
 
     const router = useRouter();
     const [, startTransition] = useTransition();
@@ -18,7 +18,7 @@ export const ChangeCtot = ({fplId, eobt, hasCtot} : {fplId : number, eobt: numbe
     async function handleEobtPlus(minutes : number|null){
         const newCtot = minutes ? dayjs.unix(eobt).utc().add(minutes, 'm').startOf('m') : null
         setIsFetching(true)
-        await fetchFromMock(`/api/mock/flightPlan/${fplId}`,
+        await fetchFromMock(`/api/mock/${userId}/flightPlan/${fplId}`,
             {method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

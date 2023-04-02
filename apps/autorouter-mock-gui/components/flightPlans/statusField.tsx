@@ -6,10 +6,10 @@ import { ChangeEvent, useEffect, useMemo, useState, useTransition } from 'react'
 import {useRouter} from "next/navigation";
 import {allTransitionsFrom} from "autorouter-dto";
 
-export const StatusField = ({
+export const StatusField = ({userId,
                                 fplId,
                                 currentStatus
-                            }: { fplId: number, currentStatus: Status }): JSX.Element => {
+                            }: { userId: number, fplId: number, currentStatus: Status }): JSX.Element => {
     const allowedTransitions = allTransitionsFrom(currentStatus)
     const allOptions = useMemo(() => [currentStatus, ...allowedTransitions], [currentStatus, allowedTransitions])
 
@@ -36,7 +36,7 @@ export const StatusField = ({
         const newStatus = event.target.value as Status;
         setTransition(newStatus)
         setIsFetching(true)
-        await fetchFromMock(`/api/mock/flightPlan/${fplId}`,
+        await fetchFromMock(`/api/mock/${userId}/flightPlan/${fplId}`,
             {
                 method: 'POST',
                 headers: {

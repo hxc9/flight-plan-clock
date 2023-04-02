@@ -4,10 +4,12 @@ import { flightPlanService } from "autorouter-mock-services"
 
 const router : Router = express.Router()
 
+const TODO_USER_ID = 1
+
 router.get('/file', async (req: Request, res: Response<FlightPlansResult>) => {
   const {query: {sidx, showclosed}} = req
 
-  const data = await flightPlanService.listFlightPlans(showclosed === 'yes')
+  const data = await flightPlanService.listFlightPlans(TODO_USER_ID, showclosed === 'yes')
 
   if (sidx === 'eobt') {
     [...data].sort((a, b) => a.eobt - b.eobt)
@@ -24,7 +26,7 @@ router.get('/file/:fplId', async (req: Request, res: Response<FlightPlan>) => {
     return
   }
 
-  const data = await flightPlanService.getFlightPlan(+fplId)
+  const data = await flightPlanService.getFlightPlan(TODO_USER_ID, +fplId)
 
   if (!data) {
     res.status(404).end()

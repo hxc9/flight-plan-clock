@@ -9,7 +9,7 @@ import {useState, useTransition} from "react";
 
 dayjs.extend(utc)
 
-export const ChangeEobt = ({fplId, eobt} : {fplId : number, eobt: number}) : JSX.Element => {
+export const ChangeEobt = ({userId, fplId, eobt} : {userId: number, fplId : number, eobt: number}) : JSX.Element => {
 
     const router = useRouter();
     const [, startTransition] = useTransition();
@@ -27,7 +27,7 @@ export const ChangeEobt = ({fplId, eobt} : {fplId : number, eobt: number}) : JSX
 
     async function handleEobtChange(newEobt: Dayjs) {
         setIsFetching(true)
-        await fetchFromMock(`/api/mock/flightPlan/${fplId}`,
+        await fetchFromMock(`/api/mock/${userId}/flightPlan/${fplId}`,
             {method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
