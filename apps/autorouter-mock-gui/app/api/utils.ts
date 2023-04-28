@@ -1,7 +1,7 @@
-import {Response} from "next/dist/compiled/@edge-runtime/primitives/fetch";
+import { NextResponse } from 'next/server'
 
-export function responseWithStatus(status: number) {
-    return new Response(null, {status})
+export function responseWithStatus(status: number) : NextResponse {
+    return new NextResponse(null, {status})
 }
 
 export function okResponse() {
