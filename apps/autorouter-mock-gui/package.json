@@ -9,7 +9,6 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@next/font": "^13.2.4",
     "autorouter-dto": "workspace:*",
     "autorouter-mock-services": "workspace:*",
     "cors": "^2.8.5",

@@ -1,4 +1,4 @@
-import {Fira_Code} from '@next/font/google';
+import {Fira_Code} from "next/font/google";
 import {getServerSession} from 'next-auth';
 import styles from '../page.module.css';
 
