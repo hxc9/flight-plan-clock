@@ -9,7 +9,6 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@next/font": "^13.2.4",
     "autorouter-dto": "workspace:*",
     "dayjs": "^1.11.7",
     "flight-plan-clock-dto": "workspace:*",
