@@ -22,6 +22,8 @@ export function extendKey(key: string, ...newParts: string[]) {
   return newKey
 }
 
+const oauth2Key = schemaKey("oauth2")
+
 export const DbKeys = {
   schemaVersion: schemaKey("schemaVersion"),
   lastFplId: schemaKey("last_fpl_id"),
@@ -32,5 +34,7 @@ export const DbKeys = {
   fplCtotKey: (userId: ID, fplId: ID) => extendKey(fplKey(userId, fplId), "ctot"),
   fplMsgKey: (userId: ID, fplId: ID) => extendKey(fplKey(userId, fplId), 'messages'),
   userListKey: schemaKey("users"),
-  userMsgKey: (userId: ID) => extendKey(userKey(userId), 'messages')
+  userMsgKey: (userId: ID) => extendKey(userKey(userId), 'messages'),
+  oauth2AuthorizationKey: (code: string) => extendKey(oauth2Key, "authorization", code),
+  oauth2AccessTokenKey: (token: string) => extendKey(oauth2Key, "accessToken", token),
 }

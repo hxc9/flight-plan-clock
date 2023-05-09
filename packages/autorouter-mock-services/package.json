@@ -19,6 +19,7 @@
   "devDependencies": {
     "@types/ioredis": "^5.0.0",
     "@types/node": "^18.15.3",
+    "@types/oauth2-server": "^3.0.13",
     "eslint": "^8.36.0",
     "eslint-config-custom": "workspace:*",
     "rimraf": "latest",
