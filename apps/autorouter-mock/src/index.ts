@@ -14,6 +14,7 @@ app.get('/', (_req: Request, res: Response) => {
 });
 
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 app.use('/api/flightPlan', flightPlan);
 app.use('/api/message', message);

@@ -1,7 +1,6 @@
-import { AuthorizationCode, Token } from 'oauth2-server';
-import {DbKeys} from "./dbKeys";
-import {redis} from "./dbService";
-import OAuth2Server from 'oauth2-server';
+import OAuth2Server, { AuthorizationCode, Token } from 'oauth2-server';
+import { DbKeys } from './dbKeys';
+import { redis } from './dbService';
 
 async function saveAuthorizationCode(code: AuthorizationCode) {
   const key = DbKeys.oauth2AuthorizationKey(code.authorizationCode);
@@ -12,7 +11,7 @@ async function saveAuthorizationCode(code: AuthorizationCode) {
 
 async function getAuthorizationCode(authorizationCode: string) {
   const [code] = <[AuthorizationCode] | null>await redis.json_get(DbKeys.oauth2AuthorizationKey(authorizationCode), '$')??[]
-  return code
+  return code ? { ...code, expiresAt: new Date(code.expiresAt) } : null
 }
 
 async function deleteAuthorizationCode(code: AuthorizationCode) {
@@ -50,7 +49,7 @@ const model : OAuth2Server.AuthorizationCodeModel = {
     if (!client) return null;
     return {
       accessToken: token.accessToken,
-      accessTokenExpiresAt: token.expiresAt,
+      accessTokenExpiresAt: new Date(token.expiresAt),
       scope: token.scope,
       client,
       user: token.user
@@ -59,14 +58,16 @@ const model : OAuth2Server.AuthorizationCodeModel = {
   getAuthorizationCode,
   getClient,
   revokeAuthorizationCode: deleteAuthorizationCode,
-  saveAuthorizationCode,
+  saveAuthorizationCode: async function(code: OAuth2Server.AuthorizationCode, client: OAuth2Server.Client, user: OAuth2Server.User) {
+    return await saveAuthorizationCode({...code, client, user});
+  },
   saveToken: async function(token: OAuth2Server.Token, client: OAuth2Server.Client, user: OAuth2Server.User) {
     const accessToken = {
       accessToken: token.accessToken,
       expiresAt: token.accessTokenExpiresAt,
       scope: token.scope,
       clientId: client.id,
-      user: {id: user.id},
+      user,
     }
     /*    const refreshToken = {
           refreshToken: token.refreshToken,
@@ -76,7 +77,7 @@ const model : OAuth2Server.AuthorizationCodeModel = {
           user: {id: user.id},
         }*/
     await saveAccessToken(accessToken);
-    return token;
+    return {...token, client, user}
   },
   verifyScope: async function(token: OAuth2Server.Token, scope: string | string[]): Promise<boolean> {
     if (!token.scope) {
