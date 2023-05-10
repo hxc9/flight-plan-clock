@@ -28,7 +28,7 @@ export default async function Page({searchParams} : {searchParams: AuthParams}) 
 
   return withHeader(
     users.length > 0 ? <>
-      <form action="http://localhost:3000/api/oauth2/authorize">
+      <form action="http://localhost:3000/authorize">
         <label htmlFor="user">Select user:</label>{' '}
         <select id="user" name="user">
           {users.map(u => <option key={u} value={u}>{u}</option>)}

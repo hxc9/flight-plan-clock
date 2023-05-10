@@ -17,7 +17,7 @@ app.use(express.json());
 
 app.use('/api/flightPlan', flightPlan);
 app.use('/api/message', message);
-app.use('/api/oauth2', auth);
+app.use('/', auth);
 
 const server = app.listen(port, () => {
   console.log(`⚡️[server]: Server is running at http://localhost:${port}`);

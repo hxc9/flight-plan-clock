@@ -8,7 +8,7 @@ export async function authorize(req: Request, response: Response) {
     try {
       const request = new OAuth2.Request(req);
       const authCode = await authService.oauth2.authorize(request, new OAuth2.Response(response), {authenticateHandler: {
-                handle: async function(request: OAuth2.Request, response: OAuth2.Response) {
+                handle: async function(request: OAuth2.Request) {
                     const user = request.query?.user
                     if (user && await userService.exists(user)) {
                         return user
