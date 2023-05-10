@@ -28,10 +28,12 @@
     "typescript": "^5.0.2"
   },
   "dependencies": {
+    "@types/oauth2-server": "^3.0.13",
     "autorouter-dto": "workspace:*",
     "dayjs": "^1.11.7",
     "generic-pool": "^3.9.0",
     "ioredis": "^5.3.1",
-    "ioredis-rejson": "^1.0.10"
+    "ioredis-rejson": "^1.0.10",
+    "oauth2-server": "^3.1.1"
   }
 }

@@ -7,6 +7,10 @@ export async function allUsers() : Promise<number[]> {
   return res1.map(e => +e).reverse()
 }
 
+export async function exists(userId: ID) {
+  return await redis.exists(DbKeys.userMsgKey(userId)) === 1
+}
+
 export async function createUser() {
   const id = await redis.incr(DbKeys.lastUserId)
   await redis.pipeline()

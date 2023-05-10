@@ -1,27 +1,91 @@
 import { AuthorizationCode, Token } from 'oauth2-server';
 import {DbKeys} from "./dbKeys";
 import {redis} from "./dbService";
+import OAuth2Server from 'oauth2-server';
 
-export async function saveAuthorizationCode(code: AuthorizationCode) {
-  await redis.json_set(DbKeys.oauth2AuthorizationKey(code.authorizationCode), '$', code)
+async function saveAuthorizationCode(code: AuthorizationCode) {
+  const key = DbKeys.oauth2AuthorizationKey(code.authorizationCode);
+  await redis.json_set(key, '$', code)
+  await redis.expireat(key, Math.floor(code.expiresAt.getTime() / 1000))
+  return code
 }
 
-export async function getAuthorizationCode(authorizationCode: string) {
+async function getAuthorizationCode(authorizationCode: string) {
   const [code] = <[AuthorizationCode] | null>await redis.json_get(DbKeys.oauth2AuthorizationKey(authorizationCode), '$')??[]
   return code
 }
 
-export async function deleteAuthorizationCode(code: AuthorizationCode) {
+async function deleteAuthorizationCode(code: AuthorizationCode) {
   return await redis.del(DbKeys.oauth2AuthorizationKey(code.authorizationCode)) === 1
 }
 
 type AccessToken = Omit<Token, "client"> & {clientId: string}
 
-export async function saveAccessToken(token: AccessToken) {
-  await redis.json_set(DbKeys.oauth2AccessTokenKey(token.accessToken), '$', token)
+async function saveAccessToken(token: AccessToken) {
+  const key = DbKeys.oauth2AccessTokenKey(token.accessToken);
+  await redis.json_set(key, '$', token)
+  await redis.expireat(key, Math.floor(token.expiresAt.getTime() / 1000))
 }
 
-export async function getAccessToken(accessToken: string) {
+async function getAccessToken(accessToken: string) {
   const [token] = <[AccessToken] | null>await redis.json_get(DbKeys.oauth2AccessTokenKey(accessToken), '$')??[]
   return token
 }
+
+export async function getClient(clientId: string, clientSecret?: string) {
+  if (clientId === 'flight-plan-clock' && (!clientSecret || clientSecret === 'fpl-clock-secret')) {
+    return {
+      id: 'flight-plan-clock',
+      grants: ['authorization_code'],
+      redirectUris: ['http://localhost:3003/oauth2'],
+    }
+  }
+}
+
+const model : OAuth2Server.AuthorizationCodeModel = {
+  getAccessToken: async function(accessToken: string) {
+    const token = await getAccessToken(accessToken);
+    if (!token) return null;
+    const client = await getClient(token.clientId, '');
+    if (!client) return null;
+    return {
+      accessToken: token.accessToken,
+      accessTokenExpiresAt: token.expiresAt,
+      scope: token.scope,
+      client,
+      user: token.user
+    };
+  },
+  getAuthorizationCode,
+  getClient,
+  revokeAuthorizationCode: deleteAuthorizationCode,
+  saveAuthorizationCode,
+  saveToken: async function(token: OAuth2Server.Token, client: OAuth2Server.Client, user: OAuth2Server.User) {
+    const accessToken = {
+      accessToken: token.accessToken,
+      expiresAt: token.accessTokenExpiresAt,
+      scope: token.scope,
+      clientId: client.id,
+      user: {id: user.id},
+    }
+    /*    const refreshToken = {
+          refreshToken: token.refreshToken,
+          expiresAt: token.refreshTokenExpiresAt,
+          scope: token.scope,
+          client: {id: client.id},
+          user: {id: user.id},
+        }*/
+    await saveAccessToken(accessToken);
+    return token;
+  },
+  verifyScope: async function(token: OAuth2Server.Token, scope: string | string[]): Promise<boolean> {
+    if (!token.scope) {
+      return false;
+    }
+    let requestedScopes = Array.isArray(scope) ? scope : scope.split(' ');
+    let authorizedScopes = Array.isArray(token.scope) ? token.scope: token.scope.split(' ');
+    return requestedScopes.every(s => authorizedScopes.indexOf(s) >= 0);
+  }
+}
+
+export const oauth2 = new OAuth2Server({model});
