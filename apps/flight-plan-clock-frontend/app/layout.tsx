@@ -12,14 +12,15 @@ const roboto = Roboto_Flex({subsets: ['latin']})
 
 export const metadata = {
     title: 'FPL Clock',
-    viewport: {
-        width: 'device-width',
-        initialScale: 1
-    },
     description: 'Flight plan clock application',
     icons: {
         icon: '/favicon.ico'
     }
+}
+
+export const viewport = {
+    width: 'device-width',
+    initialScale: 1
 }
 
 export default function RootLayout({
