@@ -19,7 +19,9 @@ export function FlightProvider({children, fplId} : {children: React.ReactNode, f
 
     useEffect(() => {
         if (socket) {
+            console.log("Starting WS processing")
             socket.on("fpl-change", (msg: UpdateMessage) => {
+                console.log("Got fpl-change msg", msg)
                 if (msg.fplId === fplId) {
                     const newFpl = {...fplRef.current, ...msg.update}
                     console.log("Got fpl-change msg", newFpl)
@@ -43,6 +45,7 @@ export function FlightProvider({children, fplId} : {children: React.ReactNode, f
             })
         }
         return () => {
+            console.log("Stopping WS processing")
             socket && socket.off("fpl-change")
             socket && socket.off("fpl-refiled")
         }
