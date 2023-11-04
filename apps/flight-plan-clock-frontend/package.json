@@ -12,7 +12,7 @@
     "autorouter-dto": "workspace:*",
     "dayjs": "^1.11.7",
     "flight-plan-clock-dto": "workspace:*",
-    "next": "^13.3.1",
+    "next": "^14.0.1",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "socket.io-client": "^4.6.1",
