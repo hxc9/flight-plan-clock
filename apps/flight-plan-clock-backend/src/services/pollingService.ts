@@ -59,6 +59,7 @@ export class PollingService {
                 }
             })
             socket.on('disconnect', () => {
+                delete this.watchedFlightPlans[socket.id]
                 this.unsubscribe(socket)
             })
         })

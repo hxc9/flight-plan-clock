@@ -18,13 +18,15 @@ export function FlightProvider({children, fplId} : {children: React.ReactNode, f
     fplRef.current = fpl
 
     useEffect(() => {
+        let subscriber = () => {
+            socket && fplId && socket.emit("watch-flightPlan", fplId)
+        }
         if (socket) {
-            console.log("Starting WS processing")
+            socket.on("connect", subscriber)
             socket.on("fpl-change", (msg: UpdateMessage) => {
                 console.log("Got fpl-change msg", msg)
                 if (msg.fplId === fplId) {
                     const newFpl = {...fplRef.current, ...msg.update}
-                    console.log("Got fpl-change msg", newFpl)
                     setTimeout(() => {
                         updateFpl(newFpl)
                         didRefresh(msg.timestamp)
@@ -45,9 +47,9 @@ export function FlightProvider({children, fplId} : {children: React.ReactNode, f
             })
         }
         return () => {
-            console.log("Stopping WS processing")
             socket && socket.off("fpl-change")
             socket && socket.off("fpl-refiled")
+            socket && socket.off("connect", subscriber)
         }
     }, [socket, fplId, didRefresh, router])
 
