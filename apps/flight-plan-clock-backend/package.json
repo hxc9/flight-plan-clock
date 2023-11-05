@@ -15,17 +15,21 @@
     "node": ">=10"
   },
   "dependencies": {
+    "@types/express-session": "^1.17.9",
     "autorouter-dto": "workspace:*",
     "autorouter-mock-services": "workspace:*",
     "cors": "^2.8.5",
     "dayjs": "^1.11.7",
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
+    "express-session": "^1.17.3",
     "flight-plan-clock-dto": "workspace:*",
     "generic-pool": "^3.9.0",
     "ioredis": "^5.3.1",
     "lodash": "^4.17.21",
     "node-fetch": "^2.6.9",
+    "passport": "^0.6.0",
+    "passport-oauth2": "^1.7.0",
     "socket.io": "^4.6.1"
   },
   "devDependencies": {
@@ -34,6 +38,8 @@
     "@types/lodash": "^4.14.191",
     "@types/node": "^18.15.3",
     "@types/node-fetch": "^2.6.2",
+    "@types/passport": "^1.0.14",
+    "@types/passport-oauth2": "^1.4.14",
     "concurrently": "^7.6.0",
     "eslint": "^8.36.0",
     "eslint-config-custom": "workspace:*",

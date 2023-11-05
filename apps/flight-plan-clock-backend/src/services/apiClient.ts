@@ -24,6 +24,10 @@ export async function ackMessages(keys: number[]) {
     })
 }
 
+export async function getUser() {
+    return await fetchFromAutoRouterWithBody<any>('/user')
+}
+
 async function fetchFromAutoRouter(uri: string, init?: RequestInit | undefined) {
     const res = await fetch(AUTOROUTER_API_URL + uri, init)
 

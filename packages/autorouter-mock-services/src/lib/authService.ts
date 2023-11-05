@@ -36,7 +36,7 @@ export async function getClient(clientId: string, clientSecret?: string) {
     return {
       id: 'flight-plan-clock',
       grants: ['authorization_code'],
-      redirectUris: ['http://localhost:3003/oauth2'],
+      redirectUris: ['http://localhost:3002/api/oauth2/callback'],
     }
   }
 }
@@ -89,4 +89,6 @@ const model : OAuth2Server.AuthorizationCodeModel = {
   }
 }
 
-export const oauth2 = new OAuth2Server({model});
+export const oauth2 = new OAuth2Server({model,
+  accessTokenLifetime: 24 * 60 * 60,
+});

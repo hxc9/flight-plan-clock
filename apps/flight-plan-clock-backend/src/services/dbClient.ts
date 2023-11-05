@@ -11,3 +11,7 @@ export const defaultExpiry = 3_600 * 24 * 14;
 export function fplKey(fplId: number) {
     return `${schemaPrefix}flightPlan:${fplId}`;
 }
+
+export function userKey(userId: number) {
+  return `${schemaPrefix}user:${userId}`;
+}
