@@ -2,8 +2,9 @@ import {FlightPlanFull} from "flight-plan-clock-dto";
 import styles from './flightPlanCard.module.css'
 import Callsign from "../../../components/callsign";
 import {DateValue, DynamicData, PlainValue} from "./dynamicData";
+import Metar from "./metar";
 
-export default function FlightPlanCard({fpl}: { fpl: FlightPlanFull }) {
+export default async function FlightPlanCard({fpl}: { fpl: FlightPlanFull }) {
 
     return <div className={styles.flightCard}>
         <div className={styles.topRow}>
@@ -24,6 +25,14 @@ export default function FlightPlanCard({fpl}: { fpl: FlightPlanFull }) {
                     <PlainValue/>
                 </DynamicData>
             </h2>
+        </div>
+        <div className={styles.midRow}>
+            <div>
+                <Metar icaoCode={fpl.departure}/>
+            </div>
+            <div>
+                <Metar icaoCode={fpl.destination}/>
+            </div>
         </div>
         <div className={styles.bottomRow}>
             <p><b>Route:</b></p>
