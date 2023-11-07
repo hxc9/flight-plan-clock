@@ -1,10 +1,13 @@
 import { FplMessages } from 'autorouter-dto';
 import express, { Request, Response, Router } from 'express';
 import { messageStreamService } from 'autorouter-mock-services';
+import {authMiddleware} from "../auth/middleware";
 
 const router: Router = express.Router();
 
 const TODO_USER_ID = 1
+
+//router.use(authMiddleware)
 
 router.get('/', async (req: Request, res: Response<FplMessages>) => {
   const { query: { limit = '10', timeout = '30' } } = req;

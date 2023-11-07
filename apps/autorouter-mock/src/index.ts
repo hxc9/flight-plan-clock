@@ -6,6 +6,7 @@ import auth from './auth';
 import user from "./routes/user";
 
 import {authService} from "autorouter-mock-services";
+import OAuth2, {UnauthorizedRequestError} from "oauth2-server";
 
 dotenv.config({path: `.env.${process.env.NODE_ENV || 'local'}`})
 
