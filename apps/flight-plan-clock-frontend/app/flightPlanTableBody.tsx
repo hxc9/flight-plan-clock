@@ -1,6 +1,5 @@
 "use client"
 
-import useSWR from 'swr'
 import {useBackend} from "../lib/apiClient";
 import {FlightPlanMini, FlightPlansResponse} from "flight-plan-clock-dto";
 import React from "react";

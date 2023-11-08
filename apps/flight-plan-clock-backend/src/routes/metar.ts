@@ -1,5 +1,4 @@
 import express, {Router} from "express";
-import fetch from "node-fetch";
 import {getMetar} from "../services/metarService";
 
 const router : Router = express.Router()
