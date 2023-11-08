@@ -1,7 +1,14 @@
+"use client"
+
 import styles from './timeCard.module.css'
 import {DateValue, DynamicCtot, DynamicData, FallbackValue, TimeFromTickValue} from "./dynamicData";
+import {useFlightPlan} from "../../../lib/apiClient";
 
-export function TimeCardEobt({time: timestamp}: { time?: number }) {
+export function TimeCardEobt({fplId}: { fplId: string }) {
+    const {flightPlan} = useFlightPlan(fplId)
+    if (!flightPlan) return null
+    const  {eobt: timestamp} = flightPlan
+
     return <div className={styles.timeCard + ' ' + styles.eobtCard}>
         <h1 className={styles.topRow}>EOBT</h1>
         <div className={styles.midRow}>
@@ -24,7 +31,11 @@ export function TimeCardEobt({time: timestamp}: { time?: number }) {
     </div>
 }
 
-export function TimeCardCtot({ctot, eobt}: { ctot?: string | null, eobt: number }) {
+export function TimeCardCtot({fplId}: { fplId: string }) {
+    const {flightPlan} = useFlightPlan(fplId)
+    if (!flightPlan) return null
+    const {eobt, ctot} = flightPlan
+
     return <div className={styles.timeCard + ' ' + styles.ctotCard}>
         <h1 className={styles.topRow}>CTOT</h1>
         <div className={styles.midRow}>

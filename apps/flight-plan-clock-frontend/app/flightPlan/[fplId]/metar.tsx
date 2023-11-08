@@ -1,7 +1,11 @@
-import styles from './metar.module.css'
+"use client"
 
-export default async function Metar({icaoCode} : {icaoCode: string}) {
-    const metar = await (await fetch(`https://aviationweather.gov/cgi-bin/data/metar.php?ids=${icaoCode}&format=raw&taf=false`)).text()
+import useSWR from 'swr'
+import styles from './metar.module.css'
+import {useBackend} from "../../../lib/apiClient";
+
+export default function Metar({icaoCode} : {icaoCode: string}) {
+    const {data: metar} = useBackend<string>(`/api/metar/${icaoCode}`)
 
     return <p className={styles.metar}>{metar}</p>
 }

@@ -270,8 +270,8 @@ importers:
         specifier: ^4.6.1
         version: 4.6.1(bufferutil@4.0.7)(utf-8-validate@5.0.10)
       swr:
-        specifier: ^2.1.0
-        version: 2.1.0(react@18.2.0)
+        specifier: ^2.2.4
+        version: 2.2.4(react@18.2.0)
     devDependencies:
       '@types/node':
         specifier: 18.11.18
@@ -3993,12 +3993,12 @@ packages:
     engines: {node: '>= 0.4'}
     dev: false
 
-  /swr@2.1.0(react@18.2.0):
-    resolution: {integrity: sha512-4hYl5p3/KalQ1MORealM79g/DtLohmud6yyfXw5l4wjtFksYUnocRFudvyaoUtgj3FrVNK9lS25Av9dsZYvz0g==}
-    engines: {pnpm: '7'}
+  /swr@2.2.4(react@18.2.0):
+    resolution: {integrity: sha512-njiZ/4RiIhoOlAaLYDqwz5qH/KZXVilRLvomrx83HjzCWTfa+InyfAjv05PSFxnmLzZkNO9ZfvgoqzAaEI4sGQ==}
     peerDependencies:
       react: ^16.11.0 || ^17.0.0 || ^18.0.0
     dependencies:
+      client-only: 0.0.1
       react: 18.2.0
       use-sync-external-store: 1.2.0(react@18.2.0)
     dev: false

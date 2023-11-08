@@ -1,12 +1,19 @@
-import {FlightPlanFull} from "flight-plan-clock-dto";
+"use client"
+
 import styles from './flightPlanCard.module.css'
 import Callsign from "../../../components/callsign";
 import {DateValue, DynamicData, PlainValue} from "./dynamicData";
 import Metar from "./metar";
+import { useFlightPlan} from "../../../lib/apiClient";
+import {RefreshCanary} from "../../../components/refreshCanary";
 
-export default async function FlightPlanCard({fpl}: { fpl: FlightPlanFull }) {
+export default function FlightPlanCard({fplId}: { fplId: string }) {
+    const {flightPlan: fpl, data} = useFlightPlan(fplId)
+
+    if (!fpl) return null
 
     return <div className={styles.flightCard}>
+        <RefreshCanary timestamp={data.lastUpdated} />
         <div className={styles.topRow}>
             <h2><Callsign callsign={fpl.callSign}/></h2>
             <h2>{fpl.departure} → {fpl.destination}</h2>

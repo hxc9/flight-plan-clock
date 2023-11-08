@@ -11,6 +11,7 @@ import flightPlans from './routes/flightPlans';
 import oauth2Callback from './routes/oauth2Callback';
 import { PollingService } from './services/pollingService';
 import session from "express-session";
+import metar from "./routes/metar";
 
 const app: Express = express();
 const port = FPC_BACKEND_PORT || 3002;
@@ -28,6 +29,7 @@ app.get('/api/ping', (req: Request, res: Response) => {
 });
 app.use('/api/flightPlans', flightPlans);
 app.use('/api/oauth2', oauth2Callback)
+app.use('/api/metar', metar)
 
 const httpServer = createServer(app);
 const io = new Server(httpServer, {
