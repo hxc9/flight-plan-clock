@@ -16,12 +16,12 @@
     "node": ">=10"
   },
   "devDependencies": {
-    "@types/node": "^18.15.3",
-    "eslint": "^8.36.0",
+    "@types/node": "^20",
+    "eslint": "^8",
     "eslint-config-custom": "workspace:*",
     "rimraf": "latest",
     "ts-node": "^10.9.1",
     "tsconfig": "workspace:*",
-    "typescript": "^5.1.3"
+    "typescript": "^5"
   }
 }

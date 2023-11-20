@@ -1,41 +1,41 @@
 .container {
-    padding: 3vh 3vw;
+  padding: 3vh 3vw;
 }
 
 .container > h1 {
-    margin-top: 0;
-    margin-bottom: 0.3em;
+  margin-top: 0;
+  margin-bottom: 0.3em;
 }
 
 .content {
-    flex-grow: 1;
+  flex-grow: 1;
 }
 
 .flightPlanTable {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 0.95em;
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.95em;
 }
 
 .flightPlanTable tr {
-    height: 4.5em;
+  height: 4.5em;
 }
 
 .flightPlanTable tr.link {
-    cursor: pointer;
+  cursor: pointer;
 }
 
 .flightPlanTable tr:not(:last-child) {
-    border-bottom: grey 1px solid;
+  border-bottom: grey 1px solid;
 }
 
 .flightPlanTable a {
-    color: inherit;
-    text-decoration: inherit;
+  color: inherit;
+  text-decoration: inherit;
 }
 
 .flightPlanTable tr > td:last-child {
-    padding-right: 0.2em;
-    font-size: 1.5em;
-    color: #007aff;
+  padding-right: 0.2em;
+  font-size: 1.5em;
+  color: #007aff;
 }

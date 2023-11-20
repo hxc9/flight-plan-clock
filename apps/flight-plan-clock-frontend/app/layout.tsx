@@ -1,50 +1,51 @@
+import type { Metadata } from 'next'
+import { Roboto_Flex } from 'next/font/google'
 import './globals.css'
-import {Roboto_Flex} from "next/font/google"
 import styles from './layout.module.css'
-import React from "react";
-import ClockProvider from "../components/clockContext";
-import Clock from './clock';
-import {RefreshContextProvider} from "../components/refreshContext";
-import UpdateInfo from "./updateInfo";
-import SocketProvider from "../components/socketContext";
+import SocketProvider from "@/components/socketContext";
+import { ReactNode } from "react";
+import {ClockProvider} from "@/components/clockContext";
+import Clock from "@/app/clock";
+import {RefreshContextProvider} from "@/components/refreshContext";
+import RefreshInfo from "@/app/refreshInfo";
 
-const roboto = Roboto_Flex({subsets: ['latin']})
+const roboto = Roboto_Flex({ subsets: ['latin'] })
 
-export const metadata = {
-    title: 'FPL Clock',
-    description: 'Flight plan clock application',
-    icons: {
-        icon: '/favicon.ico'
-    }
+export const metadata: Metadata = {
+  title: 'FPL Clock',
+  description: 'Flightplan clock application',
+  icons: {
+    icon: '/favicon.ico',
+  }
 }
 
 export const viewport = {
-    width: 'device-width',
-    initialScale: 1
+  width: 'device-width',
+  initialScale: 1,
 }
 
 export default function RootLayout({
-                                       children,
-                                   }: {
-    children: React.ReactNode
+  children,
+}: {
+  children: ReactNode
 }) {
-    return (
-        <html lang="en">
-        <body>
+  return (
+    <html lang="en">
+      <body className={roboto.className}>
+      <main className={styles.main + ' ' + roboto.className}>
         <ClockProvider>
-            <SocketProvider>
-                <RefreshContextProvider>
-                    <main className={styles.main + ' ' + roboto.className}>
-                        {children}
-                        <div className={styles.footer}>
-                            <div><UpdateInfo/></div>
-                            <div><Clock/></div>
-                        </div>
-                    </main>
-                </RefreshContextProvider>
-            </SocketProvider>
+          <RefreshContextProvider>
+          <SocketProvider>
+              {children}
+          </SocketProvider>
+        <div className={styles.footer}>
+          <div><RefreshInfo/></div>
+          <div><Clock/></div>
+        </div>
+          </RefreshContextProvider>
         </ClockProvider>
-        </body>
-        </html>
-    )
+      </main>
+      </body>
+    </html>
+  )
 }

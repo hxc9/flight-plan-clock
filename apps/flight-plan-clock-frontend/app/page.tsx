@@ -1,16 +1,13 @@
 import styles from './page.module.css'
-import React from "react";
-import RefreshGovernor from "./refreshGovernor";
-import FlightPlanTableBody from "./flightPlanTableBody";
+import FlightPlanTableBody from "@/app/flightPlanTableBody";
 
-export default async function Home() {
+export default function Home() {
     return (
         <div className={styles.container}>
             <h1>Upcoming flights</h1>
-            <RefreshGovernor/>
             <div className={styles.content}>
                 <table className={styles.flightPlanTable}>
-                    <FlightPlanTableBody/>
+                  <FlightPlanTableBody/>
                 </table>
             </div>
         </div>

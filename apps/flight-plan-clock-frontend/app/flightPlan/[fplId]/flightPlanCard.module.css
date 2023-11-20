@@ -1,3 +1,9 @@
+.timesBlock {
+    display: flex;
+    flex-direction: row;
+    height: 40vh;
+}
+
 .flightCard {
     flex-grow: 1;
     display: flex;
@@ -43,4 +49,17 @@
 .status {
     color: slategrey;
     text-transform: capitalize;
+}
+
+.timesBlock > div {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    width: 50%;
+    border-top: #C8C7CC 1px solid;
+}
+
+.timesBlock > div + div {
+    border-left: #C8C7CC 1px solid;
 }

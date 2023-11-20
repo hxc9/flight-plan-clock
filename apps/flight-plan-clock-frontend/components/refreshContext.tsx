@@ -1,27 +1,35 @@
 "use client"
 
-import React, {createContext, useState} from "react";
-import dayjs, {Dayjs} from "../lib/dayjs";
+import {createContext, ReactNode, useState} from "react";
+import dayjs, {Dayjs} from "@/lib/dayjs";
 
-export const RefreshContext = createContext<RefreshState>({
-    lastRefresh: undefined,
-    didRefresh: function (timestamp: number) {}
-})
+type RefreshContextState = {
+    lastRefresh?: Dayjs,
+    didRefresh: (timestamp: number) => void
+}
 
-export function RefreshContextProvider({children} : {children : React.ReactNode}) {
-    const [context, setContext] = useState<RefreshState>({
-        lastRefresh: undefined,
-        didRefresh: function (timestamp: number) {
-            const newVal = dayjs.unix(timestamp).utc()
-            if (!context.lastRefresh || newVal.isAfter(context.lastRefresh)) {
-                setContext({...context, lastRefresh: dayjs.unix(timestamp).utc()})
-            }
+const initialContext : RefreshContextState = {
+    didRefresh: function (timestamp) {
+        const newVal = dayjs.unix(timestamp).utc()
+        if (!timestamp || newVal.isAfter(timestamp)) {
+            this.lastRefresh = newVal
         }
-    })
+    }
+}
 
-    return <RefreshContext.Provider value={context}>
+export const RefreshContext = createContext<RefreshContextState>(initialContext)
+
+export function RefreshContextProvider({children} : {children: ReactNode}) {
+    const [lastRefresh, setRefresh] = useState<Dayjs|undefined>()
+
+    function didRefresh(timestamp: number) {
+        const newVal = dayjs.unix(timestamp).utc()
+        if (!timestamp || newVal.isAfter(timestamp)) {
+            setRefresh(newVal)
+        }
+    }
+    
+    return <RefreshContext.Provider value={{lastRefresh, didRefresh}}>
         {children}
     </RefreshContext.Provider>
 }
-
-type RefreshState = {lastRefresh: Dayjs|undefined, didRefresh: (timestamp: number) => void}

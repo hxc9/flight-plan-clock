@@ -18,19 +18,19 @@
   },
   "devDependencies": {
     "@types/ioredis": "^5.0.0",
-    "@types/node": "^18.15.3",
+    "@types/node": "^20",
     "@types/oauth2-server": "^3.0.13",
     "eslint": "^8.36.0",
     "eslint-config-custom": "workspace:*",
     "rimraf": "latest",
     "ts-node": "^10.9.1",
     "tsconfig": "workspace:*",
-    "typescript": "^5.1.3"
+    "typescript": "^5"
   },
   "dependencies": {
     "@types/oauth2-server": "^3.0.13",
     "autorouter-dto": "workspace:*",
-    "dayjs": "^1.11.7",
+    "dayjs": "^1.11.10",
     "generic-pool": "^3.9.0",
     "ioredis": "^5.3.1",
     "ioredis-rejson": "^1.0.10",

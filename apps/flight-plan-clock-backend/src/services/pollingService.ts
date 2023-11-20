@@ -49,7 +49,7 @@ export class PollingService {
                             route: parseRoute(fpl)
                         }
                     }
-                    socket.emit('fpl-change', msg)
+                    socket.emit('fpl-change-' + id, msg)
                 }
             })
             socket.on('unwatch-flightPlan', () => {
@@ -146,7 +146,7 @@ export class PollingService {
             } else if (fplMessageIs.delayed(msg)) {
                 this.relayUpdateMessage(msg, {eobt: msg.message.eobt})
             } else if (fplMessageIs.broughtForward(msg)) {
-                this.relayFplMessage('fpl-refiled', {
+                this.relayFplMessage('fpl-refiled-' + msg.message.previous_fplid, {
                     fplId: msg.message.previous_fplid,
                     timestamp: msg.timestamp,
                     refiledAs: msg.message.fplid})
@@ -165,6 +165,7 @@ export class PollingService {
     }
 
     private relayUpdateMessage(msg: FplMessage, payload: Partial<FlightPlanFull>) {
-        this.relayFplMessage('fpl-change', { fplId: msg.message.fplid, timestamp: msg.timestamp, update: payload})
+      const fplId = msg.message.fplid;
+      this.relayFplMessage('fpl-change-' + fplId, { fplId, timestamp: msg.timestamp, update: payload})
     }
 }
