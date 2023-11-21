@@ -7,7 +7,7 @@ import { useSWRConfig } from "swr";
 
 export const SocketContext : Context<Socket|undefined> = createContext<Socket|undefined>(undefined)
 
-const socket = io(backendUrl, {autoConnect: false})
+const socket = io(backendUrl, {autoConnect: false, withCredentials: true})
 
 export default function SocketProvider({children} : {children : ReactNode}) {
     const {mutate} = useSWRConfig()

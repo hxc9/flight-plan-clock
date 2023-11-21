@@ -2,9 +2,15 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 
 dotenv.config();
-import express, { Express, Request, Response } from 'express';
+import express, {
+  Express,
+  Handler,
+  NextFunction,
+  Request,
+  Response
+} from 'express';
 import { createServer } from 'http';
-import { Server } from 'socket.io';
+import {Server, Socket} from 'socket.io';
 import {FPC_BACKEND_PORT, FRONTEND_HOST, SESSION_SECRET} from './config';
 
 import flightPlans from './routes/flightPlans';
@@ -29,12 +35,14 @@ let redisStore = new RedisStore({
 })
 
 app.use(express.json());
-app.use(session({
+const sessionMiddleware = session({
   store: redisStore,
   resave: false,
   saveUninitialized: false,
   secret: SESSION_SECRET!
-}))
+});
+
+app.use(sessionMiddleware)
 app.use(cors({
   credentials: true,
   origin: FRONTEND_HOST
@@ -67,11 +75,20 @@ app.use('/api/metar', metar)
 const httpServer = createServer(app);
 const io = new Server(httpServer, {
   cors: {
-    origin: '*',
+    origin: FRONTEND_HOST,
     methods: ['GET', 'POST'],
-    optionsSuccessStatus: 204
+    optionsSuccessStatus: 204,
+    credentials: true
   }
 });
+
+function wrap(middleware: Handler) {
+  return (socket: Socket, next: any) => middleware(socket.request as Request, {} as any, next)
+}
+
+io.use(wrap(sessionMiddleware))
+io.use(wrap(passport.initialize()))
+io.use(wrap(passport.session()))
 
 const pollingService = new PollingService(io);
 pollingService.start();
