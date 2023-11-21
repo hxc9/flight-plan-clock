@@ -52,7 +52,7 @@ router.get('/callback', passport.authenticate("oauth2", {failureRedirect: '/logi
 router.post('/logout', function(req, res, next) {
   req.logout(function(err) {
     if (err) { return next(err); }
-    res.redirect('/');
+    res.status(200).end();
   });
 });
 

@@ -8,6 +8,8 @@ import {ClockProvider} from "@/components/clockContext";
 import Clock from "@/app/clock";
 import {RefreshContextProvider} from "@/components/refreshContext";
 import RefreshInfo from "@/app/refreshInfo";
+import Link from "next/link";
+import {CurrentUser} from "@/components/userContext";
 
 const roboto = Roboto_Flex({ subsets: ['latin'] })
 
@@ -32,6 +34,12 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={roboto.className}>
+      <div className={styles.header}>
+        <p>FPL Clock</p>
+        <p>
+          <Link href={"/login"}><CurrentUser/></Link>
+        </p>
+      </div>
       <main className={styles.main + ' ' + roboto.className}>
         <ClockProvider>
           <RefreshContextProvider>

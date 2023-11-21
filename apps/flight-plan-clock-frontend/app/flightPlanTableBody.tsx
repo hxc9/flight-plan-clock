@@ -9,9 +9,11 @@ import {useRouter} from "next/navigation";
 import {AppRouterInstance} from "next/dist/shared/lib/app-router-context.shared-runtime";
 import {useContext, useEffect} from "react";
 import {RefreshContext} from "@/components/refreshContext";
+import {useUser} from "@/components/userContext";
 
 
 export default function FlightPlanTableBody() {
+    useUser()
     const {data, error, isLoading} = useBackend<FlightPlansResponse>('/api/flightPlans')
     const router = useRouter()
 
