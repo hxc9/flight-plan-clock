@@ -36,7 +36,7 @@ export async function getClient(clientId: string, clientSecret?: string) {
     return {
       id: 'flight-plan-clock',
       grants: ['authorization_code'],
-      redirectUris: ['http://localhost:3002/api/oauth2/callback'],
+      redirectUris: ['http://localhost:3002/api/user/callback'],
     }
   }
 }

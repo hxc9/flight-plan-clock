@@ -1,6 +1,6 @@
 "use client"
 
-import {createContext, ReactNode, useState} from "react";
+import {createContext, ReactNode, useCallback, useState} from "react";
 import dayjs, {Dayjs} from "@/lib/dayjs";
 
 type RefreshContextState = {
@@ -22,12 +22,12 @@ export const RefreshContext = createContext<RefreshContextState>(initialContext)
 export function RefreshContextProvider({children} : {children: ReactNode}) {
     const [lastRefresh, setRefresh] = useState<Dayjs|undefined>()
 
-    function didRefresh(timestamp: number) {
+    const didRefresh = useCallback((timestamp: number) => {
         const newVal = dayjs.unix(timestamp).utc()
         if (!timestamp || newVal.isAfter(timestamp)) {
             setRefresh(newVal)
         }
-    }
+    }, [])
     
     return <RefreshContext.Provider value={{lastRefresh, didRefresh}}>
         {children}

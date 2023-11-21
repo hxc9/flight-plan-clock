@@ -8,7 +8,7 @@ import { Server } from 'socket.io';
 import {FPC_BACKEND_PORT, FRONTEND_HOST, SESSION_SECRET} from './config';
 
 import flightPlans from './routes/flightPlans';
-import oauth2Callback from './routes/oauth2Callback';
+import user from './routes/user';
 import { PollingService } from './services/pollingService';
 import session from "express-session";
 import metar from "./routes/metar";
@@ -43,7 +43,7 @@ app.use(passport.initialize())
 app.use(passport.session())
 
 app.all('*', (req: Request, res: Response, next) => {
-  if (req.path.startsWith('/api/oauth2') || req.path === '/api/ping') {
+  if (req.path.startsWith('/api/user') || req.path === '/api/ping') {
     next()
   } else {
     if (req.isAuthenticated()) {
@@ -61,7 +61,7 @@ app.get('/api/ping', (req: Request, res: Response) => {
   res.status(200).end();
 });
 app.use('/api/flightPlans', flightPlans);
-app.use('/api/oauth2', oauth2Callback)
+app.use('/api/user', user)
 app.use('/api/metar', metar)
 
 const httpServer = createServer(app);

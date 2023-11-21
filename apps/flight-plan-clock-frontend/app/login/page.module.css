@@ -1,3 +1,12 @@
+.container {
+    padding: 3vh 3vw;
+}
+
+.container > h1 {
+    margin-top: 0;
+    margin-bottom: 0.3em;
+}
+
 .buttonLink {
     display: inline-block;
     padding: 10px 20px;

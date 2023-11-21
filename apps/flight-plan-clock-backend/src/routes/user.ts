@@ -11,7 +11,7 @@ const autorouterOauth2Strategy = new OAuth2Strategy({
     clientID: "flight-plan-clock",
     clientSecret: "fpl-clock-secret",
     state: true,
-    callbackURL: "http://localhost:3002/api/oauth2/callback",
+    callbackURL: "http://localhost:3002/api/user/callback",
   },
   async function (accessToken: string, refreshToken: string, params, profile: User, cb: VerifyCallback) {
     console.log("Got token:", accessToken, refreshToken, profile, params)
@@ -55,5 +55,13 @@ router.post('/logout', function(req, res, next) {
     res.redirect('/');
   });
 });
+
+router.get('/me', (req: Request, res: Response) => {
+  if (req.isAuthenticated()) {
+    res.json(req.user)
+  } else {
+    res.status(401).end()
+  }
+})
 
 export default router

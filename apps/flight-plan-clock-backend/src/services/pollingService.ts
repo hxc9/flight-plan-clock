@@ -32,25 +32,30 @@ export class PollingService {
     start() {
         this.io.on('connection',  socket => {
             this.subscribe(socket)
-            socket.on('watch-flightPlan', async (id: number) => {
+            socket.on('watch-flightPlan', async (id: number, callback) => {
+              try {
                 if (this.watchedFlightPlans[socket.id]) {
-                    socket.leave('fpl:' + this.watchedFlightPlans[socket.id])
+                  socket.leave('fpl:' + this.watchedFlightPlans[socket.id])
                 }
                 socket.join('fpl:' + id)
                 this.watchedFlightPlans[socket.id] = id
+                console.log("Watching flight plan " + id)
                 const fpl = await fetchFlightPlan(id)
                 if (fpl) {
-                    const msg : UpdateMessage = {
-                        fplId: id,
-                        timestamp: await getLastUpdated(),
-                        update: {
-                            ...flightPlanToMini(fpl),
-                            ctot: (await getFplCtot(id))??undefined,
-                            route: parseRoute(fpl)
-                        }
+                  const msg: UpdateMessage = {
+                    fplId: id,
+                    timestamp: await getLastUpdated(),
+                    update: {
+                      ...flightPlanToMini(fpl),
+                      ctot: (await getFplCtot(id)) ?? undefined,
+                      route: parseRoute(fpl)
                     }
-                    socket.emit('fpl-change-' + id, msg)
+                  }
+                  callback(msg)
                 }
+              } catch (e) {
+                console.error(e)
+              }
             })
             socket.on('unwatch-flightPlan', () => {
                 if (this.watchedFlightPlans[socket.id]) {

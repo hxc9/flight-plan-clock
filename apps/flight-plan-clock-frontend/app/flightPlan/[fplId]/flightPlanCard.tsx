@@ -22,8 +22,13 @@ export function FlightPlanCard({fplId}: {fplId: number}) {
         if (socket && fplId) {
             console.log("Subscribing to fpl-change-" + fplId)
             function emitWatchRequest() {
-                socket && socket.timeout(5000).emit("watch-flightPlan", fplId, (err: Error) => {
-                    if (err) emitWatchRequest()
+                socket && socket.timeout(5000).emit("watch-flightPlan", fplId, (err: Error, response: UpdateMessage) => {
+                    if (err) {
+                        emitWatchRequest()
+                    } else {
+                        updateFpl((previous) => { return {...previous, ...response.update} })
+                        didRefresh(response.timestamp)
+                    }
                 })
             }
             emitWatchRequest()
