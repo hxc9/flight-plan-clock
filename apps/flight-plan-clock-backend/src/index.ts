@@ -5,7 +5,6 @@ dotenv.config();
 import express, {
   Express,
   Handler,
-  NextFunction,
   Request,
   Response
 } from 'express';
