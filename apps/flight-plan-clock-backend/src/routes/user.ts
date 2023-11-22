@@ -14,9 +14,7 @@ const autorouterOauth2Strategy = new OAuth2Strategy({
     callbackURL: "http://localhost:3002/api/user/callback",
   },
   async function (accessToken: string, refreshToken: string, params, profile: User, cb: VerifyCallback) {
-    console.log("Got token:", accessToken, refreshToken, profile, params)
     const {expires_in : expiresIn } = params
-    console.log("Expires in:", expiresIn)
     await saveAccessToken(profile.uid, accessToken, expiresIn ?? 3600)
     cb(null, profile)
   }
@@ -45,7 +43,7 @@ const router: Router = express.Router()
 
 router.get('/login', passport.authenticate("oauth2"))
 router.get('/callback', passport.authenticate("oauth2", {failureRedirect: '/login'}), (req: Request, res: Response) => {
-  console.log("Authentication success!")
+  console.log("Authentication success!", req.user)
   res.redirect('http://localhost:3003/')
 })
 
