@@ -12,6 +12,10 @@ export function fplKey(fplId: number) {
     return `${schemaPrefix}flightPlan:${fplId}`;
 }
 
-export function userKey(userId: number) {
+export function userKey(userId: number|string) {
   return `${schemaPrefix}user:${userId}`;
+}
+
+export function userSessionKey(userId: number|string) {
+  return `${userKey(userId)}:session`
 }

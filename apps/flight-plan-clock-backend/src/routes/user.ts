@@ -2,7 +2,10 @@ import express, {Request, Response, Router} from "express";
 import passport from "passport"
 import OAuth2Strategy, {VerifyCallback} from "passport-oauth2";
 import fetch from "node-fetch";
-import {saveAccessToken} from "../services/userService";
+import {
+  logoutUser,
+  saveAccessToken
+} from "../services/userService";
 import {User} from "autorouter-dto";
 
 const autorouterOauth2Strategy = new OAuth2Strategy({
@@ -48,9 +51,15 @@ router.get('/callback', passport.authenticate("oauth2", {failureRedirect: '/logi
 })
 
 router.post('/logout', function(req, res, next) {
+  const uid = (req.user as User).uid
+  res.clearCookie('connect.sid');
   req.logout(function(err) {
     if (err) { return next(err); }
-    res.status(200).end();
+    req.session.destroy(function(err) {
+        logoutUser(uid, Boolean(req.query.all)).then(() => {
+          res.status(200).end();
+        })
+    })
   });
 });
 

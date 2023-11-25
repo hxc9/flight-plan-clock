@@ -2,19 +2,13 @@
 
 import {useUser} from "@/components/userContext";
 import styles from "./page.module.css";
-import {useCallback} from "react";
+import {ReactNode, useCallback} from "react";
 import {backendUrl} from "@/lib/apiClient";
+import {KeyedMutator} from "swr";
+import { User } from "autorouter-dto";
 
 export function Account() {
     const {user, isLoading, error, mutate} = useUser(false)
-
-    const logoutCallback = useCallback(() => {
-        fetch(backendUrl + "/api/user/logout", {method: "POST", credentials: "include"})
-            .then(() => {
-                // noinspection JSIgnoredPromiseFromCall
-                mutate(undefined)
-            })
-    }, [mutate])
 
     if (isLoading) {
         return <p>Loading...</p>
@@ -48,5 +42,18 @@ export function Account() {
                 {user.name} {user.lastname} ({user.email})
             </p>
         </div>
-        <a href="#" onClick={logoutCallback} className={styles.buttonLink + ' ' + styles.logout}>Logout</a>
+        <LogoutButton mutate={mutate}>Logout</LogoutButton>
+        <LogoutButton mutate={mutate} logoutAll={true}>Logout from all devices</LogoutButton>
     </>}
+
+function LogoutButton({logoutAll, mutate, children}: {logoutAll?: boolean, mutate: KeyedMutator<User>, children: ReactNode}) {
+    const logoutCallback = useCallback(() => {
+        fetch(`${backendUrl}/api/user/logout${logoutAll ? '?all=true' : ''}`, {method: "POST", credentials: "include"})
+            .then(() => {
+                // noinspection JSIgnoredPromiseFromCall
+                mutate(undefined)
+            })
+    }, [mutate, logoutAll])
+
+    return <a href="#" onClick={logoutCallback} className={styles.buttonLink + ' ' + styles.logout}>{children}</a>
+}

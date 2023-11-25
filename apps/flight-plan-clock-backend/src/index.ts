@@ -19,7 +19,10 @@ import session from "express-session";
 import metar from "./routes/metar";
 import passport from "passport";
 import RedisStore from "connect-redis";
-import {redis, schemaPrefix} from "./services/dbClient";
+import {redis, userSessionKey} from "./services/dbClient";
+import {createTerminus} from "@godaddy/terminus";
+import uid from "uid-safe";
+import { User } from "autorouter-dto";
 
 const app: Express = express();
 const port = FPC_BACKEND_PORT || 3002;
@@ -30,7 +33,7 @@ app.get('/', (_req: Request, res: Response) => {
 
 let redisStore = new RedisStore({
   client: redis,
-  prefix: schemaPrefix + 'session:'
+  prefix: ''
 })
 
 app.use(express.json());
@@ -38,7 +41,11 @@ const sessionMiddleware = session({
   store: redisStore,
   resave: false,
   saveUninitialized: false,
-  secret: SESSION_SECRET!
+  secret: SESSION_SECRET!,
+  genid: function(req: Request): string {
+    const userId = (req.user as User|undefined)?.uid ?? ''
+    return `${userSessionKey(userId)}:${uid.sync(24)}`
+    },
 });
 
 app.use(sessionMiddleware)
@@ -92,13 +99,23 @@ io.use(wrap(passport.session()))
 const pollingService = new PollingService(io);
 pollingService.start();
 
-process.on('exit', function() {
-  io.disconnectSockets(true);
-});
+function onSignal() {
+  console.log('server is starting cleanup');
+  return Promise.all([
+    async () => {
+      io.disconnectSockets(true)
+      io.close()
+    },
+    async () => { /* TODO pollingService.stop() */ },
+    async () => { redis.quit() }
+  ])
+}
+
+createTerminus(httpServer, {
+  signal: 'SIGINT',
+  onSignal
+})
 
 httpServer.listen(port, () => {
   console.log(`⚡️[server]: Server is running at http://localhost:${port}`);
 });
-
-process.on('SIGINT', () => httpServer.close());
-process.on('SIGTERM', () => httpServer.close());
