@@ -18,6 +18,7 @@
     "@godaddy/terminus": "^4.12.1",
     "@types/express-session": "^1.17.9",
     "@types/uid-safe": "^2.1.5",
+    "async-lock": "^1.4.0",
     "autorouter-dto": "workspace:*",
     "autorouter-mock-services": "workspace:*",
     "connect-redis": "^7.1.0",
@@ -28,7 +29,7 @@
     "express-session": "^1.17.3",
     "flight-plan-clock-dto": "workspace:*",
     "generic-pool": "^3.9.0",
-    "ioredis": "^5.3.1",
+    "ioredis": "^5.3.2",
     "lodash": "^4.17.21",
     "node-fetch": "^2.6.9",
     "passport": "^0.6.0",
@@ -37,6 +38,7 @@
     "uid-safe": "^2.1.5"
   },
   "devDependencies": {
+    "@types/async-lock": "^1.4.2",
     "@types/cors": "^2.8.13",
     "@types/express": "^4.17.17",
     "@types/lodash": "^4.14.191",

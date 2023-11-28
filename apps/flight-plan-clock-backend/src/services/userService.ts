@@ -1,4 +1,5 @@
 import {redis, userKey, userSessionKey} from './dbClient'
+import {OrchestratorService} from "./orchestratorService";
 
 function accessTokenKey(userId: number) {
   return `${userKey(userId)}:accessToken`;
@@ -9,9 +10,13 @@ export async function saveAccessToken(userId: number, accessToken: string, expir
     await redis.setex(accessTokenKey(userId), expiresIn, accessToken)
 }
 
+export async function getAccessToken(userId: number) {
+    return redis.get(accessTokenKey(userId));
+}
+
 export async function getKnownUsers() {
     const keys = await redis.keys(userKey('*'))
-    return keys.map(key => parseInt(key.split(':')[1]))
+    return new Set(keys.map(key => parseInt(key.split(':')[2])))
 }
 
 export async function logoutUser(userId: number, logoutAll: boolean) {
@@ -19,4 +24,6 @@ export async function logoutUser(userId: number, logoutAll: boolean) {
   if (logoutAll || keys.length == 0) {
     await redis.del([...keys, accessTokenKey(userId)])
   }
+  const orchestratorService = await OrchestratorService.getInstance()
+  orchestratorService.delete(userId)
 }

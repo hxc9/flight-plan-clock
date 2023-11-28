@@ -1,8 +1,8 @@
 // @ts-ignore
-import Redis from "ioredis";
+import * as IORedis from "ioredis";
 import { REDIS_URL } from '../config';
 
-export const redis = new Redis(REDIS_URL as string)
+export const redis = new IORedis.Redis(REDIS_URL as string)
 
 export const schemaPrefix = "fplClock:"
 

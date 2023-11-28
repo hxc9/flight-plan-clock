@@ -19,6 +19,7 @@ export default function SocketProvider({children} : {children : ReactNode}) {
         const invalidateData = () => {
             // noinspection JSIgnoredPromiseFromCall
             mutate('/api/flightPlans')
+            console.log("Invalidated data")
         }
         socket.on("refresh-overview", invalidateData)
         return () => {

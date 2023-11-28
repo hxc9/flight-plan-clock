@@ -8,13 +8,13 @@ import express, {
   Request,
   Response
 } from 'express';
-import { createServer } from 'http';
+import {createServer, IncomingMessage} from 'http';
 import {Server, Socket} from 'socket.io';
 import {FPC_BACKEND_PORT, FRONTEND_HOST, SESSION_SECRET} from './config';
 
 import flightPlans from './routes/flightPlans';
 import user from './routes/user';
-import { PollingService } from './services/pollingService';
+import { OrchestratorService } from './services/orchestratorService';
 import session from "express-session";
 import metar from "./routes/metar";
 import passport from "passport";
@@ -79,7 +79,7 @@ app.use('/api/user', user)
 app.use('/api/metar', metar)
 
 const httpServer = createServer(app);
-const io = new Server(httpServer, {
+export const io = new Server(httpServer, {
   cors: {
     origin: FRONTEND_HOST,
     methods: ['GET', 'POST'],
@@ -96,8 +96,15 @@ io.use(wrap(sessionMiddleware))
 io.use(wrap(passport.initialize()))
 io.use(wrap(passport.session()))
 
-const pollingService = new PollingService(io);
-pollingService.start();
+export type SocketRequest = IncomingMessage & {user?: User}
+
+io.use((socket: Socket, next: any) => {
+  if ((socket.request as SocketRequest).user) {
+    next()
+  } else {
+    next(new Error('Not authorized'))
+  }
+})
 
 function onSignal() {
   console.log('server is starting cleanup');
@@ -106,7 +113,7 @@ function onSignal() {
       io.disconnectSockets(true)
       io.close()
     },
-    async () => { /* TODO pollingService.stop() */ },
+    async () => { OrchestratorService.getInstance().then(s => s.destroy()) },
     async () => { redis.quit() }
   ])
 }
@@ -116,6 +123,8 @@ createTerminus(httpServer, {
   onSignal
 })
 
-httpServer.listen(port, () => {
-  console.log(`⚡️[server]: Server is running at http://localhost:${port}`);
-});
+OrchestratorService.getInstance().then(() => {
+  httpServer.listen(port, () => {
+    console.log(`⚡️[server]: Server is running at http://localhost:${port}`);
+  });
+})

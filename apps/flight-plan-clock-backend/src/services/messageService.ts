@@ -11,7 +11,7 @@ export function storeMessage(pipeline: ChainableCommander, msg: FplMessage) {
         .expire(listKey, defaultExpiry)
 }
 
-export async function getMessagesForFlightPlan(fplId: number) : Promise<FplMessages> {
+async function getMessagesForFlightPlan(fplId: number) : Promise<FplMessages> {
     const keys = await redis.lrange(fplMessageListKey(fplId), 0, -1)
     if (keys.length === 0) {
         return []
