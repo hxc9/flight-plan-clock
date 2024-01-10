@@ -10,12 +10,9 @@ export default async function Home({ params: { userId : user } }: { params: { us
 
   return (
     <>
-      {/* @ts-expect-error Server Component */}
       <Users userId={userId} />
       {userId ? <>
-        {/* @ts-expect-error Server Component */}
         <FlightPlansTable userId={userId} />
-        {/* @ts-expect-error Server Component */}
         <MessagesTable userId={userId} />
       </> : null}
 </>

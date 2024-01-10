@@ -12,7 +12,6 @@ import { Users } from '@/components/users/users';
 export default async function Home() {
   return (
     <>
-      {/* @ts-expect-error Server Component */}
       <Users />
 </>
   );

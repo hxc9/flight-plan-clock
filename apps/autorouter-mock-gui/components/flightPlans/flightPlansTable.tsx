@@ -25,7 +25,6 @@ export const FlightPlansTable = async ({userId} : {userId: number}): Promise<JSX
       </tr>
       </thead>
       <tbody>
-      {/* @ts-expect-error Server Component */}
       {flightPlans.map((fpl) => <FlightPlanRow key={fpl.flightplanid} userId={userId} {...fpl} />)}
       </tbody>
     </table>
