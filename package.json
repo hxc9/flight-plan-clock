@@ -22,7 +22,7 @@
   "devDependencies": {
     "eslint-config-custom": "workspace:*",
     "prettier": "latest",
-    "turbo": "^1.11.3"
+    "turbo": "^1.13.2"
   },
   "packageManager": "pnpm@9.0.0"
 }
