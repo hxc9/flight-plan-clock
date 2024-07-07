@@ -17,10 +17,10 @@
     "autorouter-dto": "workspace:*"
   },
   "devDependencies": {
-    "eslint": "^8.36.0",
+    "eslint": "^8.57.0",
     "eslint-config-custom": "workspace:*",
     "rimraf": "latest",
     "tsconfig": "workspace:*",
-    "typescript": "^5.0.2"
+    "typescript": "^5.5.3"
   }
 }

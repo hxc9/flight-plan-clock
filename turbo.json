@@ -1,13 +1,33 @@
 {
   "$schema": "https://turbo.build/schema.json",
-  "globalDependencies": ["**/.env.*local"],
-  "globalEnv": ["REDIS_URL", "BACKEND_URL", "NEXT_PUBLIC_BACKEND_URL", "NEXT_PUBLIC_AUTOROUTER_API_URL", "AUTOROUTER_API_URL", "ADMIN_PASSWORD",
-    "AR_MOCK_PORT", "FPC_BACKEND_PORT", "GATEWAY_PORT", "NEXT_PUBLIC_AR_MOCK_GUI_BASE_PATH", "NODE_ENV"],
-  "pipeline": {
+  "globalDependencies": [
+    "**/.env.*local"
+  ],
+  "globalEnv": [
+    "REDIS_URL",
+    "BACKEND_URL",
+    "NEXT_PUBLIC_BACKEND_URL",
+    "NEXT_PUBLIC_AUTOROUTER_API_URL",
+    "AUTOROUTER_API_URL",
+    "ADMIN_PASSWORD",
+    "AR_MOCK_PORT",
+    "FPC_BACKEND_PORT",
+    "GATEWAY_PORT",
+    "NEXT_PUBLIC_AR_MOCK_GUI_BASE_PATH",
+    "NODE_ENV"
+  ],
+  "tasks": {
     "clean": {},
     "build": {
-      "dependsOn": ["^build", "clean"],
-      "outputs": ["build/**", "dist/**", ".next/**"]
+      "dependsOn": [
+        "^build",
+        "clean"
+      ],
+      "outputs": [
+        "build/**",
+        "dist/**",
+        ".next/**"
+      ]
     },
     "start": {
       "cache": false,
