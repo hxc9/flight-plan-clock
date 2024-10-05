@@ -14,9 +14,3 @@
     color: #007aff;
     text-decoration: none;
 }
-
-.timesBlock {
-    display: flex;
-    flex-direction: row;
-    height: 40vh;
-}

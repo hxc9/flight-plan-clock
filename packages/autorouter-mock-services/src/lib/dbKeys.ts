@@ -34,6 +34,7 @@ export const DbKeys = {
   fplCtotKey: (userId: ID, fplId: ID) => extendKey(fplKey(userId, fplId), "ctot"),
   fplMsgKey: (userId: ID, fplId: ID) => extendKey(fplKey(userId, fplId), 'messages'),
   userListKey: schemaKey("users"),
+  userKey: (userId: ID) => userKey(userId),
   userMsgKey: (userId: ID) => extendKey(userKey(userId), 'messages'),
   oauth2AuthorizationKey: (code: string) => extendKey(oauth2Key, "authorization", code),
   oauth2AccessTokenKey: (token: string) => extendKey(oauth2Key, "accessToken", token),

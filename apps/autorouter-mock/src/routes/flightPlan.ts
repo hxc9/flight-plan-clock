@@ -1,10 +1,13 @@
 import { FlightPlan, FlightPlansResult } from 'autorouter-dto';
 import express, { Request, Response, Router } from 'express';
 import { flightPlanService } from "autorouter-mock-services"
+import {authMiddleware} from "../auth/middleware";
 
 const router : Router = express.Router()
 
 const TODO_USER_ID = 1
+
+//router.use(authMiddleware)
 
 router.get('/file', async (req: Request, res: Response<FlightPlansResult>) => {
   const {query: {sidx, showclosed}} = req

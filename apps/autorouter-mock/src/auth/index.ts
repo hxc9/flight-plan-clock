@@ -33,8 +33,15 @@ async function token(req: Request, res: Response) {
 
   try {
     const token = await authService.oauth2.token(request, response);
-
-    res.status(200).json(token);
+    const formattedToken : any = {
+      access_token: token.accessToken,
+      expires_in: Math.floor((token.accessTokenExpiresAt!.getTime() - Date.now()) / 1000),
+      token_type: 'Bearer',
+    }
+    if (token.refreshToken) {
+      formattedToken.refresh_token = token.refreshToken
+    }
+    res.status(200).json(formattedToken);
   } catch (e) {
     console.log(e)
     res.status(e instanceof  OAuthError ? e.code :500).json(e)

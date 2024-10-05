@@ -14,13 +14,13 @@ export async function POST(req: Request, {params: {userId, fplId}} : Params) {
     try {
         const {newStatus, newEobt, newCtot} = await req.json()
         if (newStatus) {
-            await flightPlanService.changeFlightPlanStatus(userId, fplId, newStatus)
+            await flightPlanService.changeFlightPlanStatus(userId, +fplId, newStatus)
         }
         if (newEobt) {
-            await flightPlanService.changeFlightPlanEobt(userId, fplId, newEobt)
+            await flightPlanService.changeFlightPlanEobt(userId, +fplId, newEobt)
         }
         if (newCtot !== undefined) {
-            await ctotService.changeFlightPlanCtot(userId, fplId, newCtot)
+            await ctotService.changeFlightPlanCtot(userId, +fplId, newCtot)
         }
         return okResponse()
     } catch (e) {
@@ -35,7 +35,7 @@ export async function POST(req: Request, {params: {userId, fplId}} : Params) {
 
 export async function DELETE(_: Request, {params: {userId, fplId}} : Params) {
     try {
-        await flightPlanService.deleteFlightPlan(userId, fplId)
+        await flightPlanService.deleteFlightPlan(userId, +fplId)
         return okResponse()
     } catch (e) {
         if (e instanceof FlightPlanNotFoundError) {

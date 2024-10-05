@@ -1,17 +1,8 @@
-.timeCard {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    align-items: center;
-    width: 50%;
-    border-top: #C8C7CC 1px solid;
-}
-
-.timeCard > * {
+.topRow {
     flex-grow: 1;
 }
 
-.timeCard > .midRow {
+.midRow {
     flex-grow: 0.5;
     text-align: center;
     color: slategrey;
@@ -26,12 +17,6 @@
 }
 
 .bottomRow {
+    flex-grow: 1;
     color: slategrey;
-}
-
-.eobtCard {
-    border-right: #C8C7CC 1px solid;
-}
-
-.ctotCard {
 }
