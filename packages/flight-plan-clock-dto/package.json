@@ -21,6 +21,6 @@
     "eslint-config-custom": "workspace:*",
     "rimraf": "latest",
     "tsconfig": "workspace:*",
-    "typescript": "^5.6.2"
+    "typescript": "^5.9.3"
   }
 }
