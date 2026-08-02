@@ -16,20 +16,26 @@
     "generic-pool": "^3.9.0",
     "ioredis": "^5.11.1",
     "ioredis-rejson": "^1.0.10",
-    "next": "^14.2.35",
+    "next": "16.2.12",
     "next-auth": "^4.24.15",
     "oauth2-server": "^3.1.1",
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1"
+    "react": "19.2.8",
+    "react-dom": "19.2.8"
   },
   "devDependencies": {
     "@types/node": "^20.19.43",
     "@types/oauth2-server": "^3.0.18",
-    "@types/react": "^18.3.31",
-    "@types/react-dom": "^18.3.7",
+    "@types/react": "19.2.18",
+    "@types/react-dom": "19.2.4",
     "eslint": "latest",
     "eslint-config-custom": "workspace:*",
     "tsconfig": "workspace:*",
     "typescript": "^5.9.3"
+  },
+  "pnpm": {
+    "overrides": {
+      "@types/react": "19.2.18",
+      "@types/react-dom": "19.2.4"
+    }
   }
 }
